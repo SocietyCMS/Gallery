@@ -1,0 +1,17 @@
+{
+  "name": "Gallery",
+  "alias": "gallery",
+  "description": "A simple Gallery module to create collections of photos.",
+  "keywords": [],
+  "version": "0.0.1",
+  "active": 1,
+  "order": 10,
+  "providers": [
+    "Modules\\Gallery\\Providers\\GalleryServiceProvider",
+    "Modules\\Gallery\\Providers\\RouteServiceProvider"
+  ],
+  "aliases": {},
+  "files": [
+    "start.php"
+  ]
+}
