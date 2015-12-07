@@ -1,4 +1,6 @@
-<?php namespace Modules\Gallery\Http\Controllers;
+<?php
+
+namespace Modules\Gallery\Http\Controllers;
 
 use Illuminate\Contracts\Foundation\Application;
 use Modules\Core\Http\Controllers\PublicBaseController;
@@ -36,11 +38,13 @@ class PublicController extends PublicBaseController
     public function index()
     {
         $albums = $this->album->paginate();
+
         return view('gallery::public.index', compact('albums'));
     }
 
     /**
      * @param $slug
+     *
      * @return \Illuminate\View\View
      */
     public function show($slug)
@@ -53,7 +57,8 @@ class PublicController extends PublicBaseController
     }
 
     /**
-     * Throw a 404 error page if the given page is not found
+     * Throw a 404 error page if the given page is not found.
+     *
      * @param $page
      */
     private function throw404IfNotFound($album)

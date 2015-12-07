@@ -1,50 +1,52 @@
-<?php namespace Modules\Gallery\Transformers;
+<?php
+
+namespace Modules\Gallery\Transformers;
 
 use League\Fractal;
 use Modules\Gallery\Entities\Album;
 
 class AlbumTransformer extends Fractal\TransformerAbstract
 {
-
     /**
-     * List of resources possible to include
+     * List of resources possible to include.
      *
      * @var array
      */
     protected $availableIncludes = [
-        'photos'
+        'photos',
     ];
 
     /**
-     * List of resources to automatically include
+     * List of resources to automatically include.
      *
      * @var array
      */
     protected $defaultIncludes = [
-        'cover'
+        'cover',
     ];
 
     public function transform(Album $album)
     {
         return [
-            'title' => $album->title,
-            'slug' => $album->slug,
-            'published' => (bool)$album->published,
+            'title'      => $album->title,
+            'slug'       => $album->slug,
+            'published'  => (bool) $album->published,
             'photoCount' => $album->photos->count(),
-            'links' => [
+            'links'      => [
                 'api' => [
-                    'aplum' => apiRoute('v1', 'api.gallery.album.index', $album->slug),
+                    'aplum'  => apiRoute('v1', 'api.gallery.album.index', $album->slug),
                     'photos' => apiRoute('v1', 'api.gallery.album.photo.index', $album->slug),
                 ],
-                'backend' => route('backend::gallery.gallery.show', $album->slug)
-            ]
+                'backend' => route('backend::gallery.gallery.show', $album->slug),
+            ],
         ];
     }
 
     /**
-     * Include Photos
+     * Include Photos.
      *
      * @param Album $album
+     *
      * @return \League\Fractal\Resource\collection
      */
     public function includePhotos(Album $album)
@@ -55,18 +57,18 @@ class AlbumTransformer extends Fractal\TransformerAbstract
     }
 
     /**
-     * Include AlbumCover
+     * Include AlbumCover.
      *
      * @param Album $album
+     *
      * @return \League\Fractal\Resource\collection
      */
     public function includeCover(Album $album)
     {
-        if (is_null($coverPhotos = $album->photos->first()))
-        {
+        if (is_null($coverPhotos = $album->photos->first())) {
             return;
         }
+
         return $this->item($coverPhotos, new PhotoTransformer());
     }
-
 }

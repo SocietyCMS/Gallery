@@ -1,9 +1,10 @@
 <?php
+
 return [
     'gallery' => [
         'index' => [
             'gallery.gallery.index',
-            'gallery.gallery.show'
+            'gallery.gallery.show',
         ],
         'create' => [
             'gallery.gallery.create',

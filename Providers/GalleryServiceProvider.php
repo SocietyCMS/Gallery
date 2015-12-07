@@ -1,12 +1,11 @@
-<?php namespace Modules\Gallery\Providers;
+<?php
+
+namespace Modules\Gallery\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Gallery\Repositories\Eloquent\EloquentAlbumRepository;
-use Modules\Gallery\Repositories\Eloquent\EloquentPhotoRepository;
 
 class GalleryServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -43,10 +42,10 @@ class GalleryServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__ . '/../Config/config.php' => config_path('gallery.php'),
+            __DIR__.'/../Config/config.php' => config_path('gallery.php'),
         ]);
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/config.php', 'gallery'
+            __DIR__.'/../Config/config.php', 'gallery'
         );
     }
 
@@ -59,10 +58,10 @@ class GalleryServiceProvider extends ServiceProvider
     {
         $viewPath = base_path('resources/views/modules/gallery');
 
-        $sourcePath = __DIR__ . '/../Resources/views';
+        $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
-            $sourcePath => $viewPath
+            $sourcePath => $viewPath,
         ]);
 
         $this->loadViewsFrom([$viewPath, $sourcePath], 'gallery');
@@ -80,10 +79,9 @@ class GalleryServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'gallery');
         } else {
-            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'gallery');
+            $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'gallery');
         }
     }
-
 
     /**
      * Get the services provided by the provider.
@@ -92,7 +90,6 @@ class GalleryServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return [];
     }
-
 }

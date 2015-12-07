@@ -1,16 +1,15 @@
-<?php namespace Modules\Gallery\Http\Controllers\api;
+<?php
+
+namespace Modules\Gallery\Http\Controllers\api;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\Gallery\Repositories\AlbumRepository;
 use Modules\Gallery\Repositories\PhotoRepository;
 use Modules\Gallery\Transformers\PhotoTransformer;
 
-
-class AlbumPhotoController extends ApiBaseController {
-
-
+class AlbumPhotoController extends ApiBaseController
+{
     /**
      * @var AlbumRepository
      */
@@ -20,7 +19,6 @@ class AlbumPhotoController extends ApiBaseController {
      * @var PhotoRepository
      */
     private $photo;
-
 
     public function __construct(AlbumRepository $album, PhotoRepository $photo)
     {
@@ -32,8 +30,8 @@ class AlbumPhotoController extends ApiBaseController {
     public function index(Request $request, $album)
     {
         $photos = $this->album->findBySlug($album)->photos;
-        return $this->response->collection($photos, new PhotoTransformer());
 
+        return $this->response->collection($photos, new PhotoTransformer());
     }
 
     public function store(Request $request, $album)
@@ -41,17 +39,18 @@ class AlbumPhotoController extends ApiBaseController {
         $album = $this->album->findBySlug($album);
         $photo = $this->photo->create([
             'album_id'      => $album->id,
-            'captured_at'   => \Carbon\Carbon::now()
+            'captured_at'   => \Carbon\Carbon::now(),
         ]);
 
-        $photo->addMedia($request ->files->get('qqfile'))->toCollection('images');
+        $photo->addMedia($request->files->get('qqfile'))->toCollection('images');
 
         return $this->response->item($photo, new PhotoTransformer());
     }
 
     public function show(Request $request, $album, $photoID)
     {
-        $photo =  $this->photo->find($photoID);
+        $photo = $this->photo->find($photoID);
+
         return $this->response->item($photo, new PhotoTransformer());
     }
 
@@ -60,8 +59,8 @@ class AlbumPhotoController extends ApiBaseController {
         $photo = $this->photo->find($photoID);
 
         $photo->update([
-                'title' => $request->title,
-                'caption' =>  $request->caption
+                'title'   => $request->title,
+                'caption' => $request->caption,
                 ]);
     }
 
@@ -69,5 +68,4 @@ class AlbumPhotoController extends ApiBaseController {
     {
         $this->photo->find($photoID)->delete();
     }
-	
 }

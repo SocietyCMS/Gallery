@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePhotosTable extends Migration {
-
+class CreatePhotosTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class CreatePhotosTable extends Migration {
      */
     public function up()
     {
-        Schema::create('gallery__photos', function(Blueprint $table)
-        {
+        Schema::create('gallery__photos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->text('caption');
@@ -35,5 +34,4 @@ class CreatePhotosTable extends Migration {
     {
         Schema::drop('gallery__photos');
     }
-
 }
