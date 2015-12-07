@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateAlbumTable extends Migration {
-
+class CreateAlbumTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +12,7 @@ class CreateAlbumTable extends Migration {
      */
     public function up()
     {
-        Schema::create('gallery__albums', function(Blueprint $table)
-        {
+        Schema::create('gallery__albums', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->string('slug')->index();
@@ -31,5 +30,4 @@ class CreateAlbumTable extends Migration {
     {
         Schema::drop('gallery__albums');
     }
-
 }

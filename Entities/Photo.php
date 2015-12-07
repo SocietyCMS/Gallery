@@ -1,9 +1,10 @@
-<?php namespace Modules\Gallery\Entities;
+<?php
+
+namespace Modules\Gallery\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
 use Modules\Core\Traits\Media\baseMediaConversions;
-use Modules\User\Traits\Activity\RecordsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
@@ -16,7 +17,7 @@ class Photo extends Model implements HasMediaConversions
     use baseMediaConversions;
 
     /**
-     * Presenter Class
+     * Presenter Class.
      *
      * @var string
      */
@@ -30,7 +31,7 @@ class Photo extends Model implements HasMediaConversions
     protected $table = 'gallery__photos';
 
     /**
-     * The fillable properties of the model
+     * The fillable properties of the model.
      *
      * @var array
      */
@@ -44,7 +45,7 @@ class Photo extends Model implements HasMediaConversions
     protected $dates = ['captured_at'];
 
     /**
-     * Photos relation
+     * Photos relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -52,6 +53,4 @@ class Photo extends Model implements HasMediaConversions
     {
         return $this->belongsTo('Modules\Gallery\Entities\Album', 'album_id');
     }
-
-
 }

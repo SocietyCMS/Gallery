@@ -1,6 +1,7 @@
-<?php namespace Modules\Gallery\MenuExtenders;
+<?php
 
-;
+namespace Modules\Gallery\MenuExtenders;
+
 use Modules\Core\Contracts\Authentication;
 use Modules\Menu\Repositories\Menu\MenuRepository;
 
@@ -31,7 +32,7 @@ class MenuExtender implements \Modules\Menu\Repositories\MenuExtender
         $menuRepository->mainMenu()->route('gallery.index', trans('gallery::gallery.title.gallery'), [], 1, [
             'active' => function () {
                 return \Route::is('gallery.index') || \Route::is('gallery.show');
-            }
+            },
         ]);
 
         return $menuRepository;

@@ -1,18 +1,18 @@
-<?php namespace Modules\Gallery\Repositories;
+<?php
+
+namespace Modules\Gallery\Repositories;
 
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
-
 class PhotoRepository extends EloquentBaseRepository
 {
-
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
-    function model()
+    public function model()
     {
-        return "Modules\\Gallery\\Entities\\Photo";
+        return 'Modules\\Gallery\\Entities\\Photo';
     }
 }

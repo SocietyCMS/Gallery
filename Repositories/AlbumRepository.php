@@ -1,17 +1,18 @@
-<?php namespace Modules\Gallery\Repositories;
+<?php
+
+namespace Modules\Gallery\Repositories;
 
 use Modules\Core\Repositories\Eloquent\EloquentSlugRepository;
-
 
 class AlbumRepository extends EloquentSlugRepository
 {
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
-    function model()
+    public function model()
     {
-        return "Modules\\Gallery\\Entities\\Album";
+        return 'Modules\\Gallery\\Entities\\Album';
     }
 }

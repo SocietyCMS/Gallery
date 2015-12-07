@@ -1,4 +1,6 @@
-<?php namespace Modules\Gallery\Entities;
+<?php
+
+namespace Modules\Gallery\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
@@ -10,7 +12,7 @@ class Album extends Model
     use PresentableTrait;
 
     /**
-     * Presenter Class
+     * Presenter Class.
      *
      * @var string
      */
@@ -24,14 +26,15 @@ class Album extends Model
     protected $table = 'gallery__albums';
 
     /**
-     * The fillable properties of the model
+     * The fillable properties of the model.
      *
      * @var array
      */
     protected $fillable = ['title', 'slug', 'published'];
 
     /**
-     * Views for the Dashboard timeline
+     * Views for the Dashboard timeline.
+     *
      * @var string
      */
     protected static $templatePath = 'gallery::backend.activities';
@@ -42,7 +45,7 @@ class Album extends Model
     protected static $recordEvents = ['created'];
 
     /**
-     * Photos relation
+     * Photos relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -52,7 +55,7 @@ class Album extends Model
     }
 
     /**
-     * Photos relation
+     * Photos relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -60,6 +63,4 @@ class Album extends Model
     {
         return $this->photos();
     }
-
-
 }
