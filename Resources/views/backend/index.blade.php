@@ -13,39 +13,41 @@
 		<a href="#" id="createNewAlbumButton" class="fluid ui blue button">{{trans('gallery::gallery.button.create album')}}</a>
 	</div>
 
-	<div class="ui cards">
+	<div class="ui five column grid">
+		<div class="column" v-for="album in gallery" style="display: none" v-show="gallery">
 
-		<div class="ui special card" v-for="album in gallery" style="display: none" v-show="gallery">
-
-			<div class="blurring dimmable image" >
-				<div class="ui dimmer">
-					<div class="content">
-						<div class="center">
-							<a v-bind:href="album.links.backend" class="ui inverted button">Edit Gallery</a>
+			<div class="ui special fluid card">
+				<div class="blurring dimmable image">
+					<div class="ui dimmer">
+						<div class="content">
+							<div class="center">
+								<a v-bind:href="album.links.backend" class="ui inverted button">Edit Gallery</a>
+							</div>
 						</div>
 					</div>
+					<img src="" v-bind:src="album.cover.data.image.thumbnail.cover">
 				</div>
-				<img src="" v-bind:src="album.cover.data.image.thumbnail.cover">
+
+				<div class="content">
+					<a v-bind:href="album.links.backend" class="header">@{{ album.title }}</a>
+					<div class="meta">
+						<span class="date"></span>
+					</div>
+					<div class="description">
+
+					</div>
+				</div>
+
+				<div class="extra content">
+					<a v-bind:href="album.links.backend" class="right floated star">
+						<i class="pencil icon"></i>
+						Edit
+					</a>
+				</div>
 			</div>
 
-			<div class="content">
-				<a v-bind:href="album.links.backend" class="header">@{{ album.title }}</a>
-				<div class="meta">
-					<span class="date"></span>
-				</div>
-				<div class="description">
-
-				</div>
-			</div>
-			<div class="extra content">
-				<a v-bind:href="album.links.backend" class="right floated star">
-					<i class="pencil icon"></i>
-					Edit
-				</a>
-			</div>
 		</div>
 	</div>
-
 @endsection
 
 @section('htmlComponents')
@@ -66,10 +68,10 @@
 				<div class="ui black deny button">
 					{{ trans('core::elements.button.cancel') }}
 				</div>
-				<div class="ui positive right labeled icon button">
+				<button class="ui positive right labeled icon button">
 					{{ trans('core::elements.button.create') }}
 					<i class="checkmark icon"></i>
-				</div>
+				</button>
 			</div>
 		</form>
 @endsection
