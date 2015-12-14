@@ -15,6 +15,20 @@
 	<div class="ui grid">
 		<div class="twelve wide column qq-upload-drop-area" id="photosGrid">
 			<div class="ui segment sticky" id="albumToolbar">
+
+				<div id="uploadButton">
+					<div class="ui basic button" id="uploadImageButton">
+						<i class="icon photo"></i>
+						Add Photo
+					</div>
+					<div class="ui red basic right floated button" id="deleteAlbumButton">Delete Gallery</div>
+				</div>
+
+				<div class="ui indicating right floated progress qq-drop-processing-selector qq-drop-processing" id="uploadProgrssbar" style="display: none">
+					<div class="bar"></div>
+					<div class="label">Processing dropped files...</div>
+				</div>
+
 			</div>
 
 			<div class="ui grid">
@@ -32,6 +46,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="four wide column">
 
             <div class="ui sticky" id="photosDetail" v-show="detailPhoto">
@@ -97,43 +112,6 @@
 @endsection
 
 @section('htmlComponents')
-	<script type="text/template" id="albumToolbarTemplate">
-		<div class="qq-uploader-selector qq-uploader">
-
-			<div id="uploadButton">
-
-				<div class="ui basic button qq-upload-button-selector qq-upload-button" >
-					<i class="icon photo"></i>
-					Add Photo
-				</div>
-				<div class="ui red basic right floated button" id="deleteAlbumButton">Delete Gallery</div>
-			</div>
-
-			<div class="ui indicating right floated progress qq-drop-processing-selector qq-drop-processing" id="uploadProgrssbar" style="display: none">
-				<div class="bar"></div>
-				<div class="label">Processing dropped files...</div>
-			</div>
-
-			<ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals" style="display: none">
-				<li>
-					<div class="qq-progress-bar-container-selector">
-						<div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
-					</div>
-					<span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-					<span class="qq-upload-file-selector qq-upload-file"></span>
-					<span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="Edit filename"></span>
-					<input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
-					<span class="qq-upload-size-selector qq-upload-size"></span>
-					<button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
-					<button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
-					<button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">Delete</button>
-					<span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
-				</li>
-			</ul>
-
-		</div>
-	</script>
-
     <div class="ui small basic test modal" id="photoDeleteModal">
 
         <img class="ui centered medium image" v-bind:src="detailPhoto.image.thumbnail.large">
@@ -174,6 +152,8 @@
                     context: '#photosGrid',
                     observeChanges: true
                 });
+
+
 
         VueInstance = new Vue({
 			el: '#societyAdmin',
@@ -235,23 +215,32 @@
         });
 
 
-		$('#albumToolbar').fineUploader({
-			template: $('#albumToolbarTemplate'),
+		var dragAndDropModule = new fineUploader.DragAndDrop({
+			dropZoneElements: [document.getElementById('photosGrid')],
+			classes: {
+				dropActive: "cssClassToAddToDropZoneOnEnter"
+			},
+			callbacks: {
+				processingDroppedFilesComplete: function (files, dropTarget) {
+					fineUploaderBasicInstanceImages.addFiles(files);
+				}
+			}
+		});
+
+		var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
+			button: document.getElementById('uploadImageButton'),
 			request: {
 				endpoint: '{{app('Dingo\Api\Routing\UrlGenerator')->version('v1')->route('api.gallery.album.photo.store', ['album' => $album->slug])}}',
 				customHeaders: {
 					"Authorization": "Bearer {{$jwtoken}}"
-				}
+				},
+				inputName: 'image'
 			},
 			validation: {
-				allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
-			},
-			dragAndDrop: {
-				extraDropzones: [$("#photosGrid")]
+				allowedExtensions: ['jpeg', 'jpg', 'png', 'bmp']
 			},
 			callbacks: {
 				onComplete: function (id, name, responseJSON) {
-					this.getItemByFileId(id).remove();
 					VueInstance.addPhoto(responseJSON)
 				},
 				onUpload: function() {
@@ -266,9 +255,13 @@
 				onAllComplete: function(succeeded, failed) {
 					$('#uploadButton').show();
 					$('#uploadProgrssbar').hide();
+					$('#uploadProgrssbar').progress({
+						percent: 0
+					});
 				}
 			}
 		});
+
 
 		$('#deleteAlbumButton').click(function(){VueInstance.deleteAlbum()});
 

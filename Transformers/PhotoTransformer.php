@@ -20,7 +20,7 @@ class PhotoTransformer extends Fractal\TransformerAbstract
                     'small'  => $photo->getFirstMediaUrl('images', 'original100'),
                     'medium' => $photo->getFirstMediaUrl('images', 'original250'),
                     'large'  => $photo->getFirstMediaUrl('images', 'original400'),
-                    'cover'  => $photo->getFirstMediaUrl('images', 'cover900'),
+                    'cover'  => $photo->getFirstMediaUrl('images', 'cover400'),
                 ],
             ],
             'properties' => [

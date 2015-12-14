@@ -13,12 +13,38 @@
 		<a href="#" id="createNewAlbumButton" class="fluid ui blue button">{{trans('gallery::gallery.button.create album')}}</a>
 	</div>
 
-	<a v-bind:href="album.links.backend" class="ui compact left floated center aligned piled segment" v-for="album in gallery" class="gallery images" style="display: none" v-show="gallery">
-		<img v-if="album.cover" class="ui small image" src="{{\Pingpong\Modules\Facades\Module::asset('gallery:images/no-preview.png')}}" v-bind:src="album.cover.data.image.thumbnail.square" >
-		<img v-if="!album.cover" class="ui small image" src="{{\Pingpong\Modules\Facades\Module::asset('gallery:images/no-preview.png')}}" alt="">
-		<h4 class="ui header">@{{ album.title }}</h4>
-	</a>
+	<div class="ui cards">
 
+		<div class="ui special card" v-for="album in gallery" style="display: none" v-show="gallery">
+
+			<div class="blurring dimmable image" >
+				<div class="ui dimmer">
+					<div class="content">
+						<div class="center">
+							<a v-bind:href="album.links.backend" class="ui inverted button">Edit Gallery</a>
+						</div>
+					</div>
+				</div>
+				<img src="" v-bind:src="album.cover.data.image.thumbnail.cover">
+			</div>
+
+			<div class="content">
+				<a v-bind:href="album.links.backend" class="header">@{{ album.title }}</a>
+				<div class="meta">
+					<span class="date"></span>
+				</div>
+				<div class="description">
+
+				</div>
+			</div>
+			<div class="extra content">
+				<a v-bind:href="album.links.backend" class="right floated star">
+					<i class="pencil icon"></i>
+					Edit
+				</a>
+			</div>
+		</div>
+	</div>
 
 @endsection
 
@@ -38,10 +64,10 @@
 			</div>
 			<div class="actions">
 				<div class="ui black deny button">
-					{{ trans('core::core.button.cancel') }}
+					{{ trans('core::elements.button.cancel') }}
 				</div>
 				<div class="ui positive right labeled icon button">
-					{{ trans('core::core.button.create') }}
+					{{ trans('core::elements.button.create') }}
 					<i class="checkmark icon"></i>
 				</div>
 			</div>
@@ -50,7 +76,6 @@
 
 
 @section('javascript')
-
 	<script>
 
 		$('#createNewAlbumModal')
@@ -61,8 +86,6 @@
 					url: '{{apiRoute('v1', 'api.gallery.album.store')}}',
 					method : 'POST',
 					serializeForm: true,
-					data: {
-					},
 					beforeXHR: function(xhr) {
 						xhr.setRequestHeader ('Authorization', 'Bearer {{$jwtoken}}');
 						return xhr;
@@ -81,14 +104,21 @@
 			},
 			ready: function() {
 				this.$http.get('{{apiRoute('v1', 'api.gallery.album.index')}}', function (data, status, request) {
-					this.$set('gallery', data.data)
+					this.$set('gallery', data.data);
 					this.$set('meta', data.meta);
+
+					setTimeout(function(){
+								$('.special.card .image').dimmer({
+									on: 'hover'
+								});}, 0);
 
 				}).error(function (data, status, request) {
 				})
 			}
 
 		});
+
+
 
 	</script>
 @endsection

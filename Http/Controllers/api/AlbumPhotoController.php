@@ -4,10 +4,15 @@ namespace Modules\Gallery\Http\Controllers\api;
 
 use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\ApiBaseController;
+use Modules\Core\Http\Requests\MediaImageRequest;
 use Modules\Gallery\Repositories\AlbumRepository;
 use Modules\Gallery\Repositories\PhotoRepository;
 use Modules\Gallery\Transformers\PhotoTransformer;
 
+/**
+ * Class AlbumPhotoController
+ * @package Modules\Gallery\Http\Controllers\api
+ */
 class AlbumPhotoController extends ApiBaseController
 {
     /**
@@ -20,6 +25,11 @@ class AlbumPhotoController extends ApiBaseController
      */
     private $photo;
 
+    /**
+     * AlbumPhotoController constructor.
+     * @param AlbumRepository $album
+     * @param PhotoRepository $photo
+     */
     public function __construct(AlbumRepository $album, PhotoRepository $photo)
     {
         parent::__construct();
@@ -27,6 +37,11 @@ class AlbumPhotoController extends ApiBaseController
         $this->photo = $photo;
     }
 
+    /**
+     * @param Request $request
+     * @param         $album
+     * @return mixed
+     */
     public function index(Request $request, $album)
     {
         $photos = $this->album->findBySlug($album)->photos;
@@ -34,7 +49,12 @@ class AlbumPhotoController extends ApiBaseController
         return $this->response->collection($photos, new PhotoTransformer());
     }
 
-    public function store(Request $request, $album)
+    /**
+     * @param MediaImageRequest $request
+     * @param                   $album
+     * @return mixed
+     */
+    public function store(MediaImageRequest $request, $album)
     {
         $album = $this->album->findBySlug($album);
         $photo = $this->photo->create([
@@ -42,11 +62,17 @@ class AlbumPhotoController extends ApiBaseController
             'captured_at'   => \Carbon\Carbon::now(),
         ]);
 
-        $photo->addMedia($request->files->get('qqfile'))->toCollection('images');
+        $photo->addMedia($request->files->get('image'))->toCollection('images');
 
         return $this->response->item($photo, new PhotoTransformer());
     }
 
+    /**
+     * @param Request $request
+     * @param         $album
+     * @param         $photoID
+     * @return mixed
+     */
     public function show(Request $request, $album, $photoID)
     {
         $photo = $this->photo->find($photoID);
@@ -54,6 +80,11 @@ class AlbumPhotoController extends ApiBaseController
         return $this->response->item($photo, new PhotoTransformer());
     }
 
+    /**
+     * @param Request $request
+     * @param         $album
+     * @param         $photoID
+     */
     public function update(Request $request, $album, $photoID)
     {
         $photo = $this->photo->find($photoID);
@@ -64,6 +95,11 @@ class AlbumPhotoController extends ApiBaseController
                 ]);
     }
 
+    /**
+     * @param Request $request
+     * @param         $album
+     * @param         $photoID
+     */
     public function destroy(Request $request, $album, $photoID)
     {
         $this->photo->find($photoID)->delete();
