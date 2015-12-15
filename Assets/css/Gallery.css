@@ -52,6 +52,10 @@
 #photosGrid {
   min-height: 300px;
 }
+#photosDetail .image {
+  margin-left: auto;
+  margin-right: auto;
+}
 #photosDetail.fixed .segments {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

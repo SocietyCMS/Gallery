@@ -42,11 +42,18 @@
   min-height: 300px;
 }
 
-#photosDetail.fixed .segments {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top-width: 0;
+#photosDetail {
+  & .image {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.fixed .segments {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 0;
+  }
 }
+
 
 #albumToolbar.fixed {
   border-top-left-radius: 0;
