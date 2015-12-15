@@ -11,11 +11,11 @@
                 </div>
             </div>
             <div class="extra images">
-                <a href="{{route('gallery.show', $activity->subject->slug)}}">
                 @foreach($activity->subject->photos->take(5) as $photo)
-                    <img src="{{$photo->getFirstMediaUrl('images', 'wide160')}}">
+                    <a href="{{route('gallery.show', $activity->subject->slug)}}">
+                        <img src="{{$photo->getFirstMediaUrl('images', 'wide160')}}">
+                    </a>
                 @endforeach
-                </a>
             </div>
         </div>
     </div>

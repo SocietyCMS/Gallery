@@ -10,4 +10,8 @@ return [
     'button' => [
         'create album' => 'Create an Album',
     ],
+    'modal' => [
+        'create album' => 'Create an Album',
+        'delete album' => 'Delete an Album',
+    ]
 ];

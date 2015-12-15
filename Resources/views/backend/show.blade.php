@@ -21,7 +21,6 @@
 						<i class="icon photo"></i>
 						Add Photo
 					</div>
-					<div class="ui red basic right floated button" id="deleteAlbumButton">Delete Gallery</div>
 				</div>
 
 				<div class="ui indicating right floated progress qq-drop-processing-selector qq-drop-processing" id="uploadProgrssbar" style="display: none">
@@ -201,15 +200,7 @@
                         $('#deletePhotoModal').modal('hide');
                     }).error(function (data, status, request) {
                     });
-                },
-				deleteAlbum: function() {
-					var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => $album->slug])}}');
-
-					resource.delete(function (data, status, request) {
-						window.location.replace("{{route('backend::gallery.gallery.index')}}");
-					}).error(function (data, status, request) {
-					});
-				}
+                }
 			}
 
         });
@@ -261,10 +252,6 @@
 				}
 			}
 		});
-
-
-		$('#deleteAlbumButton').click(function(){VueInstance.deleteAlbum()});
-
     </script>
 
 @endsection
