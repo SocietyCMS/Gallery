@@ -34,7 +34,7 @@ class AlbumTransformer extends Fractal\TransformerAbstract
             'photoCount' => $album->photos->count(),
             'links'      => [
                 'api' => [
-                    'aplum'  => apiRoute('v1', 'api.gallery.album.index', $album->slug),
+                    'album'  => apiRoute('v1', 'api.gallery.album.show', $album->slug),
                     'photos' => apiRoute('v1', 'api.gallery.album.photo.index', $album->slug),
                 ],
                 'backend' => route('backend::gallery.gallery.show', $album->slug),

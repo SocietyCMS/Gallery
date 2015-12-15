@@ -13,5 +13,8 @@ return [
     'modal' => [
         'create album' => 'Create an Album',
         'delete album' => 'Delete an Album',
+    ],
+    'form' => [
+        'album name' => 'Album name:'
     ]
 ];

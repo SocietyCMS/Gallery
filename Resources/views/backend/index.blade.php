@@ -22,7 +22,7 @@
                     <div class="ui dimmer">
                         <div class="content">
                             <div class="center">
-                                <a v-bind:href="album.links.backend" class="ui inverted button">Edit Gallery</a>
+                                <a v-bind:href="album.links.backend" class="ui inverted button">{{trans('core::elements.action.edit resource', ['name'=>trans('gallery::gallery.title.gallery')])}}</a>
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,14 @@
                 </div>
 
                 <div class="content">
-                    <a v-bind:href="album.links.backend" class="header">@{{ album.title }}</a>
+                    <a v-bind:href="album.links.backend" class="header" v-if="updateAlbumSlug != album.slug">@{{ album.title }}</a>
+
+                    <div class="ui action input" v-if="updateAlbumSlug == album.slug">
+                        <input type="text" v-model="album.title" lazy v-on:change="updateAlbum(album.title)">
+                        <button class="ui primary icon button" v-on:click="updateAlbumTitleToggle(album.slug)">
+                            <i class="check icon"></i>
+                        </button>
+                    </div>
 
                     <div class="meta">
                         <span class="date"></span>
@@ -43,11 +50,11 @@
                 <div class="extra content">
                     <a v-on:click="deleteAlbumModal(album.slug)" class="right floated">
                         <i class="red trash outline icon"></i>
-                        Delete
+                        @lang('core::elements.button.delete')
                     </a>
-                    <a v-bind:href="album.links.backend">
+                    <a v-on:click="updateAlbumTitleToggle(album.slug)">
                         <i class="pencil icon"></i>
-                        Edit
+                        @lang('core::elements.button.edit')
                     </a>
                 </div>
             </div>
@@ -66,7 +73,7 @@
         <div class="content">
             <div class="ui form">
                 <div class="field">
-                    <label>Album name:</label>
+                    <label>{{trans('gallery::gallery.form.album name')}}</label>
                     <input type="text" name="title">
                 </div>
             </div>
@@ -130,6 +137,7 @@
             data: {
                 gallery: null,
                 meta: null,
+                updateAlbumSlug: null,
                 deleteAlbumSlug: null
             },
             ready: function () {
@@ -153,11 +161,23 @@
                             .modal('show')
                     ;
                 },
+                updateAlbumTitleToggle: function (slug) {
+                    if(this.updateAlbumSlug == null) {
+                        return this.updateAlbumSlug = slug;
+                    }
+                    return this.updateAlbumSlug = null;
+                },
+                updateAlbum: function (text) {
+                    var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.update', ['album' => ':id'])}}');
 
+                    resource.update({id: this.updateAlbumSlug}, {title:text}, function (data, status, request) {
+                    }).error(function (data, status, request) {
+                    });
+                },
                 deleteAlbum: function () {
                     var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => ':slug'])}}');
 
-                    resource.delete({slug: this.deleteAlbumSlug}, function (data, status, request) {
+                    resource.delete({slug: this.deleteAlbumSlug},function (data, status, request) {
                         window.location.replace("{{route('backend::gallery.gallery.index')}}");
                     }).error(function (data, status, request) {
                     });

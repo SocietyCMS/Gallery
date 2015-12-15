@@ -54,6 +54,10 @@ class AlbumController extends ApiBaseController
 
     public function update(Request $request, $slug)
     {
+        $album = $this->album->findBySlug($slug);
+        $album->update(['title' => $request->title]);
+
+        return $this->response->item($album, new AlbumTransformer());
     }
 
     public function destroy(Request $request, $slug)
