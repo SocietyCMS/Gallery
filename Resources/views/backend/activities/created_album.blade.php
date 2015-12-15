@@ -13,7 +13,7 @@
             <div class="extra images">
                 <a href="{{route('gallery.show', $activity->subject->slug)}}">
                 @foreach($activity->subject->photos->take(5) as $photo)
-                    <img src="{{$photo->getFirstMediaUrl('images', 'original250')}}">
+                    <img src="{{$photo->getFirstMediaUrl('images', 'wide160')}}">
                 @endforeach
                 </a>
             </div>
