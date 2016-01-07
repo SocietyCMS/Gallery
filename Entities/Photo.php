@@ -45,6 +45,13 @@ class Photo extends Model implements HasMediaConversions
     protected $dates = ['captured_at'];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['media'];
+
+    /**
      * Photos relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

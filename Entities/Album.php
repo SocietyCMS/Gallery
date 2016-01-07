@@ -44,6 +44,7 @@ class Album extends Model
      */
     protected static $recordEvents = ['created'];
 
+
     /**
      * Photos relation.
      *
