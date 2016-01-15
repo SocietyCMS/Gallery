@@ -39,7 +39,7 @@ class SidebarExtender implements \Maatwebsite\Sidebar\SidebarExtender
                 $item->icon('fa fa-picture-o');
                 $item->route('backend::gallery.gallery.index');
                 $item->authorize(
-                    $this->auth->hasAccess('gallery.gallery.index')
+                    $this->auth->can('gallery::manage-gallery')
                 );
             });
 
