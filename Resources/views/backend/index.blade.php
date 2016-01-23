@@ -8,6 +8,36 @@
 @endsection
 
 @section('content')
+    <div>
+
+        <alert type="error">Something Went Wrong!</alert>
+        <h1>Hello App!</h1>
+        <p>
+            <!-- use v-link directive for navigation. -->
+            <a v-link="{ path: '/foo' }">Go to Foo</a>
+            <a v-link="{ path: '/bar' }">Go to Bar</a>
+        </p>
+        <!-- route outlet -->
+        <router-view></router-view>
+    </div>
+@endsection
+
+@section('javascript')
+    <script>
+
+        var resourceGalleryAlbumIndex = '{{apiRoute('v1', 'api.gallery.album.index')}}';
+        var resourceGalleryAlbumUpdate = '{{apiRoute('v1', 'api.gallery.album.update', ['album' => ':id'])}}';
+
+    </script>
+    <script src="{{\Pingpong\Modules\Facades\Module::asset('gallery:js/app.js')}}"></script>
+
+@endsection
+
+
+
+
+
+@section('content1')
 
     <div class="ui blue segment">
         <a href="#" id="createNewAlbumButton"
@@ -63,7 +93,7 @@
     </div>
 @endsection
 
-@section('htmlComponents')
+@section('htmlComponents1')
     <form class="ui modal" id="createNewAlbumModal">
         <i class="close icon"></i>
 
@@ -111,8 +141,15 @@
 @endsection
 
 
-@section('javascript')
+@section('javascript1')
+    <script src="{{\Pingpong\Modules\Facades\Module::asset('documents:js/app.js')}}"></script>
     <script>
+
+        var resourceGalleryAlbumIndex = '{{apiRoute('v1', 'api.gallery.album.index')}}';
+        var resourceGalleryAlbumUpdate = '{{apiRoute('v1', 'api.gallery.album.update', ['album' => ':id'])}}';
+
+
+
 
         $('#createNewAlbumModal')
                 .modal('attach events', '#createNewAlbumButton', 'show');
@@ -131,59 +168,6 @@
                     }
                 });
 
-
-        new Vue({
-            el: '#societyAdmin',
-            data: {
-                gallery: null,
-                meta: null,
-                updateAlbumSlug: null,
-                deleteAlbumSlug: null
-            },
-            ready: function () {
-                this.$http.get('{{apiRoute('v1', 'api.gallery.album.index')}}', function (data, status, request) {
-                    this.$set('gallery', data.data);
-                    this.$set('meta', data.meta);
-
-                    setTimeout(function () {
-                        $('.special.card .image').dimmer({
-                            on: 'hover'
-                        });
-                    }, 0);
-
-                }).error(function (data, status, request) {
-                })
-            },
-            methods: {
-                deleteAlbumModal: function (slug) {
-                    this.deleteAlbumSlug = slug;
-                    $('#deleteAlbumModal')
-                            .modal('show')
-                    ;
-                },
-                updateAlbumTitleToggle: function (slug) {
-                    if(this.updateAlbumSlug == null) {
-                        return this.updateAlbumSlug = slug;
-                    }
-                    return this.updateAlbumSlug = null;
-                },
-                updateAlbum: function (text) {
-                    var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.update', ['album' => ':id'])}}');
-
-                    resource.update({id: this.updateAlbumSlug}, {title:text}, function (data, status, request) {
-                    }).error(function (data, status, request) {
-                    });
-                },
-                deleteAlbum: function () {
-                    var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => ':slug'])}}');
-
-                    resource.delete({slug: this.deleteAlbumSlug},function (data, status, request) {
-                        window.location.replace("{{route('backend::gallery.gallery.index')}}");
-                    }).error(function (data, status, request) {
-                    });
-                }
-            }
-        });
 
 
     </script>
