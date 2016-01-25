@@ -1,19 +1,33 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _Alert = require('./components/Alert.vue');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['album']
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.image.thumbnail.cover\">\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n        <div class=\"description\">\n            <div class=\"ui horizontal bulleted list\">\n                <div class=\"item\">\n                    About Us\n                </div>\n                <div class=\"item\">\n                    Sitemap\n                </div>\n                <div class=\"item\">\n                    Contact\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photoCount }} Photos\n    </div>\n</a>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/home/ralph/web/societycms.dev/modules/Gallery/Resources/assets/js/components/Album.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":4}],2:[function(require,module,exports){
+'use strict';
 
-var _Alert2 = _interopRequireDefault(_Alert);
+var _Album = require('./components/Album.vue');
+
+var _Album2 = _interopRequireDefault(_Album);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-new Vue({
-    el: '#societyAdmin',
-    components: { Alert: _Alert2.default },
-    ready: function ready() {
-        console.log('ready');
-    }
-});
 
 new Vue({
     el: '#societyAdmin',
@@ -21,64 +35,18 @@ new Vue({
         gallery: null,
         meta: null
     },
+    components: { Album: _Album2.default },
     ready: function ready() {
         this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
             this.$set('gallery', data.data);
             this.$set('meta', data.meta);
         }).error(function (data, status, request) {});
     },
+
     methods: {}
 });
 
-},{"./components/Alert.vue":2}],2:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.Alert {\n    padding: 10px;\n    position: absolute;\n    bottom: 40px;\n    right: 40px;\n}\n.Alert--Success {\n    border: 10px solid green;\n}\n.Alert--Error {\n    border: 10px solid red;\n}\n")
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    props: ['type'],
-    data: function data() {
-        return {
-            show: true
-        };
-    },
-    ready: function ready() {
-        setTimeout(function () {
-            this.show = false;
-        }, 3000);
-    },
-    computed: {
-        alertClass: function alertClass() {
-            var type = this.type;
-
-            return {
-                'Alert': true,
-                'Alert--Scuccess': type == 'success',
-                'Alert--Error': type == 'error'
-            };
-        }
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :class=\"alertClass\" v-show=\"show\">\n    <p>\n        <slot></slot>\n    </p>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/home/ralph/web/societycms.dev/modules/Gallery/Resources/assets/js/components/Alert.vue"
-  module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.Alert {\n    padding: 10px;\n    position: absolute;\n    bottom: 40px;\n    right: 40px;\n}\n.Alert--Success {\n    border: 10px solid green;\n}\n.Alert--Error {\n    border: 10px solid red;\n}\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":5,"vue-hot-reload-api":4,"vueify-insert-css":6}],3:[function(require,module,exports){
+},{"./components/Album.vue":1}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -9996,26 +9964,6 @@ if (process.env.NODE_ENV !== 'production' && inBrowser) {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":3}],6:[function(require,module,exports){
-var inserted = exports.cache = {}
+},{"_process":3}]},{},[2]);
 
-exports.insert = function (css) {
-  if (inserted[css]) return
-  inserted[css] = true
-
-  var elem = document.createElement('style')
-  elem.setAttribute('type', 'text/css')
-
-  if ('textContent' in elem) {
-    elem.textContent = css
-  } else {
-    elem.styleSheet.cssText = css
-  }
-
-  document.getElementsByTagName('head')[0].appendChild(elem)
-  return elem
-}
-
-},{}]},{},[1]);
-
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=gallery.js.map

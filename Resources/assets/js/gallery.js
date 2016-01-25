@@ -1,13 +1,4 @@
-import Alert from './components/Alert.vue';
-
-new Vue({
-    el: '#societyAdmin',
-    components: {Alert},
-    ready(){
-        console.log('ready');
-    }
-});
-
+import Album from './components/Album.vue';
 
 new Vue({
     el: '#societyAdmin',
@@ -15,6 +6,7 @@ new Vue({
         gallery: null,
         meta: null
     },
+    components: {Album},
     ready: function () {
         this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
             this.$set('gallery', data.data);
@@ -22,6 +14,7 @@ new Vue({
         }).error(function (data, status, request) {
         })
     },
+
     methods: {
     }
 });

@@ -38,7 +38,8 @@ elixir(function (mix) {
     /**
      * Concat scripts
      **/
-    mix.browserify("app.js");
+    mix.browserify("gallery.js");
+    mix.browserify("album.js");
 
     /**
      * Copy images
