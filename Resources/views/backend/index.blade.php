@@ -8,17 +8,44 @@
 @endsection
 
 @section('content')
+
+    <div class="ui six doubling cards">
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/elliot.jpg">
+            </div>
+        </div>
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/helen.jpg">
+            </div>
+        </div>
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/jenny.jpg">
+            </div>
+        </div>
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/veronika.jpg">
+            </div>
+        </div>
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/stevie.jpg">
+            </div>
+        </div>
+        <div class="card">
+            <div class="image">
+                <img src="http://semantic-ui.com/images/avatar/large/steve.jpg">
+            </div>
+        </div>
+    </div>
+
     <div>
 
         <alert type="error">Something Went Wrong!</alert>
-        <h1>Hello App!</h1>
-        <p>
-            <!-- use v-link directive for navigation. -->
-            <a v-link="{ path: '/foo' }">Go to Foo</a>
-            <a v-link="{ path: '/bar' }">Go to Bar</a>
-        </p>
-        <!-- route outlet -->
-        <router-view></router-view>
+
     </div>
 @endsection
 

@@ -13,32 +13,37 @@
     }
 </style>
 
-
 <template>
-    <div class="Alert"
-         v-class="
-            Alert--Success: type == 'success',
-            Alert--Error: type == 'error',
-         "
+    <div :class="alertClass"
          v-show="show"
     >
         <p>
-            <content></content>
+            <slot></slot>
         </p>
     </div>
 </template>
 
-
-<script lang="es6" sourceType="module">
+<script>
     export default {
         props: ['type'],
-        data() {
+        data: function() {
             return {
                 show: true
-            }
+            };
         },
-        ready() {
-            setTimeout(() => this.show = false, 3000);
+        ready: function() {
+            setTimeout(function(){ this.show = false}, 3000);
+        },
+        computed: {
+            alertClass: function() {
+                var type = this.type;
+
+                return {
+                    'Alert': true,
+                    'Alert--Scuccess' : type== 'success',
+                    'Alert--Error' : type== 'error'
+                }
+            }
         }
-    }
+    };
 </script>

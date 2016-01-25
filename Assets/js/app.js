@@ -9,25 +9,76 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 new Vue({
     el: '#societyAdmin',
-    componens: { Alert: _Alert2.default },
+    components: { Alert: _Alert2.default },
     ready: function ready() {
         console.log('ready');
     }
 });
 
+new Vue({
+    el: '#societyAdmin',
+    data: {
+        gallery: null,
+        meta: null
+    },
+    ready: function ready() {
+        this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
+            this.$set('gallery', data.data);
+            this.$set('meta', data.meta);
+        }).error(function (data, status, request) {});
+    },
+    methods: {}
+});
+
 },{"./components/Alert.vue":2}],2:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n.Alert {\n    padding: 10px;\n    position: absolute;\n    bottom: 40px;\n    right: 40px;\n}\n.Alert--Success {\n    border: 10px solid green;\n}\n.Alert--Error {\n    border: 10px solid red;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['type'],
+    data: function data() {
+        return {
+            show: true
+        };
+    },
+    ready: function ready() {
+        setTimeout(function () {
+            this.show = false;
+        }, 3000);
+    },
+    computed: {
+        alertClass: function alertClass() {
+            var type = this.type;
+
+            return {
+                'Alert': true,
+                'Alert--Scuccess': type == 'success',
+                'Alert--Error': type == 'error'
+            };
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div :class=\"alertClass\" v-show=\"show\">\n    <p>\n        <slot></slot>\n    </p>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/home/ralph/web/societycms.dev/modules/Gallery/Resources/assets/js/components/Alert.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n.Alert {\n    padding: 10px;\n    position: absolute;\n    bottom: 40px;\n    right: 40px;\n}\n.Alert--Success {\n    border: 10px solid green;\n}\n.Alert--Error {\n    border: 10px solid red;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":4}],3:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":4,"vueify-insert-css":6}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -344,17 +395,74 @@ function updateView (view, Component) {
   // disable transitions
   view.vm._isCompiled = false
   // save state
-  var state = view.childVM.$data
+  var state = extractState(view.childVM)
   // remount, make sure to disable keep-alive
   var keepAlive = view.keepAlive
   view.keepAlive = false
   view.mountComponent()
   view.keepAlive = keepAlive
   // restore state
-  view.childVM.$data = state
+  restoreState(view.childVM, state, true)
   // re-eanble transitions
   view.vm._isCompiled = true
   view.hotUpdating = false
+}
+
+/**
+ * Extract state from a Vue instance.
+ *
+ * @param {Vue} vm
+ * @return {Object}
+ */
+
+function extractState (vm) {
+  return {
+    cid: vm.constructor.cid,
+    data: vm.$data,
+    children: vm.$children.map(extractState)
+  }
+}
+
+/**
+ * Restore state to a reloaded Vue instance.
+ *
+ * @param {Vue} vm
+ * @param {Object} state
+ */
+
+function restoreState (vm, state, isRoot) {
+  var oldAsyncConfig
+  if (isRoot) {
+    var s = Date.now()
+    // set Vue into sync mode during state rehydration
+    oldAsyncConfig = Vue.config.async
+    Vue.config.async = false
+  }
+  // actual restore
+  if (isRoot || !vm._props) {
+    vm.$data = state.data
+  } else {
+    Object.keys(state.data).forEach(function (key) {
+      if (!vm._props[key]) {
+        // for non-root, only restore non-props fields
+        vm.$data[key] = state.data[key]
+      }
+    })
+  }
+  // verify child consistency
+  var hasSameChildren = vm.$children.every(function (c, i) {
+    return state.children[i] && state.children[i].cid === c.constructor.cid
+  })
+  if (hasSameChildren) {
+    // rehydrate children
+    vm.$children.forEach(function (c, i) {
+      restoreState(c, state.children[i])
+    })
+  }
+  if (isRoot) {
+    Vue.config.async = oldAsyncConfig
+    console.log(Date.now() - s)
+  }
 }
 
 function format (id) {
@@ -9888,6 +9996,26 @@ if (process.env.NODE_ENV !== 'production' && inBrowser) {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":3}]},{},[1]);
+},{"_process":3}],6:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}]},{},[1]);
 
 //# sourceMappingURL=app.js.map
