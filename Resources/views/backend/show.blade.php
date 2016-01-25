@@ -16,7 +16,7 @@
 
 	<div class="ui divider"></div>
 
-	<div class="ui cards">
+	<div class="ui photos" id="masonry">
 		<photo :photo="photo" v-for="photo in album"></photo>
 	</div>
 

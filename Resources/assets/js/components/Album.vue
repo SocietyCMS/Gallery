@@ -8,19 +8,6 @@
         </div>
         <div class="content">
             <div class="header">{{ album.title }}</div>
-            <div class="description">
-                <div class="ui horizontal bulleted list">
-                    <div class="item">
-                        About Us
-                    </div>
-                    <div class="item">
-                        Sitemap
-                    </div>
-                    <div class="item">
-                        Contact
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="extra content">
             <i class="photo icon"></i>

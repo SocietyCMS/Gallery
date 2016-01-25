@@ -26,7 +26,6 @@ new Vue({
 });
 
 },{"./components/Photo.vue":2}],2:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.photo {\n    height: 200px;\n    margin: .5vw;\n}\n.photo img {\n    width: auto;\n    height: 100%;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -42,17 +41,13 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/home/ralph/web/societycms.dev/modules/Gallery/Resources/assets/js/components/Photo.vue"
-  module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.photo {\n    height: 200px;\n    margin: .5vw;\n}\n.photo img {\n    width: auto;\n    height: 100%;\n}\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":4,"vueify-insert-css":6}],3:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":4}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -9970,26 +9965,6 @@ if (process.env.NODE_ENV !== 'production' && inBrowser) {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":3}],6:[function(require,module,exports){
-var inserted = exports.cache = {}
-
-exports.insert = function (css) {
-  if (inserted[css]) return
-  inserted[css] = true
-
-  var elem = document.createElement('style')
-  elem.setAttribute('type', 'text/css')
-
-  if ('textContent' in elem) {
-    elem.textContent = css
-  } else {
-    elem.styleSheet.cssText = css
-  }
-
-  document.getElementsByTagName('head')[0].appendChild(elem)
-  return elem
-}
-
-},{}]},{},[1]);
+},{"_process":3}]},{},[1]);
 
 //# sourceMappingURL=album.js.map
