@@ -26,28 +26,33 @@ new Vue({
 });
 
 },{"./components/Photo.vue":2}],2:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n.photo {\n    height: 200px;\n    margin: .5vw;\n}\n.photo img {\n    width: auto;\n    height: 100%;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
-    props: ['album']
+    props: ['photo']
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.image.thumbnail.cover\">\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n        <div class=\"description\">\n            <div class=\"ui horizontal bulleted list\">\n                <div class=\"item\">\n                    About Us\n                </div>\n                <div class=\"item\">\n                    Sitemap\n                </div>\n                <div class=\"item\">\n                    Contact\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photoCount }} Photos\n    </div>\n</a>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img class=\"ui bordered image\" src=\"\" v-bind:src=\"photo.image.thumbnail.large\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/home/ralph/web/societycms.dev/modules/Gallery/Resources/assets/js/components/Photo.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n.photo {\n    height: 200px;\n    margin: .5vw;\n}\n.photo img {\n    width: auto;\n    height: 100%;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":4}],3:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":4,"vueify-insert-css":6}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -9965,6 +9970,26 @@ if (process.env.NODE_ENV !== 'production' && inBrowser) {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":3}]},{},[1]);
+},{"_process":3}],6:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}]},{},[1]);
 
 //# sourceMappingURL=album.js.map

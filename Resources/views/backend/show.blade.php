@@ -16,6 +16,9 @@
 
 	<div class="ui divider"></div>
 
+	<div class="ui cards">
+		<photo :photo="photo" v-for="photo in album"></photo>
+	</div>
 
 @endsection
 

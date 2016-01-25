@@ -4,7 +4,7 @@ new Vue({
     el: '#societyAdmin',
     data: {
         album:null,
-        meta:null,
+        meta:null
     },
     components: {Photo},
     ready: function () {
