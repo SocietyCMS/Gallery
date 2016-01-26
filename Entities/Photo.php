@@ -35,7 +35,7 @@ class Photo extends Model implements HasMediaConversions
      *
      * @var array
      */
-    protected $fillable = ['title', 'caption', 'captured_at', 'album_id'];
+    protected $fillable = ['title', 'caption', 'height', 'width', 'filesize', 'captured_at', 'album_id'];
 
     /**
      * The attributes that should be mutated to dates.

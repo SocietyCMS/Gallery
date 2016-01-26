@@ -9,11 +9,42 @@
 
 @section('content')
 
-    <div class="ui six doubling link cards">
+    <a class="ui primary button" href="">
+        <i class="add user icon"></i>
+        New User
+    </a>
+
+    <div class="ui six doubling link cards gallery">
         <album :album="album" v-for="album in gallery"></album>
+    </div>
+
+
+    <div class="ui basic modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Give your new Album an name
+        </div>
+        <div class="content">
+            <div class="description">
+                <div class="ui massive inverted transparent fluid input">
+                    <input type="text" placeholder="Album Title...">
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="two fluid ui inverted buttons">
+                <div class="ui green inverted button">
+                    <i class="checkmark icon"></i>
+                    Create
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
+@section('styles')
+    <link href="{{\Pingpong\Modules\Facades\Module::asset('gallery:css/Gallery.css')}}" rel="stylesheet" type="text/css">
+@endsection
 @section('javascript')
     <script>
 

@@ -7,22 +7,84 @@ var _Photo2 = _interopRequireDefault(_Photo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-new Vue({
+var VueInstance = new Vue({
     el: '#societyAdmin',
     data: {
-        album: null,
+        photos: null,
+        album: {
+            title: null
+        },
         meta: null
     },
     components: { Photo: _Photo2.default },
     ready: function ready() {
         this.$http.get(resourceGalleryAlbumPhotoIndex, function (data, status, request) {
-
-            this.$set('album', data.data);
+            this.$set('photos', data.data);
             this.$set('meta', data.meta);
+        }).error(function (data, status, request) {});
+
+        this.$http.get(resourceGalleryAlbumShow, function (data, status, request) {
+            this.$set('album', data.data);
         }).error(function (data, status, request) {});
     },
 
-    methods: {}
+    methods: {
+        updateAlbum: function updateAlbum() {
+            var resource = this.$resource(resourceGalleryAlbumUpdate);
+            resource.update({ id: this.album.slug }, { title: this.album.title }, function (data, status, request) {}).error(function (data, status, request) {});
+        },
+        addPhoto: function addPhoto(photo) {
+            this.photos.push(photo.data);
+        }
+    }
+});
+
+var dragAndDropModule = new fineUploader.DragAndDrop({
+    dropZoneElements: [document.getElementById('photosGrid')],
+    classes: {
+        dropActive: "cssClassToAddToDropZoneOnEnter"
+    },
+    callbacks: {
+        processingDroppedFilesComplete: function processingDroppedFilesComplete(files, dropTarget) {
+            fineUploaderBasicInstanceImages.addFiles(files);
+        }
+    }
+});
+
+var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
+    button: document.getElementById('uploadImageButton'),
+    request: {
+        endpoint: resourceGalleryAlbumPhotoStore,
+        customHeaders: {
+            "Authorization": "Bearer " + jwtoken
+        },
+        inputName: 'image'
+    },
+    validation: {
+        allowedExtensions: ['jpeg', 'jpg', 'png', 'bmp']
+    },
+    callbacks: {
+        onComplete: function onComplete(id, name, responseJSON) {
+            VueInstance.addPhoto(responseJSON);
+        },
+        onUpload: function onUpload() {
+            // $('#uploadButton').hide();
+            // $('#uploadProgrssbar').show();
+        },
+        onTotalProgress: function onTotalProgress(totalUploadedBytes, totalBytes) {
+            $('#uploadProgrssbar').progress({
+                percent: Math.ceil(totalUploadedBytes / totalBytes * 100)
+            });
+        },
+        onAllComplete: function onAllComplete(succeeded, failed) {
+            /*    $('#uploadButton').show();
+             $('#uploadProgrssbar').hide();
+             $('#uploadProgrssbar').progress({
+             percent: 0
+             });
+             */
+        }
+    }
 });
 
 },{"./components/Photo.vue":2}],2:[function(require,module,exports){
@@ -33,16 +95,26 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     props: ['photo'],
+    computed: {
+        thumbnailHeight: function thumbnailHeight() {
+            return '225px';
+        },
+        thumbnailWidth: function thumbnailWidth() {
+            return Math.ceil(225 / this.photo.properties.height * this.photo.properties.width) + 'px';
+        }
+    },
     ready: function ready() {
-        $('.photo img').visibility({
-            type: 'image',
-            transition: 'fade in',
-            duration: 1000
-        });
+        Vue.nextTick(function () {
+            $('#photo-id-' + this.photo.id).visibility({
+                type: 'image',
+                transition: 'fade in',
+                duration: 1000
+            });
+        }.bind(this));
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img class=\"ui bordered image\" src=\"\" v-bind:data-src=\"photo.image.thumbnail.large\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth }\" v-bind:data-src=\"photo.thumbnail.large\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -409,7 +481,6 @@ function extractState (vm) {
 function restoreState (vm, state, isRoot) {
   var oldAsyncConfig
   if (isRoot) {
-    var s = Date.now()
     // set Vue into sync mode during state rehydration
     oldAsyncConfig = Vue.config.async
     Vue.config.async = false
@@ -437,7 +508,6 @@ function restoreState (vm, state, isRoot) {
   }
   if (isRoot) {
     Vue.config.async = oldAsyncConfig
-    console.log(Date.now() - s)
   }
 }
 

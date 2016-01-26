@@ -4,7 +4,7 @@
             <div class="ui blue right corner label" v-if="album.published">
                 <i class="bookmark icon"></i>
             </div>
-            <img v-bind:src="album.cover.data.image.thumbnail.cover" >
+            <img v-bind:src="album.cover.data.thumbnail.cover" >
         </div>
         <div class="content">
             <div class="header">{{ album.title }}</div>

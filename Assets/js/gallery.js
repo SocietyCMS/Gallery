@@ -8,7 +8,7 @@ exports.default = {
     props: ['album']
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.image.thumbnail.cover\">\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }} Photos\n    </div>\n</a>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\">\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }} Photos\n    </div>\n</a>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -401,7 +401,6 @@ function extractState (vm) {
 function restoreState (vm, state, isRoot) {
   var oldAsyncConfig
   if (isRoot) {
-    var s = Date.now()
     // set Vue into sync mode during state rehydration
     oldAsyncConfig = Vue.config.async
     Vue.config.async = false
@@ -429,7 +428,6 @@ function restoreState (vm, state, isRoot) {
   }
   if (isRoot) {
     Vue.config.async = oldAsyncConfig
-    console.log(Date.now() - s)
   }
 }
 

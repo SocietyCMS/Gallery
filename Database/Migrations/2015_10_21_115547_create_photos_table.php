@@ -16,6 +16,9 @@ class CreatePhotosTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('caption');
+            $table->integer('height')->unsigned();
+            $table->integer('width')->unsigned();
+            $table->integer('filesize')->unsigned();
             $table->timestamp('captured_at');
             $table->integer('album_id')->unsigned();
             $table->timestamps();
