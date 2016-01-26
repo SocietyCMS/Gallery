@@ -21,21 +21,23 @@
 
     <div class="ui basic modal">
         <i class="close icon"></i>
-        <div class="header">
-            Give your new Album an name
-        </div>
-        <div class="content">
-            <div class="description">
-                <div class="ui massive inverted transparent fluid input">
-                    <input type="text" placeholder="Album Title...">
+        <div class="ui inverted segment">
+            <div class="header">
+                Give your new Album an name
+            </div>
+            <div class="content">
+                <div class="description">
+                    <div class="ui massive inverted transparent fluid input">
+                        <input type="text" placeholder="Album Title...">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="actions">
-            <div class="two fluid ui inverted buttons">
-                <div class="ui green inverted button">
-                    <i class="checkmark icon"></i>
-                    Create
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui green inverted button">
+                        <i class="checkmark icon"></i>
+                        Create
+                    </div>
                 </div>
             </div>
         </div>
