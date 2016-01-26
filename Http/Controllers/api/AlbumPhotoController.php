@@ -46,6 +46,10 @@ class AlbumPhotoController extends ApiBaseController
     {
         $photos = $this->album->findBySlug($album)->photos;
 
+        $data = \Intervention\Image\Image::make($photos->first()->getFirstMediaUrl('images'))->exif();
+
+        dd($data);
+
         return $this->response->collection($photos, new PhotoTransformer());
     }
 

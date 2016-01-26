@@ -11,7 +11,7 @@
         </div>
         <div class="extra content">
             <i class="photo icon"></i>
-            {{ album.photoCount }} Photos
+            {{ album.photos.total }} Photos
         </div>
     </a>
 </template>
