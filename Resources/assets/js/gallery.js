@@ -4,7 +4,11 @@ new Vue({
     el: '#societyAdmin',
     data: {
         gallery: null,
-        meta: null
+        meta: null,
+        newAlbum: {
+            title: null,
+            description: null
+        }
     },
     components: {Album},
     ready: function () {
@@ -16,5 +20,17 @@ new Vue({
     },
 
     methods: {
+        newAlbumModal: function() {
+            $('#newAlbumModal')
+                .modal('setting', 'transition', 'fade up')
+                .modal('show');
+        },
+        createNewAlbum: function() {
+            var resource = this.$resource(resourceGalleryAlbumStore);
+
+            resource.save(this.newAlbum, function (data, status, request) {
+            }).error(function (data, status, request) {
+            });
+        },
     }
 });

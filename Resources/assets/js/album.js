@@ -30,8 +30,18 @@ var VueInstance = new Vue({
             }).error(function (data, status, request) {
             });
         },
-        addPhoto: function(photo) {
-            this.photos.push(photo.data);
+        addPhoto: function(previewID, previewName, photo) {
+            var index = this.photos.map(function(e) { return e.id; }).indexOf(previewID);
+            this.photos.$set(index,photo.data);
+        },
+        addPreview: function(previewID, previewName) {
+            this.album.photos.total++;
+            return this.photos.push({
+                id: previewID,
+                preview: {
+                    name: previewName
+                }
+            });
         }
     }
 });
@@ -63,11 +73,13 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     },
     callbacks: {
         onComplete: function (id, name, responseJSON) {
-            VueInstance.addPhoto(responseJSON)
+            VueInstance.addPhoto(id, name, responseJSON)
         },
-        onUpload: function () {
-            // $('#uploadButton').hide();
-            // $('#uploadProgrssbar').show();
+        onSubmitted: function (id, name) {
+            VueInstance.addPreview(id, name);
+            Vue.nextTick(function () {
+                return fineUploaderBasicInstanceImages.drawThumbnail(id,document.getElementById('photo-id-'+id), 225);
+            }.bind(this))
         },
         onTotalProgress: function (totalUploadedBytes, totalBytes) {
             $('#uploadProgrssbar').progress({

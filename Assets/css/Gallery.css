@@ -27,5 +27,8 @@
 .ui.button.bottom.spacing {
   margin-bottom: 2em;
 }
+#noPhotosPlaceholder {
+  margin-top: 3em;
+}
 
 /*# sourceMappingURL=Gallery.css.map */

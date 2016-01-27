@@ -1,7 +1,7 @@
 <template>
     <div class="photo">
-        <img id="photo-id-{{photo.id}}" class="ui rounded image" v-bind:style="{ height: thumbnailHeight, width: thumbnailWidth }"
-             v-bind:data-src="photo.thumbnail.large">
+        <img id="photo-id-{{photo.id}}" class="ui rounded image" v-bind:style="{ height: thumbnailHeight, width: thumbnailWidth}"
+             v-bind:data-src="thumbnailImage">
     </div>
 </template>
 
@@ -9,11 +9,18 @@
     export default {
         props: ['photo'],
         computed: {
+            thumbnailImage: function() {
+                if(this.photo.thumbnail && this.photo.thumbnail.large){
+                    return this.photo.thumbnail.large
+                }
+            },
             thumbnailHeight: function () {
                 return '225px';
             },
             thumbnailWidth: function () {
-                return Math.ceil((225 / this.photo.properties.height) * this.photo.properties.width) + 'px'
+                if(this.photo.properties && this.photo.properties.height && this.photo.properties.width){
+                    return Math.ceil((225 / this.photo.properties.height) * this.photo.properties.width) + 'px'
+                }
             }
         },
         ready() {

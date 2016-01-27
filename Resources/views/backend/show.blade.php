@@ -33,6 +33,12 @@
 
     <div class="ui photos" id="photosGrid">
         <photo :photo="photo" v-for="photo in photos"></photo>
+
+        <h1 class="ui center aligned icon header" v-if="album.photos.total == 0" id="noPhotosPlaceholder">
+            <i class="grey cloud upload icon"></i>
+            This album is empty
+            <div class="sub header">You can drag&drop photos here to upload.</div>
+        </h1>
     </div>
 
 @endsection

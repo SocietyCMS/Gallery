@@ -33,7 +33,11 @@ new Vue({
     el: '#societyAdmin',
     data: {
         gallery: null,
-        meta: null
+        meta: null,
+        newAlbum: {
+            title: null,
+            description: null
+        }
     },
     components: { Album: _Album2.default },
     ready: function ready() {
@@ -43,7 +47,16 @@ new Vue({
         }).error(function (data, status, request) {});
     },
 
-    methods: {}
+    methods: {
+        newAlbumModal: function newAlbumModal() {
+            $('#newAlbumModal').modal('setting', 'transition', 'fade up').modal('show');
+        },
+        createNewAlbum: function createNewAlbum() {
+            var resource = this.$resource(resourceGalleryAlbumStore);
+
+            resource.save(this.newAlbum, function (data, status, request) {}).error(function (data, status, request) {});
+        }
+    }
 });
 
 },{"./components/Album.vue":1}],3:[function(require,module,exports){
@@ -401,6 +414,7 @@ function extractState (vm) {
 function restoreState (vm, state, isRoot) {
   var oldAsyncConfig
   if (isRoot) {
+    var s = Date.now()
     // set Vue into sync mode during state rehydration
     oldAsyncConfig = Vue.config.async
     Vue.config.async = false
@@ -428,6 +442,7 @@ function restoreState (vm, state, isRoot) {
   }
   if (isRoot) {
     Vue.config.async = oldAsyncConfig
+    console.log(Date.now() - s)
   }
 }
 

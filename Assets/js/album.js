@@ -33,8 +33,24 @@ var VueInstance = new Vue({
             var resource = this.$resource(resourceGalleryAlbumUpdate);
             resource.update({ id: this.album.slug }, { title: this.album.title }, function (data, status, request) {}).error(function (data, status, request) {});
         },
-        addPhoto: function addPhoto(photo) {
-            this.photos.push(photo.data);
+        addPhoto: function addPhoto(previewID, previewName, photo) {
+
+            var index = this.photos.map(function (e) {
+                return e.id;
+            }).indexOf(previewID);
+
+            this.photos.$set(index, photo.data);
+
+            this.album.photos.total++;
+            //this.photos.push(photo.data);
+        },
+        addPreview: function addPreview(previewID, previewName) {
+            return this.photos.push({
+                id: previewID,
+                preview: {
+                    name: previewName
+                }
+            });
         }
     }
 });
@@ -65,11 +81,13 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     },
     callbacks: {
         onComplete: function onComplete(id, name, responseJSON) {
-            VueInstance.addPhoto(responseJSON);
+            VueInstance.addPhoto(id, name, responseJSON);
         },
-        onUpload: function onUpload() {
-            // $('#uploadButton').hide();
-            // $('#uploadProgrssbar').show();
+        onSubmitted: function onSubmitted(id, name) {
+            VueInstance.addPreview(id, name);
+            Vue.nextTick(function () {
+                return fineUploaderBasicInstanceImages.drawThumbnail(id, document.getElementById('photo-id-' + id), 225);
+            }.bind(this));
         },
         onTotalProgress: function onTotalProgress(totalUploadedBytes, totalBytes) {
             $('#uploadProgrssbar').progress({
@@ -96,11 +114,14 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     props: ['photo'],
     computed: {
+        thumbnailImage: function thumbnailImage() {},
         thumbnailHeight: function thumbnailHeight() {
             return '225px';
         },
         thumbnailWidth: function thumbnailWidth() {
-            return Math.ceil(225 / this.photo.properties.height * this.photo.properties.width) + 'px';
+            if (this.photo.properties && this.photo.properties.height && this.photo.properties.width) {
+                return Math.ceil(225 / this.photo.properties.height * this.photo.properties.width) + 'px';
+            }
         }
     },
     ready: function ready() {
@@ -114,7 +135,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth }\" v-bind:data-src=\"photo.thumbnail.large\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\" v-bind:data-src=\"photo.thumbnail.large\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -481,6 +502,7 @@ function extractState (vm) {
 function restoreState (vm, state, isRoot) {
   var oldAsyncConfig
   if (isRoot) {
+    var s = Date.now()
     // set Vue into sync mode during state rehydration
     oldAsyncConfig = Vue.config.async
     Vue.config.async = false
@@ -508,6 +530,7 @@ function restoreState (vm, state, isRoot) {
   }
   if (isRoot) {
     Vue.config.async = oldAsyncConfig
+    console.log(Date.now() - s)
   }
 }
 
