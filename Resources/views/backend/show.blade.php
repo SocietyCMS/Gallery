@@ -17,7 +17,7 @@
                 Upload Photos
             </div>
             <div class="divider"></div>
-            <div class="item">
+            <div class="item" v-on:click="deleteAlbumModal">
                 <i class="trash outline icon"></i>
                 Delete Album
             </div>
@@ -34,11 +34,33 @@
     <div class="ui photos" id="photosGrid">
         <photo :photo="photo" v-for="photo in photos"></photo>
 
-        <h1 class="ui center aligned icon header" v-if="album.photos.total == 0" id="noPhotosPlaceholder">
+        <h1 class="ui center aligned icon header" v-if="album.photos && album.photos.total == 0" id="noPhotosPlaceholder">
             <i class="grey cloud upload icon"></i>
             This album is empty
             <div class="sub header">You can drag&drop photos here to upload.</div>
         </h1>
+    </div>
+
+
+    <div class="ui dimmer" v-bind:class="{'active':deleting}">
+        <div class="ui large text loader">Deleting Album....</div>
+    </div>
+
+
+    <div class="ui small modal"  id="deleteAlbumModal">
+        <div class="header"> Delete album?</div>
+        <div class="content">
+            <p>Deleting an album is permanent. All Photos in this album are going to be deleted.</p>
+        </div>
+        <div class="actions">
+                <div class="ui red inverted button" v-on:click="deleteAlbum">
+                    <i class="trash icon"></i>
+                    Delete
+                </div>
+                <div class="ui positive blue button">
+                    Keep Album
+                </div>
+        </div>
     </div>
 
 @endsection
@@ -52,10 +74,13 @@
     <script>
         var resourceGalleryAlbumUpdate = '{{apiRoute('v1', 'api.gallery.album.update', ['album' => $album->slug])}}';
         var resourceGalleryAlbumShow = '{{apiRoute('v1', 'api.gallery.album.show', ['album' => $album->slug])}}';
+        var resourceGalleryAlbumDelete = '{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => $album->slug])}}';
+
 
         var resourceGalleryAlbumPhotoIndex = '{{apiRoute('v1', 'api.gallery.album.photo.index', ['album' => $album->slug])}}';
         var resourceGalleryAlbumPhotoStore = '{{apiRoute('v1', 'api.gallery.album.photo.store', ['album' => $album->slug])}}';
 
+        var backendGalleryAlbumIndex = '{{route('backend::gallery.gallery.index')}}';
 
         var jwtoken = '{{$jwtoken}}';
     </script>

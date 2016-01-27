@@ -7,7 +7,8 @@ var VueInstance = new Vue({
         album: {
             title: null
         },
-        meta: null
+        meta: null,
+        deleting: false
     },
     components: {Photo},
     ready: function () {
@@ -42,6 +43,26 @@ var VueInstance = new Vue({
                     name: previewName
                 }
             });
+        },
+        deleteAlbumModal: function() {
+            $('#deleteAlbumModal')
+                .modal('setting', 'transition', 'fade up')
+                .modal('show');
+        },
+        deleteAlbum: function() {
+
+            $('#deleteAlbumModal')
+                .modal('hide');
+
+            this.deleting = true;
+            var resource = this.$resource(resourceGalleryAlbumDelete);
+
+            resource.delete(this.album, function (data, status, request) {
+                window.open(backendGalleryAlbumIndex,"_self")
+            }).error(function (data, status, request) {
+            });
+
+
         }
     }
 });
@@ -71,20 +92,25 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     validation: {
         allowedExtensions: ['jpeg', 'jpg', 'png', 'bmp']
     },
+    enableAuto: true,
+    maxConnections: 1,
     callbacks: {
         onComplete: function (id, name, responseJSON) {
-            VueInstance.addPhoto(id, name, responseJSON)
+            VueInstance.addPhoto('#'+id, name, responseJSON)
         },
         onSubmitted: function (id, name) {
-            VueInstance.addPreview(id, name);
+            VueInstance.addPreview('#'+id, name);
             Vue.nextTick(function () {
-                return fineUploaderBasicInstanceImages.drawThumbnail(id,document.getElementById('photo-id-'+id), 225);
+                return fineUploaderBasicInstanceImages.drawThumbnail(id,document.getElementById('photo-id-#'+id), 225);
             }.bind(this))
         },
         onTotalProgress: function (totalUploadedBytes, totalBytes) {
             $('#uploadProgrssbar').progress({
                 percent: Math.ceil(totalUploadedBytes / totalBytes * 100)
             });
+        },
+        onError: function (id, name, errorReason) {
+            // toastr.error(errorReason, 'Error: ' + name);
         },
         onAllComplete: function (succeeded, failed) {
             /*    $('#uploadButton').show();

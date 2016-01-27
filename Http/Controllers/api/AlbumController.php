@@ -67,7 +67,8 @@ class AlbumController extends ApiBaseController
         foreach ($album->photos as $photo) {
             $photo->delete();
         }
-        $album->delete();
+
+        $this->album->deleteBySlug($slug);
 
         $this->successDeleted();
     }

@@ -2,6 +2,9 @@
     <div class="photo">
         <img id="photo-id-{{photo.id}}" class="ui rounded image" v-bind:style="{ height: thumbnailHeight, width: thumbnailWidth}"
              v-bind:data-src="thumbnailImage">
+        <div class="ui active dimmer" v-if="photo.preview">
+            <div class="ui indeterminate loader"></div>
+        </div>
     </div>
 </template>
 

@@ -14,7 +14,8 @@ var VueInstance = new Vue({
         album: {
             title: null
         },
-        meta: null
+        meta: null,
+        deleting: false
     },
     components: { Photo: _Photo2.default },
     ready: function ready() {
@@ -34,23 +35,34 @@ var VueInstance = new Vue({
             resource.update({ id: this.album.slug }, { title: this.album.title }, function (data, status, request) {}).error(function (data, status, request) {});
         },
         addPhoto: function addPhoto(previewID, previewName, photo) {
-
             var index = this.photos.map(function (e) {
                 return e.id;
             }).indexOf(previewID);
-
             this.photos.$set(index, photo.data);
-
-            this.album.photos.total++;
-            //this.photos.push(photo.data);
         },
         addPreview: function addPreview(previewID, previewName) {
+            this.album.photos.total++;
             return this.photos.push({
                 id: previewID,
                 preview: {
                     name: previewName
                 }
             });
+        },
+        deleteAlbumModal: function deleteAlbumModal() {
+            $('#deleteAlbumModal').modal('setting', 'transition', 'fade up').modal('show');
+        },
+        deleteAlbum: function deleteAlbum() {
+
+            $('#deleteAlbumModal').modal('hide');
+
+            this.deleting = true;
+
+            var resource = this.$resource(resourceGalleryAlbumDelete);
+
+            resource.delete(this.album, function (data, status, request) {
+                window.open(backendGalleryAlbumIndex, "_self");
+            }).error(function (data, status, request) {});
         }
     }
 });
@@ -79,20 +91,25 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     validation: {
         allowedExtensions: ['jpeg', 'jpg', 'png', 'bmp']
     },
+    enableAuto: true,
+    maxConnections: 1,
     callbacks: {
         onComplete: function onComplete(id, name, responseJSON) {
-            VueInstance.addPhoto(id, name, responseJSON);
+            VueInstance.addPhoto('#' + id, name, responseJSON);
         },
         onSubmitted: function onSubmitted(id, name) {
-            VueInstance.addPreview(id, name);
+            VueInstance.addPreview('#' + id, name);
             Vue.nextTick(function () {
-                return fineUploaderBasicInstanceImages.drawThumbnail(id, document.getElementById('photo-id-' + id), 225);
+                return fineUploaderBasicInstanceImages.drawThumbnail(id, document.getElementById('photo-id-#' + id), 225);
             }.bind(this));
         },
         onTotalProgress: function onTotalProgress(totalUploadedBytes, totalBytes) {
             $('#uploadProgrssbar').progress({
                 percent: Math.ceil(totalUploadedBytes / totalBytes * 100)
             });
+        },
+        onError: function onError(id, name, errorReason) {
+            // toastr.error(errorReason, 'Error: ' + name);
         },
         onAllComplete: function onAllComplete(succeeded, failed) {
             /*    $('#uploadButton').show();
@@ -114,7 +131,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     props: ['photo'],
     computed: {
-        thumbnailImage: function thumbnailImage() {},
+        thumbnailImage: function thumbnailImage() {
+            if (this.photo.thumbnail && this.photo.thumbnail.large) {
+                return this.photo.thumbnail.large;
+            }
+        },
         thumbnailHeight: function thumbnailHeight() {
             return '225px';
         },
@@ -135,7 +156,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\" v-bind:data-src=\"photo.thumbnail.large\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\" v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -502,7 +523,6 @@ function extractState (vm) {
 function restoreState (vm, state, isRoot) {
   var oldAsyncConfig
   if (isRoot) {
-    var s = Date.now()
     // set Vue into sync mode during state rehydration
     oldAsyncConfig = Vue.config.async
     Vue.config.async = false
@@ -530,7 +550,6 @@ function restoreState (vm, state, isRoot) {
   }
   if (isRoot) {
     Vue.config.async = oldAsyncConfig
-    console.log(Date.now() - s)
   }
 }
 

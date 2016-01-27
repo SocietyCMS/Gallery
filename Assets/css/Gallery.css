@@ -17,8 +17,14 @@
   justify-content: space-between;
 }
 .ui.photos .photo {
+  position: relative;
   height: 225px;
   margin: 0.875em 0.1em;
+  border-radius: .28571429rem;
+}
+.ui.photos .photo > .ui.dimmer {
+  border-radius: inherit!important;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 .ui.photos .photo img {
   width: auto;

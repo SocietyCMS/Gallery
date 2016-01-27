@@ -19,7 +19,7 @@
     </div>
 
     <div class="ui modal"  id="newAlbumModal">
-        <div class="header"> Give your new Album an name</div>
+        <div class="header"> Give your new Album a name</div>
         <div class="content">
             <form class="ui form">
                 <div class="ui field">
@@ -31,10 +31,10 @@
                     <textarea rows="2" v-model="newAlbum.description"></textarea>
                 </div>
 
-                <div class="ui green inverted fluid button" v-on:click="createNewAlbum" v-bind:class="{'disabled':!newAlbum.title}">
+                <button class="ui green inverted fluid button" v-on:click="createNewAlbum" v-bind:class="{'disabled':!newAlbum.title}">
                     <i class="checkmark icon"></i>
                     Create
-                </div>
+                </button>
 
             </form>
         </div>
