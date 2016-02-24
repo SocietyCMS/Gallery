@@ -85,7 +85,7 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     request: {
         endpoint: resourceGalleryAlbumPhotoStore,
         customHeaders: {
-            "Authorization": "Bearer " + jwtoken
+            "Authorization": "Bearer " + societycms.jwtoken
         },
         inputName: 'image'
     },

@@ -81,8 +81,6 @@
         var resourceGalleryAlbumPhotoStore = '{{apiRoute('v1', 'api.gallery.album.photo.store', ['album' => $album->slug])}}';
 
         var backendGalleryAlbumIndex = '{{route('backend::gallery.gallery.index')}}';
-
-        var jwtoken = '{{$jwtoken}}';
     </script>
     <script src="{{\Pingpong\Modules\Facades\Module::asset('gallery:js/album.js')}}"></script>
 
