@@ -3,14 +3,15 @@ var WebpackPublishPlugin = require('../../WebpackPublishPlugin');
 
 
 module.exports = {
-    context: __dirname + '/Resources/assets',
-    entry: [
-        './app.js'
-    ],
+    context: __dirname + '/Resources/assets/js',
+    entry: {
+        gallery: './gallery.js',
+        album: './album.js'
+    },
 
     output: {
-        path: __dirname + '/Assets/',
-        filename: "bundle.js"
+        path: __dirname + '/Assets/js/',
+        filename: "[name].js"
     },
 
     module: {
@@ -45,7 +46,7 @@ module.exports = {
             proxy: 'societycms.dev'
         }),
         new WebpackPublishPlugin({
-            module: 'Documents'
+            module: 'Gallery'
         })
     ]
 };

@@ -61,8 +61,6 @@ var VueInstance = new Vue({
                 window.open(backendGalleryAlbumIndex,"_self")
             }).error(function (data, status, request) {
             });
-
-
         }
     }
 });
@@ -75,6 +73,7 @@ var dragAndDropModule = new fineUploader.DragAndDrop({
     },
     callbacks: {
         processingDroppedFilesComplete: function (files, dropTarget) {
+            toastr.info('Uploading '+files.length+' files. Please wait..');
             fineUploaderBasicInstanceImages.addFiles(files);
         }
     }
@@ -105,20 +104,13 @@ var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
             }.bind(this))
         },
         onTotalProgress: function (totalUploadedBytes, totalBytes) {
-            $('#uploadProgrssbar').progress({
-                percent: Math.ceil(totalUploadedBytes / totalBytes * 100)
-            });
         },
         onError: function (id, name, errorReason) {
-            // toastr.error(errorReason, 'Error: ' + name);
+             toastr.error(errorReason, 'Error: ' + name);
         },
         onAllComplete: function (succeeded, failed) {
-            /*    $('#uploadButton').show();
-             $('#uploadProgrssbar').hide();
-             $('#uploadProgrssbar').progress({
-             percent: 0
-             });
-             */
+            console.log(succeeded, failed);
+            toastr.success('Upload successful');
         }
     }
 });
