@@ -10,7 +10,7 @@
         @foreach($album->photos as $photo)
             <div class="card gallery-card">
                 <a href="{{ $photo->getFirstMediaUrl('images')}}" class="fancybox" rel="{{$album->title}}" data-title="{{$photo->title}}" >
-                    <img class="card-img" src="{{ $photo->getFirstMediaUrl('images', 'original250')}}" alt="{{$photo->title}}">
+                    <img class="card-img" src="{{ $photo->getFirstMediaUrl('images', 'wide320')}}" alt="{{$photo->title}}">
                 </a>
             </div>
         @endforeach
