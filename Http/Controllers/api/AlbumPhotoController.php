@@ -66,7 +66,6 @@ class AlbumPhotoController extends ApiBaseController
         $this->updateComputedProperties($photo, $request->files->get('image'));
         $photo->addMedia($request->files->get('image'))->toCollection('images');
 
-
         return $this->response->item($photo, new PhotoTransformer());
     }
 
