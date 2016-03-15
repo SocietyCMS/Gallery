@@ -3,6 +3,7 @@
 namespace Modules\Gallery\Http\Controllers\api;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\Core\Http\Requests\MediaImageRequest;
 use Modules\Gallery\Repositories\AlbumRepository;
@@ -62,6 +63,7 @@ class AlbumPhotoController extends ApiBaseController
             'captured_at'   => \Carbon\Carbon::now(),
         ]);
 
+        $this->updateComputedProperties($photo, $request->files->get('image'));
         $photo->addMedia($request->files->get('image'))->toCollection('images');
 
         return $this->response->item($photo, new PhotoTransformer());
@@ -103,5 +105,18 @@ class AlbumPhotoController extends ApiBaseController
     public function destroy(Request $request, $album, $photoID)
     {
         $this->photo->find($photoID)->delete();
+    }
+
+    private function updateComputedProperties($photo, $imageFile)
+    {
+        $image = Image::make($imageFile);
+
+        $photo->height = $image->height();
+        $photo->width = $image->width();
+        $photo->filesize = $image->filesize();
+        $photo->captured_at = \Carbon\Carbon::parse($image->exif('DateTimeOriginal'));
+
+        $photo->save();
+
     }
 }

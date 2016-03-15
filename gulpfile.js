@@ -3,6 +3,8 @@ var shell = require('gulp-shell');
 var elixir = require('laravel-elixir');
 var moduleInfo = require('./module.json');
 
+require('laravel-elixir-vueify');
+
 var Task = elixir.Task;
 
 elixir.extend("PublishModules", function () {
@@ -27,8 +29,21 @@ elixir.extend("PublishModules", function () {
  */
 
 elixir(function (mix) {
+
+    /**
+     * Compile less
+     **/
     mix.less(moduleInfo.name + ".less");
 
+    /**
+     * Concat scripts
+     **/
+    mix.browserify("gallery.js");
+    mix.browserify("album.js");
+
+    /**
+     * Copy images
+     */
     mix.copy('Resources/assets/images', 'Assets/images');
 
     mix.PublishModules();

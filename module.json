@@ -8,9 +8,12 @@
     "order": 10,
     "providers": [
         "Modules\\Gallery\\Providers\\GalleryServiceProvider",
-        "Modules\\Gallery\\Providers\\RouteServiceProvider"
+        "Modules\\Gallery\\Providers\\RouteServiceProvider",
+        "Intervention\\Image\\ImageServiceProvider"
     ],
-    "aliases": [],
+    "aliases": {
+        "Image": "Intervention\\Image\\Facades\\Image"
+    },
     "files": [
         "start.php"
     ]

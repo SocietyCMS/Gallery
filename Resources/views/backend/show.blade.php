@@ -4,254 +4,84 @@
     {{ trans('gallery::gallery.title.gallery') }}
 @endsection
 @section('subTitle')
-    {{ $album->title }}
+    @{{ album.title }}
 @endsection
 
 @section('content')
 
-
-	<div class="ui active text loader" v-show="!loaded">Loading</div>
-
-	<div class="ui grid">
-		<div class="twelve wide column qq-upload-drop-area" id="photosGrid">
-			<div class="ui segment sticky" id="albumToolbar">
-
-				<div id="uploadButton">
-					<div class="ui basic button" id="uploadImageButton">
-						<i class="icon photo"></i>
-						Add Photo
-					</div>
-				</div>
-
-				<div class="ui indicating right floated progress qq-drop-processing-selector qq-drop-processing" id="uploadProgrssbar" style="display: none">
-					<div class="bar"></div>
-					<div class="label">Processing dropped files...</div>
-				</div>
-
-			</div>
-
-			<div class="ui grid">
-				<div class="eight wide tablet two wide computer photo column"  v-for="photo in album" v-bind:class="{'selected': photo == detailPhoto }" v-on:click="detail(photo)">
-					<a class="ui basic photo raised segment">
-						<div class="photo image"><img class="ui image" v-bind:src="photo.image.thumbnail.small"></div>
-						<div class="photo title">@{{photo.title}}</div>
-					</a>
-				</div>
-				<div class="eight wide tablet two wide computer photo column">
-					<a class="ui basic photo drop indicator segment">
-						<div class="photo image"></div>
-						<div class="photo title"></div>
-					</a>
-				</div>
-			</div>
-		</div>
-
-		<div class="four wide column">
-
-            <div class="ui sticky" id="photosDetail" v-show="detailPhoto">
-                <div class="ui raised segments">
-
-                    <div class="ui segment">
-                        <img class="ui image" v-bind:src="detailPhoto.image.thumbnail.large">
-
-                    </div>
-                    <div class="ui segment">
-
-                            <form class="ui form">
-                                <div class="field">
-                                    <label>Title</label>
-                                    <input type="text" name="title" placeholder="" v-model="detailPhoto.title" v-on:change="updatePhoto">
-                                </div>
-                                <div class="field">
-                                    <label>Caption</label>
-                                    <input type="text" name="caption" placeholder="" v-model="detailPhoto.caption" v-on:change="updatePhoto">
-                                </div>
-                            </form>
-
-                            <table class="ui very basic celled table">
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <h4 class="ui header">
-                                            Size:
-                                        </h4></td>
-                                    <td>
-                                        @{{ detailPhoto.properties.humanReadableSize}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4 class="ui header">
-                                            Uploaded on:
-                                        </h4></td>
-                                    <td>
-                                        @{{ detailPhoto.properties.uploaded_on}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4 class="ui header">
-                                            Modified on:
-                                        </h4></td>
-                                    <td>
-                                        @{{ detailPhoto.properties.modified_on}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                    </div>
-                    <div class="ui segment">
-                        <button class="negative ui button" id="photoDeleteButton">Delete</button>
-                    </div>
-                </div>
+    <div class="ui icon top left pointing right floated dropdown album ellipsis button">
+        <i class="ellipsis vertical icon"></i>
+        <div class="menu">
+            <div class="item" id="uploadImageButton">
+                <i class="cloud upload icon"></i>
+                Upload Photos
             </div>
-		</div>
-	</div>
+            <div class="divider"></div>
+            <div class="item" v-on:click="deleteAlbumModal">
+                <i class="trash outline icon"></i>
+                Delete Album
+            </div>
+        </div>
+    </div>
 
-@endsection
+    <div class="ui massive transparent fluid icon input">
+        <input type="text" placeholder="Album Title" @keyup="updateAlbum | debounce 200" v-model="album.title">
+        <i class="write icon"></i>
+    </div>
 
-@section('htmlComponents')
-    <div class="ui small basic test modal" id="photoDeleteModal">
+    <div class="ui divider"></div>
 
-        <img class="ui centered medium image" v-bind:src="detailPhoto.image.thumbnail.large">
+    <div class="ui photos" id="photosGrid">
+        <photo :photo="photo" v-for="photo in photos"></photo>
 
-        <div class="ui centered aligned content">
-            You are about to delete this photo, are you sure?
+        <h1 class="ui center aligned icon header" v-if="album.photos && album.photos.total == 0" id="noPhotosPlaceholder">
+            <i class="grey cloud upload icon"></i>
+            This album is empty
+            <div class="sub header">You can drag&drop photos here to upload.</div>
+        </h1>
+    </div>
+
+
+    <div class="ui dimmer" v-bind:class="{'active':deleting}">
+        <div class="ui large text loader">Deleting Album....</div>
+    </div>
+
+
+    <div class="ui small modal"  id="deleteAlbumModal">
+        <div class="header"> Delete album?</div>
+        <div class="content">
+            <p>Deleting an album is permanent. All Photos in this album are going to be deleted.</p>
         </div>
         <div class="actions">
-            <div class="ui basic cancel inverted button">
-                <i class="remove icon"></i>
-                No
-            </div>
-            <div class="ui red approve inverted button" v-on:click="deletePhoto">
-                <i class="checkmark icon"></i>
-                Yes
-            </div>
+                <div class="ui red inverted button" v-on:click="deleteAlbum">
+                    <i class="trash icon"></i>
+                    Delete
+                </div>
+                <div class="ui positive blue button">
+                    Keep Album
+                </div>
         </div>
     </div>
 
 @endsection
 
 @section('styles')
-	<link href="{{\Pingpong\Modules\Facades\Module::asset('gallery:css/Gallery.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{\Pingpong\Modules\Facades\Module::asset('gallery:css/Gallery.css')}}" rel="stylesheet"
+          type="text/css">
 @endsection
 
 @section('javascript')
-	<script>
-        $('#photoDeleteModal')
-                .modal('attach events', '#photoDeleteButton', 'show');
-
-        $('#albumToolbar')
-                .sticky( {
-                    observeChanges: true
-                });
-
-        $('#photosDetail')
-                .sticky({
-                    context: '#photosGrid',
-                    observeChanges: true
-                });
+    <script>
+        var resourceGalleryAlbumUpdate = '{{apiRoute('v1', 'api.gallery.album.update', ['album' => $album->slug])}}';
+        var resourceGalleryAlbumShow = '{{apiRoute('v1', 'api.gallery.album.show', ['album' => $album->slug])}}';
+        var resourceGalleryAlbumDelete = '{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => $album->slug])}}';
 
 
+        var resourceGalleryAlbumPhotoIndex = '{{apiRoute('v1', 'api.gallery.album.photo.index', ['album' => $album->slug])}}';
+        var resourceGalleryAlbumPhotoStore = '{{apiRoute('v1', 'api.gallery.album.photo.store', ['album' => $album->slug])}}';
 
-        VueInstance = new Vue({
-			el: '#societyAdmin',
-			data: {
-				album:null,
-				meta:null,
-				detailPhoto: null,
-				loaded: false
-			},
-			ready: function() {
-
-				this.$http.get('{{apiRoute('v1', 'api.gallery.album.photo.index', ['album' => $album->slug])}}', function (data, status, request) {
-
-                    this.$set('album', data.data);
-					this.$set('meta', data.meta);
-					this.$set('loaded', true);
-
-                    this.detail(data.data[0])
-
-				}).error(function (data, status, request) {
-				});
-
-			},
-			methods: {
-				detail: function (photo) {
-					this.detailPhoto = photo;
-				},
-				updatePhoto: function() {
-					var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.photo.update', ['album' => $album->slug, 'photo' => ':id'])}}');
-
-					resource.update({id: this.detailPhoto.id}, this.detailPhoto, function (data, status, request) {
-					}).error(function (data, status, request) {
-					});
-				},
-				addPhoto: function(photo) {
-					this.album.push(photo.data);
-				},
-                deletePhoto: function() {
-
-                    var resource = this.$resource('{{apiRoute('v1', 'api.gallery.album.photo.destroy', ['album' => $album->slug, 'photo' => ':id'])}}');
-
-                    resource.delete({id: this.detailPhoto.id}, this.detailPhoto, function (data, status, request) {
-                        this.album.$remove(this.detailPhoto);
-                        this.detailPhoto = this.album[0];
-                        $('#deletePhotoModal').modal('hide');
-                    }).error(function (data, status, request) {
-                    });
-                }
-			}
-
-        });
-
-
-		var dragAndDropModule = new fineUploader.DragAndDrop({
-			dropZoneElements: [document.getElementById('photosGrid')],
-			classes: {
-				dropActive: "cssClassToAddToDropZoneOnEnter"
-			},
-			callbacks: {
-				processingDroppedFilesComplete: function (files, dropTarget) {
-					fineUploaderBasicInstanceImages.addFiles(files);
-				}
-			}
-		});
-
-		var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
-			button: document.getElementById('uploadImageButton'),
-			request: {
-				endpoint: '{{app('Dingo\Api\Routing\UrlGenerator')->version('v1')->route('api.gallery.album.photo.store', ['album' => $album->slug])}}',
-				customHeaders: {
-					"Authorization": "Bearer {{$jwtoken}}"
-				},
-				inputName: 'image'
-			},
-			validation: {
-				allowedExtensions: ['jpeg', 'jpg', 'png', 'bmp']
-			},
-			callbacks: {
-				onComplete: function (id, name, responseJSON) {
-					VueInstance.addPhoto(responseJSON)
-				},
-				onUpload: function() {
-					$('#uploadButton').hide();
-					$('#uploadProgrssbar').show();
-				},
-				onTotalProgress: function(totalUploadedBytes, totalBytes) {
-					$('#uploadProgrssbar').progress({
-						percent: Math.ceil(totalUploadedBytes / totalBytes * 100)
-					});
-				},
-				onAllComplete: function(succeeded, failed) {
-					$('#uploadButton').show();
-					$('#uploadProgrssbar').hide();
-					$('#uploadProgrssbar').progress({
-						percent: 0
-					});
-				}
-			}
-		});
+        var backendGalleryAlbumIndex = '{{route('backend::gallery.gallery.index')}}';
     </script>
+    <script src="{{\Pingpong\Modules\Facades\Module::asset('gallery:js/album.js')}}"></script>
 
 @endsection

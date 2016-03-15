@@ -7,6 +7,7 @@ use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\Gallery\Repositories\AlbumRepository;
 use Modules\Gallery\Repositories\PhotoRepository;
 use Modules\Gallery\Transformers\AlbumTransformer;
+use Prettus\Repository\Events\RepositoryEntityDeleted;
 
 class AlbumController extends ApiBaseController
 {
@@ -54,8 +55,7 @@ class AlbumController extends ApiBaseController
 
     public function update(Request $request, $slug)
     {
-        $album = $this->album->findBySlug($slug);
-        $album->update(['title' => $request->title]);
+        $album = $this->album->updateBySlug(['title' => $request->title],$slug);
 
         return $this->response->item($album, new AlbumTransformer());
     }
@@ -67,7 +67,8 @@ class AlbumController extends ApiBaseController
         foreach ($album->photos as $photo) {
             $photo->delete();
         }
-        $album->delete();
+
+        $this->album->deleteBySlug($slug);
 
         $this->successDeleted();
     }

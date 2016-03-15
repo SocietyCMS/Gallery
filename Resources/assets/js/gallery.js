@@ -1,0 +1,36 @@
+import Album from './components/Album.vue';
+
+new Vue({
+    el: '#societyAdmin',
+    data: {
+        gallery: null,
+        meta: null,
+        newAlbum: {
+            title: null,
+            description: null
+        }
+    },
+    components: {Album},
+    ready: function () {
+        this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
+            this.$set('gallery', data.data);
+            this.$set('meta', data.meta);
+        }).error(function (data, status, request) {
+        })
+    },
+
+    methods: {
+        newAlbumModal: function() {
+            $('#newAlbumModal')
+                .modal('setting', 'transition', 'fade up')
+                .modal('show');
+        },
+        createNewAlbum: function() {
+            var resource = this.$resource(resourceGalleryAlbumStore);
+
+            resource.save(this.newAlbum, function (data, status, request) {
+            }).error(function (data, status, request) {
+            });
+        },
+    }
+});

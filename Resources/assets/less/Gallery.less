@@ -1,70 +1,46 @@
 @import (reference) '../../themes/societyadmin/semantic/src/definitions/globals/reset';
 @import (reference) '../../themes/societyadmin/semantic/src/definitions/globals/site';
 
+.ui.cards.gallery {
+  margin-top: 1em;
+}
 
-.ui.grid .photo.column {
+.album.ellipsis.button {
+  background: 0 0!important;
+}
+
+.ui.photos {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
+  margin: 1em 0em;
+  flex-flow: row wrap;
+  justify-content: space-between;
 
-  &.selected .photo.image img {
-    box-sizing: border-box;
-    border: 0.2em solid @blue;
-    margin: -0.05em;
-  }
 
-  .ui.photo.segment {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
 
-    padding: 0;
+  .photo {
+    position: relative;
+    height: 225px;
+    margin: 0.875em 0.1em;
+    border-radius: .28571429rem;
+
+    &>.ui.dimmer {
+      border-radius: inherit!important;
+      background-color: rgba(0,0,0,.6);
+    }
 
     img {
-      box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .08);
+      width: auto;
+      height: 100%;
     }
 
-    .photo.image {
-      min-height: 100px;
-      display: flex;
-      align-items: center;
-    }
-
-    .photo.title {
-      align-self: center;
-    }
   }
+
 }
 
-#photosGrid {
-  min-height: 300px;
+.ui.button.bottom.spacing {
+  margin-bottom: 2em;
 }
 
-#photosDetail {
-  & .image {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  &.fixed .segments {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top-width: 0;
-  }
-}
-
-
-#albumToolbar.fixed {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top-width: 0;
-
-  & + div {
-    margin-top: 70px;
-  }
-}
-
-.drop.indicator .photo.title {
-  color:@textColor;
+#noPhotosPlaceholder {
+  margin-top: 3em;
 }
