@@ -130,7 +130,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\" >\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }} Photos\n    </div>\n</a>\n";
+	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }} Photos\n    </div>\n</a>\n";
 
 /***/ }
 /******/ ]);
