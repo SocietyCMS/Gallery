@@ -72,7 +72,7 @@ class DemoTableSeeder extends Seeder
                 'caption' => $this->faker->sentence(),
                 'captured_at' => \Carbon\Carbon::now(),
             ]);
-            $image = $this->faker->image(storage_path('temp'), 1920, 1080, strtolower($AlbumCategory));
+            $image = $this->faker->image('/tmp', 1920, 1080, strtolower($AlbumCategory));
             $photo->addMedia($image)->toCollection('images');
         }
     }
