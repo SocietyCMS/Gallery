@@ -12,7 +12,7 @@ new Vue({
     },
     components: {Album},
     ready: function () {
-        this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
+        this.$http.get(societycms.api.gallery.album.index, function (data, status, request) {
             this.$set('gallery', data.data);
             this.$set('meta', data.meta);
         }).error(function (data, status, request) {
@@ -26,7 +26,7 @@ new Vue({
                 .modal('show');
         },
         createNewAlbum: function() {
-            var resource = this.$resource(resourceGalleryAlbumStore);
+            var resource = this.$resource(societycms.api.gallery.album.store);
 
             resource.save(this.newAlbum, function (data, status, request) {
             }).error(function (data, status, request) {

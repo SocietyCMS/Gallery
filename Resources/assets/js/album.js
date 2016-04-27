@@ -12,13 +12,13 @@ var VueInstance = new Vue({
     },
     components: {Photo},
     ready: function () {
-        this.$http.get(resourceGalleryAlbumPhotoIndex, function (data, status, request) {
+        this.$http.get(societycms.api.gallery.album.photo.index, {album:societycms.gallery.album.slug}, function (data, status, request) {
             this.$set('photos', data.data);
             this.$set('meta', data.meta);
         }).error(function (data, status, request) {
         });
 
-        this.$http.get(resourceGalleryAlbumShow, function (data, status, request) {
+        this.$http.get(societycms.api.gallery.album.show, {album:societycms.gallery.album.slug}, function (data, status, request) {
             this.$set('album', data.data);
         }).error(function (data, status, request) {
         });
@@ -26,7 +26,7 @@ var VueInstance = new Vue({
 
     methods: {
         updateAlbum: function () {
-            var resource = this.$resource(resourceGalleryAlbumUpdate);
+            var resource = this.$resource(societycms.api.gallery.album.update);
             resource.update({id: this.album.slug}, {title: this.album.title}, function (data, status, request) {
             }).error(function (data, status, request) {
             });
@@ -55,9 +55,9 @@ var VueInstance = new Vue({
                 .modal('hide');
 
             this.deleting = true;
-            var resource = this.$resource(resourceGalleryAlbumDelete);
+            var resource = this.$resource(societycms.api.gallery.album.destroy);
 
-            resource.delete(this.album, function (data, status, request) {
+            resource.delete({album:societycms.gallery.album.slug}, this.album, function (data, status, request) {
                 window.open(backendGalleryAlbumIndex,"_self")
             }).error(function (data, status, request) {
             });
@@ -82,7 +82,7 @@ var dragAndDropModule = new fineUploader.DragAndDrop({
 var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
     button: document.getElementById('uploadImageButton'),
     request: {
-        endpoint: resourceGalleryAlbumPhotoStore,
+        endpoint: Vue.url(societycms.api.gallery.album.photo.store, {album:societycms.gallery.album.slug}),
         customHeaders: {
             "Authorization": "Bearer " + societycms.jwtoken
         },

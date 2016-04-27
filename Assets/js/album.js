@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _Photo = __webpack_require__(1);
+	var _Photo = __webpack_require__(4);
 
 	var _Photo2 = _interopRequireDefault(_Photo);
 
@@ -64,19 +64,19 @@
 	    },
 	    components: { Photo: _Photo2.default },
 	    ready: function ready() {
-	        this.$http.get(resourceGalleryAlbumPhotoIndex, function (data, status, request) {
+	        this.$http.get(societycms.api.gallery.album.photo.index, { album: societycms.gallery.album.slug }, function (data, status, request) {
 	            this.$set('photos', data.data);
 	            this.$set('meta', data.meta);
 	        }).error(function (data, status, request) {});
 
-	        this.$http.get(resourceGalleryAlbumShow, function (data, status, request) {
+	        this.$http.get(societycms.api.gallery.album.show, { album: societycms.gallery.album.slug }, function (data, status, request) {
 	            this.$set('album', data.data);
 	        }).error(function (data, status, request) {});
 	    },
 
 	    methods: {
 	        updateAlbum: function updateAlbum() {
-	            var resource = this.$resource(resourceGalleryAlbumUpdate);
+	            var resource = this.$resource(societycms.api.gallery.album.update);
 	            resource.update({ id: this.album.slug }, { title: this.album.title }, function (data, status, request) {}).error(function (data, status, request) {});
 	        },
 	        addPhoto: function addPhoto(previewID, previewName, photo) {
@@ -102,9 +102,9 @@
 	            $('#deleteAlbumModal').modal('hide');
 
 	            this.deleting = true;
-	            var resource = this.$resource(resourceGalleryAlbumDelete);
+	            var resource = this.$resource(societycms.api.gallery.album.destroy);
 
-	            resource.delete(this.album, function (data, status, request) {
+	            resource.delete({ album: societycms.gallery.album.slug }, this.album, function (data, status, request) {
 	                window.open(backendGalleryAlbumIndex, "_self");
 	            }).error(function (data, status, request) {});
 	        }
@@ -127,7 +127,7 @@
 	var fineUploaderBasicInstanceImages = new fineUploader.FineUploaderBasic({
 	    button: document.getElementById('uploadImageButton'),
 	    request: {
-	        endpoint: resourceGalleryAlbumPhotoStore,
+	        endpoint: Vue.url(societycms.api.gallery.album.photo.store, { album: societycms.gallery.album.slug }),
 	        customHeaders: {
 	            "Authorization": "Bearer " + societycms.jwtoken
 	        },
@@ -160,16 +160,19 @@
 	});
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(2)
+	__vue_script__ = __webpack_require__(5)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/js/components/Photo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(3)
+	__vue_template__ = __webpack_require__(6)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -188,7 +191,7 @@
 	})()}
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -225,7 +228,7 @@
 	};
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\"\n         v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n</div>\n";

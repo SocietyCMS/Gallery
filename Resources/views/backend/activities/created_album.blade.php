@@ -5,7 +5,13 @@
         </div>
         <div class="content">
             <div class="summary">
-                A new Gallery has been created: <a href="{{route('gallery.show', $activity->subject->slug)}}">{{$activity->subject->title}}</a>
+                {!!  trans(
+                    'gallery::activities.created_object.summary',
+                    [
+                        'title' => $activity->subject->title,
+                        'url' => route('gallery.show', $activity->subject->slug),
+                    ]
+                    ) !!}
                 <div class="date">
                     {{$activity->created_at->diffForHumans()}}
                 </div>

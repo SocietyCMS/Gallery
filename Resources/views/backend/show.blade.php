@@ -72,14 +72,6 @@
 
 @section('javascript')
     <script>
-        var resourceGalleryAlbumUpdate = '{{apiRoute('v1', 'api.gallery.album.update', ['album' => $album->slug])}}';
-        var resourceGalleryAlbumShow = '{{apiRoute('v1', 'api.gallery.album.show', ['album' => $album->slug])}}';
-        var resourceGalleryAlbumDelete = '{{apiRoute('v1', 'api.gallery.album.destroy', ['album' => $album->slug])}}';
-
-
-        var resourceGalleryAlbumPhotoIndex = '{{apiRoute('v1', 'api.gallery.album.photo.index', ['album' => $album->slug])}}';
-        var resourceGalleryAlbumPhotoStore = '{{apiRoute('v1', 'api.gallery.album.photo.store', ['album' => $album->slug])}}';
-
         var backendGalleryAlbumIndex = '{{route('backend::gallery.gallery.index')}}';
     </script>
     <script src="{{\Pingpong\Modules\Facades\Module::asset('gallery:js/album.js')}}"></script>

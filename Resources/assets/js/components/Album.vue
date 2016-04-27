@@ -12,7 +12,7 @@
         </div>
         <div class="extra content">
             <i class="photo icon"></i>
-            {{ album.photos.total }} Photos
+            {{ album.photos.total }}
         </div>
     </a>
 </template>

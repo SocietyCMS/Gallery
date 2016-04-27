@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _Album = __webpack_require__(4);
+	var _Album = __webpack_require__(1);
 
 	var _Album2 = _interopRequireDefault(_Album);
 
@@ -64,7 +64,7 @@
 	    },
 	    components: { Album: _Album2.default },
 	    ready: function ready() {
-	        this.$http.get(resourceGalleryAlbumIndex, function (data, status, request) {
+	        this.$http.get(societycms.api.gallery.album.index, function (data, status, request) {
 	            this.$set('gallery', data.data);
 	            this.$set('meta', data.meta);
 	        }).error(function (data, status, request) {});
@@ -75,7 +75,7 @@
 	            $('#newAlbumModal').modal('setting', 'transition', 'fade up').modal('show');
 	        },
 	        createNewAlbum: function createNewAlbum() {
-	            var resource = this.$resource(resourceGalleryAlbumStore);
+	            var resource = this.$resource(societycms.api.gallery.album.store);
 
 	            resource.save(this.newAlbum, function (data, status, request) {}).error(function (data, status, request) {});
 	        }
@@ -83,19 +83,16 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(5)
+	__vue_script__ = __webpack_require__(2)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/js/components/Album.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(6)
+	__vue_template__ = __webpack_require__(3)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -114,7 +111,7 @@
 	})()}
 
 /***/ },
-/* 5 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -127,10 +124,10 @@
 	};
 
 /***/ },
-/* 6 */
+/* 3 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }} Photos\n    </div>\n</a>\n";
+	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }}\n    </div>\n</a>\n";
 
 /***/ }
 /******/ ]);

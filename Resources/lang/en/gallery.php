@@ -7,12 +7,14 @@ return [
         'create album' => 'Create an Album',
         'all albums'   => 'All Albums',
     ],
-    'button' => [
-        'create album' => 'Create an Album',
-    ],
     'modal' => [
-        'create album' => 'Create an Album',
+        'create album' => 'Give your new Album a name',
         'delete album' => 'Delete an Album',
+    ],
+    'form' => [
+        'title'   => 'Title',
+        'description'    => 'Description',
+        'content' => 'Content'
     ],
     'form' => [
         'album name' => 'Album name:'

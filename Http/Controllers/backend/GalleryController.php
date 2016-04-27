@@ -20,14 +20,18 @@ class GalleryController extends Controller
     public function index()
     {
         $albums = $this->album->all();
-
+        \JavaScript::put([
+            'gallery' => ['albums' => $albums]
+        ]);
         return view('gallery::backend.index', compact('albums'));
     }
 
     public function show($slug)
     {
         $album = $this->album->findBySlug($slug);
-
+        \JavaScript::put([
+            'gallery' => ['album' => $album]
+        ]);
         return view('gallery::backend.show', compact('album'));
     }
 }
