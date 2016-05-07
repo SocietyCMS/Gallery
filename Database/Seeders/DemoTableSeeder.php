@@ -30,6 +30,10 @@ class DemoTableSeeder extends Seeder
 
         $this->createAlbum('Cats');
         $this->createAlbum('Food');
+        $this->createAlbum('City');
+        $this->createAlbum('Abstract');
+        $this->createAlbum('People');
+        $this->createAlbum('Nightlife');
 
         $this->createMenuEntry();
     }
@@ -65,7 +69,7 @@ class DemoTableSeeder extends Seeder
     private function createPhotos($Album, $AlbumCategory)
     {
 
-        for ($x = 0; $x <= $this->faker->numberBetween($min = 5, $max = 20); $x++) {
+        for ($x = 0; $x <= $this->faker->numberBetween($min = 15, $max = 30); $x++) {
             $photo = Photo::create([
                 'album_id' => $Album->id,
                 'title' => $this->faker->words(6, true),
