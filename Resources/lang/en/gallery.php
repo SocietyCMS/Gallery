@@ -11,12 +11,8 @@ return [
         'create album' => 'Give your new Album a name',
         'delete album' => 'Delete an Album',
     ],
-    'form' => [
-        'title'   => 'Title',
-        'description'    => 'Description',
-        'content' => 'Content'
+    'form'  => [
+        'title'       => 'Title',
+        'album name' => 'Album name:',
     ],
-    'form' => [
-        'album name' => 'Album name:'
-    ]
 ];

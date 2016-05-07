@@ -24,11 +24,7 @@
             <form class="ui form">
                 <div class="ui field">
                     <label>{{trans('gallery::gallery.form.title')}}</label>
-                    <input type="text" placeholder="Album Title..." v-model="newAlbum.title">
-                </div>
-                <div class="field">
-                    <label>{{trans('gallery::gallery.form.description')}}</label>
-                    <textarea rows="2" v-model="newAlbum.description"></textarea>
+                    <input type="text"  v-model="newAlbum.title">
                 </div>
 
                 <button class="ui green inverted fluid button" v-on:click="createNewAlbum"
