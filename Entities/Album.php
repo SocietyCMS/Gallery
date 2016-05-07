@@ -4,7 +4,7 @@ namespace Modules\Gallery\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
-use Modules\User\Traits\Activity\RecordsActivity;
+use Modules\Core\Traits\Activity\RecordsActivity;
 
 class Album extends Model
 {

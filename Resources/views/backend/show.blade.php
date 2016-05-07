@@ -14,12 +14,12 @@
         <div class="menu">
             <div class="item" id="uploadImageButton">
                 <i class="cloud upload icon"></i>
-                Upload Photos
+                {{trans('core::elements.action.upload resource', ['name'=>trans('gallery::gallery.title.photo')])}}
             </div>
             <div class="divider"></div>
             <div class="item" v-on:click="deleteAlbumModal">
                 <i class="trash outline icon"></i>
-                Delete Album
+                {{trans('core::elements.action.delete resource', ['name'=>trans('gallery::gallery.title.album')])}}
             </div>
         </div>
     </div>
@@ -36,29 +36,28 @@
 
         <h1 class="ui center aligned icon header" v-if="album.photos && album.photos.total == 0" id="noPhotosPlaceholder">
             <i class="grey cloud upload icon"></i>
-            This album is empty
-            <div class="sub header">You can drag&drop photos here to upload.</div>
+            {{ trans('gallery::gallery.info.this album is empty') }}
+            <div class="sub header">{{ trans('gallery::gallery.info.drag-drop upload') }}</div>
         </h1>
     </div>
 
-
     <div class="ui dimmer" v-bind:class="{'active':deleting}">
-        <div class="ui large text loader">Deleting Album....</div>
+        <div class="ui large text loader">{{ trans('gallery::gallery.info.deleting album') }}</div>
     </div>
 
 
     <div class="ui small modal"  id="deleteAlbumModal">
-        <div class="header"> Delete album?</div>
+        <div class="header">{{ trans('gallery::gallery.modal.delete album') }}</div>
         <div class="content">
-            <p>Deleting an album is permanent. All Photos in this album are going to be deleted.</p>
+            <p>{{ trans('gallery::gallery.modal.delete album warning') }}</p>
         </div>
         <div class="actions">
                 <div class="ui red inverted button" v-on:click="deleteAlbum">
                     <i class="trash icon"></i>
-                    Delete
+                    {{trans('core::elements.action.delete resource', ['name'=>trans('gallery::gallery.title.album')])}}
                 </div>
                 <div class="ui positive blue button">
-                    Keep Album
+                    {{trans('core::elements.action.keep resource', ['name'=>trans('gallery::gallery.title.album')])}}
                 </div>
         </div>
     </div>

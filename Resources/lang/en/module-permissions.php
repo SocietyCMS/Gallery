@@ -3,8 +3,8 @@
 return [
 
     'manage-gallery' => [
-        'display_name' => 'Manage Gallery',
-        'description'  => 'This permission allows you to create Galleries.',
+        'display_name' => 'Fotoalben verwalten',
+        'description'  => 'Diese Berechtigun wird benötigt, um Fotoalben zu erstellen.',
     ],
 
 ];

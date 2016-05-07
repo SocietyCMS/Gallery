@@ -2,17 +2,23 @@
 
 return [
     'title' => [
-        'gallery'      => 'Gallery',
-        'album'        => 'Album',
-        'create album' => 'Create an Album',
-        'all albums'   => 'All Albums',
+        'gallery'    => 'Gallery',
+        'album'      => 'Album',
+        'photo'      => 'Photo',
+        'photos'     => 'Photos',
+        'all albums' => 'All Albums',
     ],
     'modal' => [
-        'create album' => 'Give your new Album a name',
-        'delete album' => 'Delete an Album',
+        'create album'         => 'Give your new Album a name',
+        'delete album'         => 'Delete album?',
+        'delete album warning' => 'Deleting an album is permanent. All Photos in this album are going to be deleted.',
     ],
     'form'  => [
-        'title'       => 'Title',
-        'album name' => 'Album name:',
+        'title' => 'Title',
+    ],
+    'info'  => [
+        'this album is empty' => 'This album is empty',
+        'drag-drop upload'    => 'You can drag&drop photos here to upload.',
+        'deleting album'      => 'Deleting Album....',
     ],
 ];
