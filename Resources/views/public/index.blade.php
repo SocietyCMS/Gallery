@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Gallery
+    {{ trans('gallery::gallery.title.gallery') }}
 @stop
 
 @section('content')
