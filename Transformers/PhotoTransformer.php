@@ -15,11 +15,10 @@ class PhotoTransformer extends Fractal\TransformerAbstract
             'caption'    => $photo->caption,
             'image'      => $photo->getFirstMediaUrl('images'),
             'thumbnail'  => [
-                'square' => $photo->getFirstMediaUrl('images', 'square100'),
-                'small'  => $photo->getFirstMediaUrl('images', 'original100'),
-                'medium' => $photo->getFirstMediaUrl('images', 'original250'),
-                'large'  => $photo->getFirstMediaUrl('images', 'original400'),
-                'cover'  => $photo->getFirstMediaUrl('images', 'cover400'),
+                'square' => $photo->getFirstMediaUrl('images', 'thumbnail-square'),
+                'small'  => $photo->getFirstMediaUrl('images', 'thumbnail-small'),
+                'medium' => $photo->getFirstMediaUrl('images', 'thumbnail-medium'),
+                'large'  => $photo->getFirstMediaUrl('images', 'thumbnail-large'),
             ],
             'properties' => [
                 'filename'    => $photo->getFirstMedia('images') ? $photo->getFirstMedia('images')->file_name : null,

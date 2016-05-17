@@ -4,17 +4,16 @@ namespace Modules\Gallery\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
-use Modules\Core\Traits\Media\baseMediaConversions;
+use Modules\Core\Traits\Media\useMediaConversions;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 class Photo extends Model implements HasMediaConversions
 {
     use HasMediaTrait;
+    use useMediaConversions;
 
     use PresentableTrait;
-
-    use baseMediaConversions;
 
     /**
      * Presenter Class.

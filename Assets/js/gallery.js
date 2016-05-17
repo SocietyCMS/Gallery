@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _Album = __webpack_require__(1);
+	var _Album = __webpack_require__(4);
 
 	var _Album2 = _interopRequireDefault(_Album);
 
@@ -83,16 +83,19 @@
 	});
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(2)
+	__vue_script__ = __webpack_require__(5)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/js/components/Album.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(3)
+	__vue_template__ = __webpack_require__(6)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -111,7 +114,7 @@
 	})()}
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -124,10 +127,10 @@
 	};
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui blue right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.cover\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }}\n    </div>\n</a>\n";
+	module.exports = "\n<a class=\"card\" href=\"{{album.links.backend}}\">\n    <div class=\"image\">\n        <div class=\"ui green right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <div class=\"ui yellow right corner label\" v-if=\"!album.published\">\n            <i class=\"write icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.square\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos.total }}\n    </div>\n</a>\n";
 
 /***/ }
 /******/ ]);

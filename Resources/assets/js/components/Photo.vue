@@ -13,8 +13,8 @@
         props: ['photo'],
         computed: {
             thumbnailImage: function() {
-                if(this.photo.thumbnail && this.photo.thumbnail.large){
-                    return this.photo.thumbnail.large
+                if(this.photo.thumbnail && this.photo.thumbnail.medium){
+                    return this.photo.thumbnail.medium
                 }
             },
             thumbnailHeight: function () {

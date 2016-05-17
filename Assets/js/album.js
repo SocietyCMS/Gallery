@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _Photo = __webpack_require__(4);
+	var _Photo = __webpack_require__(1);
 
 	var _Photo2 = _interopRequireDefault(_Photo);
 
@@ -160,19 +160,16 @@
 	});
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(5)
+	__vue_script__ = __webpack_require__(2)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/js/components/Photo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(6)
+	__vue_template__ = __webpack_require__(3)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -191,7 +188,7 @@
 	})()}
 
 /***/ },
-/* 5 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -203,8 +200,8 @@
 	    props: ['photo'],
 	    computed: {
 	        thumbnailImage: function thumbnailImage() {
-	            if (this.photo.thumbnail && this.photo.thumbnail.large) {
-	                return this.photo.thumbnail.large;
+	            if (this.photo.thumbnail && this.photo.thumbnail.medium) {
+	                return this.photo.thumbnail.medium;
 	            }
 	        },
 	        thumbnailHeight: function thumbnailHeight() {
@@ -228,7 +225,7 @@
 	};
 
 /***/ },
-/* 6 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"photo\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image\" v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\"\n         v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n</div>\n";
