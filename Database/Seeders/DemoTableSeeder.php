@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Modules\Gallery\Entities\Album;
 use Modules\Gallery\Entities\Photo;
 use Modules\Menu\Entities\Menu;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class DemoTableSeeder extends Seeder
 {
@@ -68,17 +69,34 @@ class DemoTableSeeder extends Seeder
      */
     private function createPhotos($Album, $AlbumCategory)
     {
+        $photosCount = $this->faker->numberBetween($min = 15, $max = 30);
 
-        for ($x = 0; $x <= $this->faker->numberBetween($min = 15, $max = 30); $x++) {
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $progress = new ProgressBar($output, $photosCount);
+
+        for ($x = 0; $x <= $photosCount; $x++) {
             $photo = Photo::create([
                 'album_id' => $Album->id,
                 'title' => $this->faker->words(6, true),
                 'caption' => $this->faker->sentence(),
                 'captured_at' => \Carbon\Carbon::now(),
             ]);
-            $image = $this->faker->image('/tmp', 1920, 1080, strtolower($AlbumCategory));
+
+            list($dimensionX, $dimensionY) = $this->faker->randomElement([
+                [1920, 1200],
+                [1920, 1080],
+                [1600, 1200],
+                [1280, 1024],
+                [1280, 800],
+                [960, 720],
+            ]);
+            $image = $this->faker->image('/tmp', $dimensionX, $dimensionY, strtolower($AlbumCategory));
             $photo->addMedia($image)->toCollection('images');
+
+            $progress->advance();
         }
+
+        $progress->finish();
     }
 
     /**
