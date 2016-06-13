@@ -6,7 +6,7 @@ module.exports = {
     context: __dirname + '/Resources/assets/js',
     entry: {
         gallery: './gallery.js',
-        album: './album.js'
+        album: './album.js',
     },
 
     output: {

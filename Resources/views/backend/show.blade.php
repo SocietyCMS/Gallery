@@ -64,15 +64,9 @@
 
 @endsection
 
-@section('styles')
-    <link href="{{\Pingpong\Modules\Facades\Module::asset('gallery:css/Gallery.css')}}" rel="stylesheet"
-          type="text/css">
-@endsection
-
 @section('javascript')
     <script>
         var backendGalleryAlbumIndex = '{{route('backend::gallery.gallery.index')}}';
     </script>
     <script src="{{\Pingpong\Modules\Facades\Module::asset('gallery:js/album.js')}}"></script>
-
 @endsection

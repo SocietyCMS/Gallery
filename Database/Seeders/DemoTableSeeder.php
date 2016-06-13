@@ -75,12 +75,6 @@ class DemoTableSeeder extends Seeder
         $progress = new ProgressBar($output, $photosCount);
 
         for ($x = 0; $x <= $photosCount; $x++) {
-            $photo = Photo::create([
-                'album_id' => $Album->id,
-                'title' => $this->faker->words(6, true),
-                'caption' => $this->faker->sentence(),
-                'captured_at' => \Carbon\Carbon::now(),
-            ]);
 
             list($dimensionX, $dimensionY) = $this->faker->randomElement([
                 [1920, 1200],
@@ -90,6 +84,17 @@ class DemoTableSeeder extends Seeder
                 [1280, 800],
                 [960, 720],
             ]);
+
+            $photo = Photo::create([
+                'album_id' => $Album->id,
+                'title' => $this->faker->words(6, true),
+                'caption' => $this->faker->sentence(),
+                'captured_at' => \Carbon\Carbon::now(),
+                'height' =>$dimensionY,
+                'width' => $dimensionX
+            ]);
+
+
             $image = $this->faker->image('/tmp', $dimensionX, $dimensionY, strtolower($AlbumCategory));
             $photo->addMedia($image)->toCollection('images');
 

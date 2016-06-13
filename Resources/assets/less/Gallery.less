@@ -1,12 +1,9 @@
-@import (reference) '../../themes/societyadmin/semantic/src/definitions/globals/reset';
-@import (reference) '../../themes/societyadmin/semantic/src/definitions/globals/site';
-
 .ui.cards.gallery {
   margin-top: 1em;
 }
 
 .album.ellipsis.button {
-  background: 0 0!important;
+  background: 0 0 !important;
 }
 
 .ui.photos {
@@ -15,17 +12,15 @@
   flex-flow: row wrap;
   justify-content: center;
 
-
-
   .photo {
     position: relative;
     height: 225px;
     margin: 0.875em 0.1em;
     border-radius: .28571429rem;
 
-    &>.ui.dimmer {
-      border-radius: inherit!important;
-      background-color: rgba(0,0,0,.6);
+    & > .ui.dimmer {
+      border-radius: inherit !important;
+      background-color: rgba(0, 0, 0, .6);
     }
 
     img {
@@ -43,4 +38,68 @@
 
 #noPhotosPlaceholder {
   margin-top: 3em;
+}
+
+
+#photosGrid {
+  .photo {
+    float: left;
+    margin: 4px;
+    border: 1px solid #eee;
+    box-sizing: content-box;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      display: block;
+      width: auto;
+      height: 100%;
+    }
+  }
+}
+
+
+.detail-placeholder {
+  height: calc(800px + 225px);
+}
+
+.detail {
+  height: 50em;
+  background: #ddd;
+  width: calc(100% + 6em);
+  margin-left: -6em;
+  margin-right: -6em;
+
+}
+
+.og-expander {
+  position: absolute;
+  background: #ddd;
+  top: auto;
+  left: 0;
+  width: 100%;
+  margin-top: 10px;
+  text-align: left;
+  height: 0;
+  overflow: hidden;
+}
+
+.og-expander-inner {
+  padding: 50px 30px;
+  height: 100%;
+}
+
+.og-fullimg {
+  text-align: center;
+}
+.og-fullimg, .og-details {
+  width: 50%;
+  float: left;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.og-details {
+  padding: 0 40px 0 20px;
 }

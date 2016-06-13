@@ -1,5 +1,7 @@
 import Album from './components/Album.vue';
 
+require('../less/Gallery.less');
+
 new Vue({
     el: '#societyAdmin',
     data: {

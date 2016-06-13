@@ -1,5 +1,7 @@
 import Photo from './components/Photo.vue';
 
+require('../less/Gallery.less');
+
 var VueInstance = new Vue({
     el: '#societyAdmin',
     data: {
@@ -19,7 +21,7 @@ var VueInstance = new Vue({
         });
 
         this.$http.get(societycms.api.gallery.album.show, {album:societycms.gallery.album.slug}, function (data, status, request) {
-            this.$set('album', data.data);
+            this.$set('album', data.data);           
         }).error(function (data, status, request) {
         });
     },
