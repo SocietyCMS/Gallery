@@ -28,18 +28,15 @@ class AlbumTransformer extends Fractal\TransformerAbstract
     public function transform(Album $album)
     {
         return [
-            'title'     => $album->title,
-            'slug'      => $album->slug,
-            'published' => (bool)$album->published,
-            'photos'    => [
-                'total' => $album->photos->count(),
-            ],
-            'links'     => [
+            'title'        => $album->title,
+            'slug'         => $album->slug,
+            'published'    => (bool)$album->published,
+            'photos_count' => $album->photos->count(),
+            'links'        => [
                 'api'     => [
                     'album'  => apiRoute('v1', 'api.gallery.album.show', $album->slug),
                     'photos' => apiRoute('v1', 'api.gallery.album.photo.index', $album->slug),
-                ],
-                'backend' => route('backend::gallery.gallery.show', $album->slug),
+                ]
             ],
         ];
     }

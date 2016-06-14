@@ -3,10 +3,9 @@ var WebpackPublishPlugin = require('../../WebpackPublishPlugin');
 
 
 module.exports = {
-    context: __dirname + '/Resources/assets/js',
+    context: __dirname + '/Resources/assets',
     entry: {
         gallery: './gallery.js',
-        album: './album.js',
     },
 
     output: {
