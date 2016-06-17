@@ -2,7 +2,7 @@
 
 return [
     'title' => [
-        'gallery'    => 'Gallerie',
+        'gallery'    => 'Fotogalerie',
         'album'      => 'Album',
         'photo'      => 'Foto',
         'photos'     => 'Fotos',
