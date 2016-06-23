@@ -26,12 +26,8 @@ class GalleryController extends Controller
         return view('gallery::backend.index', compact('albums'));
     }
 
-    public function show($slug)
+    public function show()
     {
-        $album = $this->album->findBySlug($slug);
-        \JavaScript::put([
-            'gallery' => ['album' => $album]
-        ]);
-        return view('gallery::backend.show', compact('album'));
+        return view('gallery::backend.show');
     }
 }

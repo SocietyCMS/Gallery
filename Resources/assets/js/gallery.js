@@ -22,17 +22,6 @@ new Vue({
     },
 
     methods: {
-        newAlbumModal: function() {
-            $('#newAlbumModal')
-                .modal('setting', 'transition', 'fade up')
-                .modal('show');
-        },
-        createNewAlbum: function() {
-            var resource = this.$resource(societycms.api.gallery.album.store);
-
-            resource.save(this.newAlbum, function (data, status, request) {
-            }).error(function (data, status, request) {
-            });
-        },
+       
     }
 });

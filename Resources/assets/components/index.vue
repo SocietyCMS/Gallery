@@ -1,11 +1,32 @@
 <template>
-    <a class="ui primary button" >
-        <i class="add user icon"></i>
+    <a class="ui primary button" v-on:click="newAlbumModal">
+        <i class="photo icon"></i>
+        {{ 'core::elements.action.create resource' | trans  }}
     </a>
 
-    <div class="ui six doubling link cards gallery">
+    <div class="ui five doubling link cards gallery">
         <album :album="album" v-for="album in galleries"></album>
     </div>
+
+    <div class="ui modal" id="newAlbumModal">
+        <div class="header">{{'gallery::gallery.modal.create album' | trans}}</div>
+        <div class="content">
+            <form class="ui form">
+                <div class="ui field">
+                    <label>{{'gallery::gallery.form.title'| trans }}</label>
+                    <input type="text"  v-model="newAlbum.title">
+                </div>
+
+                <button class="ui green inverted fluid button" v-on:click="createNewAlbum"
+                        v-bind:class="{'disabled':!newAlbum.title}">
+                    <i class="checkmark icon"></i>
+                    {{'core::elements.button.create'| trans}}
+                </button>
+
+            </form>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -24,6 +45,10 @@
 
         data() {
             return {
+                newAlbum: {
+                    title: null,
+                    description: null
+                }
             };
         },
 
@@ -45,6 +70,18 @@
         },
 
         methods: {
+            newAlbumModal: function() {
+                $('#newAlbumModal')
+                        .modal('setting', 'transition', 'fade up')
+                        .modal('show');
+            },
+            createNewAlbum: function() {
+                var resource = this.$resource(societycms.api.gallery.album.store);
+
+                resource.save(this.newAlbum, function (data, status, request) {
+                }).error(function (data, status, request) {
+                });
+            },
         },
     };
 </script>

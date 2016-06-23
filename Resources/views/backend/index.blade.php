@@ -8,7 +8,9 @@
 @endsection
 
 @section('content')
+
     <router-view keep-alive></router-view>
+
 @endsection
 
 @section('javascript')

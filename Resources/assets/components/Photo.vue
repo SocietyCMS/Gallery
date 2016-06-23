@@ -1,10 +1,19 @@
 <template>
-    <div class="photo" data-w="{{photo.properties.width}}" data-h="{{photo.properties.height}}">
-        <img id="photo-id-{{photo.id}}" class="ui rounded image"
+    <div class="ui instant move down reveal photo" data-w="{{photo.properties.width}}" data-h="{{photo.properties.height}}">
+        <img id="photo-id-{{photo.id}}" class="ui rounded image visible content"
              v-bind:style="{ height: thumbnailHeight, width: thumbnailWidth}"
              v-bind:data-src="thumbnailImage">
         <div class="ui active dimmer" v-if="photo.preview">
             <div class="ui indeterminate loader"></div>
+        </div>
+        <div class="hidden content">
+
+            <div class="center aligned photo-detail">
+                <div class="ui inverted transparent fluid input">
+                    <input type="text" v-model="photo.title">
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -32,13 +41,6 @@
         },
         ready() {
             Vue.nextTick(function () {
-                $('#photo-id-' + this.photo.id)
-                        .visibility({
-                            type: 'image',
-                            transition: 'fade in',
-                            duration: 1000,
-                        });
-
                 new flexImages({selector: '#photosGrid', container: '.photo', rowHeight: 225});
             }.bind(this))
         }

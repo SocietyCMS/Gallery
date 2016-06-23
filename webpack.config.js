@@ -42,7 +42,7 @@ module.exports = {
     },
     plugins: [
         new BrowserSyncPlugin({
-            proxy: 'societycms.dev'
+            proxy: 'societycms.local'
         }),
         new WebpackPublishPlugin({
             module: 'Gallery'

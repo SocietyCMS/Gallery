@@ -1,5 +1,5 @@
 <template>
-    <a class="card" @click="selectGallery(album)" v-link="{ name: 'show', params: { slug: album.slug }}">
+    <a class="card ui piled segment" @click="selectGallery(album)" v-link="{ name: 'show', params: { slug: album.slug }}">
         <div class="image">
             <div class="ui green right corner label" v-if="album.published">
                 <i class="bookmark icon"></i>
@@ -22,7 +22,7 @@
 
 <script>
 
-    import { select_gallery } from '../vuex/actions';
+    import { set_selected_gallery } from '../vuex/actions';
 
     export default {
         props: ['album'],
@@ -32,12 +32,12 @@
                 selected_gallery: function(state) {state.selected_gallery}
             },
             actions: {
-                select_gallery,
+                set_selected_gallery,
             }
         },
         methods: {
             selectGallery: function(album) {
-                this.select_gallery(album);
+                this.set_selected_gallery(album);
             }
         }
     };

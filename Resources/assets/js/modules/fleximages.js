@@ -40,7 +40,7 @@ export default function (options) {
                     exact_w += new_w + o.margin;
                     if (exact_w > max_w) new_w -= exact_w - max_w;
                     _helper();
-                    row[row.length-1][0].classList.remove('last-in-row');
+                    row[x][0].classList.remove('last-in-row');
                 }
 
                 row[row.length-1][0].classList.add('last-in-row');

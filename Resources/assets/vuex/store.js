@@ -6,6 +6,7 @@ import Vuex from 'vuex'
 // each Vuex instance is just a single state tree.
 const state = {
     galleries: [],
+    selected_gallery: null,
     selected_gallery_photos: []
 }
 
@@ -19,9 +20,8 @@ const mutations = {
         state.galleries.push(gallery);
     },
 
-    SELECT_GALLERY (state, gallery) {
+    SELECTED_GALLERY (state, gallery) {
         state.selected_gallery = gallery;
-
     },
 
     CLEAR_PHOTOS (state) {

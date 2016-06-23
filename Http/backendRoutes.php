@@ -5,7 +5,8 @@ $router->group(['prefix' => '/gallery'], function ($router) {
     $router->group(['middleware' => ['permission:gallery::manage-gallery']], function () {
         get('/', ['as' => 'backend::gallery.gallery.index', 'uses' => 'GalleryController@index']);
         //get('gallery/create', ['as' => 'backend::gallery.gallery.create', 'uses' => 'GalleryController@create']);
-        //get('gallery/{slug}', ['as' => 'backend::gallery.gallery.show', 'uses' => 'GalleryController@show']);
+
+        get('gallery/show', ['as' => 'backend::gallery.gallery.show', 'uses' => 'GalleryController@show']);
     });
 
 });
