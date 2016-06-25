@@ -3,10 +3,9 @@ var WebpackPublishPlugin = require('../../WebpackPublishPlugin');
 
 
 module.exports = {
-    context: __dirname + '/Resources/assets/js',
+    context: __dirname + '/Resources/assets',
     entry: {
         gallery: './gallery.js',
-        album: './album.js',
     },
 
     output: {
@@ -43,7 +42,7 @@ module.exports = {
     },
     plugins: [
         new BrowserSyncPlugin({
-            proxy: 'societycms.dev'
+            proxy: 'societycms.local'
         }),
         new WebpackPublishPlugin({
             module: 'Gallery'

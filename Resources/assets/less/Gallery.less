@@ -1,6 +1,10 @@
 .ui.cards.gallery {
   margin-top: 1em;
 }
+.ui.cards.gallery .card:first-child {
+  margin-top: inherit;
+}
+
 
 .album.ellipsis.button {
   background: 0 0 !important;
@@ -10,7 +14,6 @@
   display: flex;
   margin: 1em 0em;
   flex-flow: row wrap;
-  justify-content: center;
 
   .photo {
     position: relative;
@@ -28,6 +31,31 @@
       height: 100%;
     }
 
+    .hidden.content {
+      height: 100%;
+      display: flex;
+    }
+  }
+
+  .photo-detail {
+    background-color: #1B1C1D;
+    padding: 1em;
+
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+
+    box-sizing: border-box;
+
+    .input {
+      font-size: 1.25em;
+    }
+
+    .buttons {
+      margin-top: 0.5em;
+    }
   }
 
 }
@@ -56,50 +84,4 @@
       height: 100%;
     }
   }
-}
-
-
-.detail-placeholder {
-  height: calc(800px + 225px);
-}
-
-.detail {
-  height: 50em;
-  background: #ddd;
-  width: calc(100% + 6em);
-  margin-left: -6em;
-  margin-right: -6em;
-
-}
-
-.og-expander {
-  position: absolute;
-  background: #ddd;
-  top: auto;
-  left: 0;
-  width: 100%;
-  margin-top: 10px;
-  text-align: left;
-  height: 0;
-  overflow: hidden;
-}
-
-.og-expander-inner {
-  padding: 50px 30px;
-  height: 100%;
-}
-
-.og-fullimg {
-  text-align: center;
-}
-.og-fullimg, .og-details {
-  width: 50%;
-  float: left;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.og-details {
-  padding: 0 40px 0 20px;
 }
