@@ -20,6 +20,16 @@ const mutations = {
         state.galleries.push(gallery);
     },
 
+    REMOVE_GALLERY (state, galleryToRemove) {
+        var tokenToRemove;
+        state.galleries.forEach(function(gallery, index) {
+            if(galleryToRemove.slug === gallery.slug) {
+                tokenToRemove = index;
+            }
+        });
+        state.galleries.splice(tokenToRemove, 1);
+    },
+
     SELECTED_GALLERY (state, gallery) {
         state.selected_gallery = gallery;
     },
@@ -30,6 +40,10 @@ const mutations = {
 
     ADD_PHOTO (state, photo) {
         state.selected_gallery_photos.push(photo);
+    },
+
+    REMOVE_PHOTO (state, photo) {
+        state.selected_gallery_photos.$remove(photo);
     },
 }
 

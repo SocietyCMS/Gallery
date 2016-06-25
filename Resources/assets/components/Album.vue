@@ -20,7 +20,7 @@
     </a>
 </template>
 
-<script>
+<script type="text/babel">
 
     import { set_selected_gallery } from '../vuex/actions';
 

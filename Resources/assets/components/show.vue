@@ -17,14 +17,14 @@
 
         <div class="ui divider"></div>
 
-        <div v-dropzone="add_photo" v-bind:upload-url="uploadUrl" style="min-height: 30em; border: 1px solid red" >
-            <div class="ui photos" id="photosGrid" >
+        <div v-dropzone="add_photo" v-bind:upload-url="uploadUrl" style="min-height: 30em; border: 1px solid red">
+            <div class="ui photos" id="photosGrid">
                 <photo :photo="photo" v-for="photo in selected_gallery_photos"></photo>
             </div>
         </div>
     </div>
 
-    <div class="ui small modal"  id="deleteAlbumModal">
+    <div class="ui small modal" id="deleteAlbumModal">
         <div class="header">{{ 'gallery::gallery.modal.delete album' | trans }}</div>
         <div class="content">
             <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>
@@ -42,8 +42,8 @@
 
 </template>
 
-<script>
-    import { set_selected_gallery, add_photo, add_photos } from '../vuex/actions';
+<script type="text/babel">
+    import {set_selected_gallery, remove_gallery, add_photo, add_photos} from '../vuex/actions';
 
     import Photo from './Photo.vue';
 
@@ -52,7 +52,7 @@
 
         params: ['uploadUrl'],
 
-        bind: function() {
+        bind: function () {
 
         },
         update: function (callback) {
@@ -64,8 +64,9 @@
                 },
                 paramName: "image",
 
-                addedfile: function(file) {},
-                success: function(file, response) {
+                addedfile: function (file) {
+                },
+                success: function (file, response) {
                     console.log(file, response);
                     callback(response.data)
                 },
@@ -81,14 +82,14 @@
         route: {
             data: function (transition) {
                 return Promise.all([
-                            this.$http.get(societycms.api.gallery.album.show, {album:this.$route.params.slug}),
-                            this.$http.get(societycms.api.gallery.album.photo.index, {album:this.$route.params.slug}),
-                        ]).then(function([gallery, photos]) {
-                            this.set_selected_gallery(gallery.data.data);
-                            this.add_photos(photos.data.data);
-                        }.bind(this))
+                    this.$http.get(societycms.api.gallery.album.show, {album: this.$route.params.slug}),
+                    this.$http.get(societycms.api.gallery.album.photo.index, {album: this.$route.params.slug}),
+                ]).then(function ([gallery, photos]) {
+                    this.set_selected_gallery(gallery.data.data);
+                    this.add_photos(photos.data.data);
+                }.bind(this))
             },
-            activate: function(transition) {
+            activate: function (transition) {
                 transition.next();
             }
         },
@@ -106,41 +107,43 @@
                 set_selected_gallery,
                 add_photo,
                 add_photos,
+                remove_gallery,
             }
         },
 
         computed: {
-            uploadUrl: function() {
-                return Vue.url(societycms.api.gallery.album.photo.store, {album:this.selected_gallery.slug});
+            uploadUrl: function () {
+                return Vue.url(societycms.api.gallery.album.photo.store, {album: this.selected_gallery.slug});
             }
         },
 
         methods: {
 
-            updateAlbum: function() {
+            updateAlbum: function () {
                 var resource = this.$resource(societycms.api.gallery.album.update);
                 resource.update({album: this.selected_gallery.slug}, {title: this.selected_gallery.title}, function (data, status, request) {
                 }).error(function (data, status, request) {
                 });
             },
 
-            deleteAlbumModal: function() {
+            deleteAlbumModal: function () {
                 $('#deleteAlbumModal')
                         .modal('setting', 'transition', 'fade up')
                         .modal('show');
             },
-            deleteAlbum: function() {
+            deleteAlbum: function () {
 
                 $('#deleteAlbumModal')
                         .modal('hide');
 
-                this.deleting = true;
                 var resource = this.$resource(societycms.api.gallery.album.destroy);
 
-                resource.delete({album:this.selected_gallery.slug}, this.album, function (data, status, request) {
-                    this.$router.go({name:'index'})
+                resource.delete({album: this.selected_gallery.slug}, this.album, function (data, status, request) {
+                    this.remove_gallery(this.selected_gallery);
+                    this.$router.go({name: 'index'});
                 }).error(function (data, status, request) {
                 });
+
             }
         },
     };

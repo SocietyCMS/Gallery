@@ -6,6 +6,8 @@ export const add_galleries = function ({dispatch}, payload) {
     })
 }
 
+export const remove_gallery = ({dispatch}, payload) => dispatch('REMOVE_GALLERY', payload)
+
 export const set_selected_gallery = ({dispatch}, gallery) => dispatch('SELECTED_GALLERY', gallery)
 
 
@@ -17,3 +19,5 @@ export const add_photos = function ({dispatch}, photos) {
         dispatch('ADD_PHOTO',  photo)
     })
 }
+
+export const remove_photo = ({dispatch}, payload) => dispatch('REMOVE_PHOTO', payload)

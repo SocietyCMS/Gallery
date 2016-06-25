@@ -29,7 +29,7 @@
 
 </template>
 
-<script>
+<script type="text/babel">
     import Album from './Album.vue';
 
     import { add_gallery, add_galleries } from '../vuex/actions';

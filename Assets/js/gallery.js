@@ -131,6 +131,15 @@
 	    ADD_GALLERY: function ADD_GALLERY(state, gallery) {
 	        state.galleries.push(gallery);
 	    },
+	    REMOVE_GALLERY: function REMOVE_GALLERY(state, galleryToRemove) {
+	        var tokenToRemove;
+	        state.galleries.forEach(function (gallery, index) {
+	            if (galleryToRemove.slug === gallery.slug) {
+	                tokenToRemove = index;
+	            }
+	        });
+	        state.galleries.splice(tokenToRemove, 1);
+	    },
 	    SELECTED_GALLERY: function SELECTED_GALLERY(state, gallery) {
 	        state.selected_gallery = gallery;
 	    },
@@ -139,6 +148,9 @@
 	    },
 	    ADD_PHOTO: function ADD_PHOTO(state, photo) {
 	        state.selected_gallery_photos.push(photo);
+	    },
+	    REMOVE_PHOTO: function REMOVE_PHOTO(state, photo) {
+	        state.selected_gallery_photos.$remove(photo);
 	    }
 	};
 
@@ -970,23 +982,33 @@
 	    });
 	};
 
-	var set_selected_gallery = exports.set_selected_gallery = function set_selected_gallery(_ref3, gallery) {
+	var remove_gallery = exports.remove_gallery = function remove_gallery(_ref3, payload) {
 	    var dispatch = _ref3.dispatch;
+	    return dispatch('REMOVE_GALLERY', payload);
+	};
+
+	var set_selected_gallery = exports.set_selected_gallery = function set_selected_gallery(_ref4, gallery) {
+	    var dispatch = _ref4.dispatch;
 	    return dispatch('SELECTED_GALLERY', gallery);
 	};
 
-	var add_photo = exports.add_photo = function add_photo(_ref4, payload) {
-	    var dispatch = _ref4.dispatch;
+	var add_photo = exports.add_photo = function add_photo(_ref5, payload) {
+	    var dispatch = _ref5.dispatch;
 	    return dispatch('ADD_PHOTO', payload);
 	};
 
-	var add_photos = exports.add_photos = function add_photos(_ref5, photos) {
-	    var dispatch = _ref5.dispatch;
+	var add_photos = exports.add_photos = function add_photos(_ref6, photos) {
+	    var dispatch = _ref6.dispatch;
 
 	    dispatch('CLEAR_PHOTOS');
 	    photos.forEach(function (photo) {
 	        dispatch('ADD_PHOTO', photo);
 	    });
+	};
+
+	var remove_photo = exports.remove_photo = function remove_photo(_ref7, payload) {
+	    var dispatch = _ref7.dispatch;
+	    return dispatch('REMOVE_PHOTO', payload);
 	};
 
 /***/ },
@@ -1115,7 +1137,8 @@
 	        actions: {
 	            set_selected_gallery: _actions.set_selected_gallery,
 	            add_photo: _actions.add_photo,
-	            add_photos: _actions.add_photos
+	            add_photos: _actions.add_photos,
+	            remove_gallery: _actions.remove_gallery
 	        }
 	    },
 
@@ -1139,10 +1162,10 @@
 
 	            $('#deleteAlbumModal').modal('hide');
 
-	            this.deleting = true;
 	            var resource = this.$resource(societycms.api.gallery.album.destroy);
 
 	            resource.delete({ album: this.selected_gallery.slug }, this.album, function (data, status, request) {
+	                this.remove_gallery(this.selected_gallery);
 	                this.$router.go({ name: 'index' });
 	            }).error(function (data, status, request) {});
 	        }
@@ -2815,10 +2838,30 @@
 
 	var _fleximages2 = _interopRequireDefault(_fleximages);
 
+	var _actions = __webpack_require__(7);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	    props: ['photo'],
+	    data: function data() {
+	        return {
+	            isFocused: false,
+	            confirmDelete: false
+	        };
+	    },
+
+	    vuex: {
+	        getters: {
+	            selected_gallery: function selected_gallery(state) {
+	                return state.selected_gallery;
+	            }
+	        },
+	        actions: {
+	            remove_photo: _actions.remove_photo
+	        }
+	    },
+
 	    computed: {
 	        thumbnailImage: function thumbnailImage() {
 	            if (this.photo.thumbnail && this.photo.thumbnail.medium) {
@@ -2838,6 +2881,19 @@
 	        Vue.nextTick(function () {
 	            new _fleximages2.default({ selector: '#photosGrid', container: '.photo', rowHeight: 225 });
 	        }.bind(this));
+	    },
+
+	    methods: {
+	        deletePhoto: function deletePhoto() {
+	            var resource = this.$resource(societycms.api.gallery.album.photo.destroy);
+
+	            resource.delete({
+	                album: this.selected_gallery.slug,
+	                photo: this.photo.id
+	            }, this.photo, function (data, status, request) {
+	                this.remove_photo(this.photo);
+	            }).error(function (data, status, request) {});
+	        }
 	    }
 	};
 
@@ -3441,13 +3497,13 @@
 /* 107 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui instant move down reveal photo\" data-w=\"{{photo.properties.width}}\" data-h=\"{{photo.properties.height}}\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\"\n         v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n    <div class=\"hidden content\">\n\n        <div class=\"center aligned photo-detail\">\n            <div class=\"ui inverted transparent fluid input\">\n                <input type=\"text\" v-model=\"photo.title\">\n            </div>\n        </div>\n\n    </div>\n</div>\n";
+	module.exports = "\n<div class=\"ui instant move down reveal photo\" v-bind:class=\"{ 'active': isFocused }\"\n     data-w=\"{{photo.properties.width}}\"\n     data-h=\"{{photo.properties.height}}\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\"\n         v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n    <div class=\"hidden content photo-detail\">\n        <div class=\"content\">\n            <div class=\"ui huge fluid input\">\n                <input type=\"text\" placeholder=\"Title\"\n                       v-model=\"photo.title\"\n                       v-on:focus=\"isFocused = true\"\n                       v-on:blur=\"isFocused = false\"\n                       debounce=\"500\">\n            </div>\n\n            <div class=\"buttons\">\n                <div class=\"ui inverted red icon button \" v-on:click=\"confirmDelete = true\" v-show=\"!confirmDelete\">\n                    <i class=\"trash icon\"></i></div>\n\n                <div class=\"ui buttons\" v-show=\"confirmDelete\">\n                    <div class=\"ui button\" v-on:click=\"confirmDelete = false\">Cancel</div>\n                    <div class=\"ui negative button\" v-on:click=\"deletePhoto\">Delete</div>\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n</div>\n";
 
 /***/ },
 /* 108 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div v-dropzone=\"add_photo\" v-bind:upload-url=\"uploadUrl\" style=\"min-height: 30em; border: 1px solid red\" >\n        <div class=\"ui photos\" id=\"photosGrid\" >\n            <photo :photo=\"photo\" v-for=\"photo in selected_gallery_photos\"></photo>\n        </div>\n    </div>\n</div>\n\n<div class=\"ui small modal\"  id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
+	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div v-dropzone=\"add_photo\" v-bind:upload-url=\"uploadUrl\" style=\"min-height: 30em; border: 1px solid red\">\n        <div class=\"ui photos\" id=\"photosGrid\">\n            <photo :photo=\"photo\" v-for=\"photo in selected_gallery_photos\"></photo>\n        </div>\n    </div>\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
 
 /***/ },
 /* 109 */
@@ -3484,7 +3540,7 @@
 
 
 	// module
-	exports.push([module.id, ".ui.cards.gallery {\n  margin-top: 1em;\n}\n.ui.cards.gallery .card:first-child {\n  margin-top: inherit;\n}\n.album.ellipsis.button {\n  background: 0 0 !important;\n}\n.ui.photos {\n  display: flex;\n  margin: 1em 0em;\n  flex-flow: row wrap;\n}\n.ui.photos .photo {\n  position: relative;\n  height: 225px;\n  margin: 0.875em 0.1em;\n  border-radius: .28571429rem;\n}\n.ui.photos .photo > .ui.dimmer {\n  border-radius: inherit !important;\n  background-color: rgba(0, 0, 0, 0.6);\n}\n.ui.photos .photo img {\n  width: auto;\n  height: 100%;\n}\n.ui.photos .photo .hidden.content {\n  height: 100%;\n  display: flex;\n}\n.ui.photos .photo-detail {\n  background-color: #1B1C1D;\n  padding: 1em;\n  display: flex;\n  flex-grow: 1;\n  flex-direction: column;\n  justify-content: center;\n  align-content: center;\n}\n.ui.photos .photo-detail .input {\n  font-size: 1.25em;\n}\n.ui.button.bottom.spacing {\n  margin-bottom: 2em;\n}\n#noPhotosPlaceholder {\n  margin-top: 3em;\n}\n#photosGrid .photo {\n  float: left;\n  margin: 4px;\n  border: 1px solid #eee;\n  box-sizing: content-box;\n  overflow: hidden;\n  position: relative;\n}\n#photosGrid .photo img {\n  display: block;\n  width: auto;\n  height: 100%;\n}\n", ""]);
+	exports.push([module.id, ".ui.cards.gallery {\n  margin-top: 1em;\n}\n.ui.cards.gallery .card:first-child {\n  margin-top: inherit;\n}\n.album.ellipsis.button {\n  background: 0 0 !important;\n}\n.ui.photos {\n  display: flex;\n  margin: 1em 0em;\n  flex-flow: row wrap;\n}\n.ui.photos .photo {\n  position: relative;\n  height: 225px;\n  margin: 0.875em 0.1em;\n  border-radius: .28571429rem;\n}\n.ui.photos .photo > .ui.dimmer {\n  border-radius: inherit !important;\n  background-color: rgba(0, 0, 0, 0.6);\n}\n.ui.photos .photo img {\n  width: auto;\n  height: 100%;\n}\n.ui.photos .photo .hidden.content {\n  height: 100%;\n  display: flex;\n}\n.ui.photos .photo-detail {\n  background-color: #1B1C1D;\n  padding: 1em;\n  display: flex;\n  flex-grow: 1;\n  flex-direction: column;\n  justify-content: center;\n  align-content: center;\n  box-sizing: border-box;\n}\n.ui.photos .photo-detail .input {\n  font-size: 1.25em;\n}\n.ui.photos .photo-detail .buttons {\n  margin-top: 0.5em;\n}\n.ui.button.bottom.spacing {\n  margin-bottom: 2em;\n}\n#noPhotosPlaceholder {\n  margin-top: 3em;\n}\n#photosGrid .photo {\n  float: left;\n  margin: 4px;\n  border: 1px solid #eee;\n  box-sizing: content-box;\n  overflow: hidden;\n  position: relative;\n}\n#photosGrid .photo img {\n  display: block;\n  width: auto;\n  height: 100%;\n}\n", ""]);
 
 	// exports
 
