@@ -17,11 +17,33 @@
 
         <div class="ui divider"></div>
 
-        <div v-dropzone="add_photo" v-bind:upload-url="uploadUrl" style="min-height: 30em; border: 1px solid red">
-            <div class="ui photos" id="photosGrid">
-                <photo :photo="photo" v-for="photo in selected_gallery_photos"></photo>
+        <div class="ui grid">
+            <div class="twelve wide column">
+                <div id="photosGrid" v-dropzone="add_photo" v-bind:upload-url="uploadUrl"
+                     style="min-height: 30em; border: 1px solid red">
+                    <waterfall
+                            line="h"
+                            :line-gap="200"
+                            min-line-gap="160"
+                            max-line-gap="240"
+                            :watch="selected_gallery_photos"
+                    >
+                        <waterfall-slot v-for="photo in selected_gallery_photos"
+                                        :width="photo.properties.width"
+                                        :height="photo.properties.height"
+                                        :order="$index">
+                            <photo :photo="photo"></photo>
+                        </waterfall-slot>
+                    </waterfall>
+
+                </div>
+            </div>
+            <div class="four wide column">
+
             </div>
         </div>
+
+
     </div>
 
     <div class="ui small modal" id="deleteAlbumModal">
@@ -44,6 +66,7 @@
 
 <script type="text/babel">
     import {set_selected_gallery, remove_gallery, add_photo, add_photos} from '../vuex/actions';
+    import {Waterfall, WaterfallSlot} from 'vue-waterfall'
 
     import Photo from './Photo.vue';
 
@@ -95,7 +118,9 @@
         },
 
         components: {
-            Photo
+            Photo,
+            Waterfall,
+            WaterfallSlot
         },
 
         vuex: {

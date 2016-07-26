@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(109);
+	__webpack_require__(110);
 
 	// The router needs a root component to render.
 	// For demo purposes, we will just use an empty one
@@ -1033,7 +1033,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/show.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(108)
+	__vue_template__ = __webpack_require__(109)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -1071,7 +1071,9 @@
 
 	var _actions = __webpack_require__(7);
 
-	var _Photo = __webpack_require__(87);
+	var _vueWaterfall = __webpack_require__(87);
+
+	var _Photo = __webpack_require__(88);
 
 	var _Photo2 = _interopRequireDefault(_Photo);
 
@@ -1122,7 +1124,9 @@
 	    },
 
 	    components: {
-	        Photo: _Photo2.default
+	        Photo: _Photo2.default,
+	        Waterfall: _vueWaterfall.Waterfall,
+	        WaterfallSlot: _vueWaterfall.WaterfallSlot
 	    },
 
 	    vuex: {
@@ -2800,13 +2804,24 @@
 /* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*!
+	 * vue-waterfall v0.2.3
+	 * (c) 2016 MopTym <moptym@163.com>
+	 * https://github.com/MopTym/vue-waterfall
+	 */
+	!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.Waterfall=e():t.Waterfall=e()}(this,function(){return function(t){function e(i){if(n[i])return n[i].exports;var r=n[i]={exports:{},id:i,loaded:!1};return t[i].call(r.exports,r,r.exports,e),r.loaded=!0,r.exports}var n={};return e.m=t,e.c=n,e.p="",e(0)}([function(t,e,n){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}var r=n(1),o=i(r),a=n(8),s=i(a);t.exports={Waterfall:o["default"],WaterfallSlot:s["default"],waterfall:o["default"],waterfallSlot:s["default"]}},function(t,e,n){var i,r;n(2),i=n(6),r=n(7),t.exports=i||{},t.exports.__esModule&&(t.exports=t.exports["default"]),r&&(("function"==typeof t.exports?t.exports.options||(t.exports.options={}):t.exports).template=r)},function(t,e,n){var i=n(3);"string"==typeof i&&(i=[[t.id,i,""]]);n(5)(i,{});i.locals&&(t.exports=i.locals)},function(t,e,n){e=t.exports=n(4)(),e.push([t.id,".vue-waterfall{position:relative}",""])},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1])}return t.join("")},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var i={},r=0;r<this.length;r++){var o=this[r][0];"number"==typeof o&&(i[o]=!0)}for(r=0;r<e.length;r++){var a=e[r];"number"==typeof a[0]&&i[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a))}},t}},function(t,e,n){function i(t,e){for(var n=0;n<t.length;n++){var i=t[n],r=c[i.id];if(r){r.refs++;for(var o=0;o<r.parts.length;o++)r.parts[o](i.parts[o]);for(;o<i.parts.length;o++)r.parts.push(u(i.parts[o],e))}else{for(var a=[],o=0;o<i.parts.length;o++)a.push(u(i.parts[o],e));c[i.id]={id:i.id,refs:1,parts:a}}}}function r(t){for(var e=[],n={},i=0;i<t.length;i++){var r=t[i],o=r[0],a=r[1],s=r[2],u=r[3],l={css:a,media:s,sourceMap:u};n[o]?n[o].parts.push(l):e.push(n[o]={id:o,parts:[l]})}return e}function o(t,e){var n=p(),i=m[m.length-1];if("top"===t.insertAt)i?i.nextSibling?n.insertBefore(e,i.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),m.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e)}}function a(t){t.parentNode.removeChild(t);var e=m.indexOf(t);e>=0&&m.splice(e,1)}function s(t){var e=document.createElement("style");return e.type="text/css",o(t,e),e}function u(t,e){var n,i,r;if(e.singleton){var o=g++;n=v||(v=s(e)),i=l.bind(null,n,o,!1),r=l.bind(null,n,o,!0)}else n=s(e),i=f.bind(null,n),r=function(){a(n)};return i(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;i(t=e)}else r()}}function l(t,e,n,i){var r=n?"":i.css;if(t.styleSheet)t.styleSheet.cssText=x(e,r);else{var o=document.createTextNode(r),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(o,a[e]):t.appendChild(o)}}function f(t,e){var n=e.css,i=e.media,r=e.sourceMap;if(i&&t.setAttribute("media",i),r&&(n+="\n/*# sourceURL="+r.sources[0]+" */",n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */"),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}var c={},d=function(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e}},h=d(function(){return/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())}),p=d(function(){return document.head||document.getElementsByTagName("head")[0]}),v=null,g=0,m=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=h()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=r(t);return i(n,e),function(t){for(var o=[],a=0;a<n.length;a++){var s=n[a],u=c[s.id];u.refs--,o.push(u)}if(t){var l=r(t);i(l,e)}for(var a=0;a<o.length;a++){var u=o[a];if(0===u.refs){for(var f=0;f<u.parts.length;f++)u.parts[f]();delete c[u.id]}}}};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},function(t,e){"use strict";function n(t){t!==!1&&this.autoResize?y(window,"resize",this.reflowHandler,!1):b(window,"resize",this.reflowHandler,!1)}function i(t){var e=t.target,n=e[L];n&&m(e,n)}function r(t){return function(){clearTimeout(t),t=setTimeout(this.reflow,this.interval)}}function o(){var t=this;if(this.$el){var e=this.$el.clientWidth,n=this.$children.map(function(t){return t.getMeta()});n.sort(function(t,e){return t.order-e.order}),this.virtualRects=n.map(function(){return{}}),s(this,n,this.virtualRects),setTimeout(function(){a(t.$el,e)&&s(t,n,t.virtualRects),t.style.overflow="hidden",f(t.virtualRects,n),t.$broadcast("wf-reflowed",[t]),t.$dispatch("wf-reflowed",[t])},0)}}function a(t,e){return e!==t.clientWidth}function s(t,e,n){var i=u(t),r="h"===t.line?W:C;r.calculate(t,i,e,n)}function u(t){return{align:~["left","right","center"].indexOf(t.align)?t.align:"left",line:~["v","h"].indexOf(t.line)?t.line:"v",lineGap:+t.lineGap,minLineGap:t.minLineGap?+t.minLineGap:t.lineGap,maxLineGap:t.maxLineGap?+t.maxLineGap:t.lineGap,singleMaxWidth:Math.max(t.singleMaxWidth||0,t.maxLineGap),fixedHeight:!!t.fixedHeight}}function l(t,e,n){switch(n){case"right":return t-e;case"center":return(t-e)/2;default:return 0}}function f(t,e){var n=e.filter(function(t){return t.moveClass}),i=c(n);d(t,e);var r=c(n);n.forEach(function(t,e){t.node[L]=t.moveClass,h(t.node,i[e],r[e])}),document.body.clientWidth,n.forEach(function(t){g(t.node,t.moveClass),p(t.node)})}function c(t){return t.map(function(t){return t.vm.rect})}function d(t,e){t.forEach(function(t,n){var i=e[n].node.style;e[n].vm.rect=t;for(var r in t)i[r]=t[r]+"px"})}function h(t,e,n){var i=e.left-n.left,r=e.top-n.top,o=e.width/n.width,a=e.height/n.height;t.style.transform=t.style.WebkitTransform="translate("+i+"px,"+r+"px) scale("+o+","+a+")",t.style.transitionDuration="0s"}function p(t){t.style.transform=t.style.WebkitTransform="",t.style.transitionDuration=""}function v(t,e){for(var n="function"==typeof t?function(){return t()}:function(){return t},i=[],r=0;e>r;r++)i[r]=n();return i}function g(t,e){if(!x(t,e)){var n=w(t,"class").trim(),i=(n+" "+e).trim();w(t,"class",i)}}function m(t,e){var n=new RegExp("\\s*\\b"+e+"\\b\\s*","g"),i=w(t,"class").replace(n," ").trim();w(t,"class",i)}function x(t,e){return new RegExp("\\b"+e+"\\b").test(w(t,"class"))}function w(t,e,n){return"undefined"==typeof n?t.getAttribute(e)||"":void t.setAttribute(e,n)}function y(t,e,n){var i=arguments.length<=3||void 0===arguments[3]?!1:arguments[3];t.addEventListener(e,n,i)}function b(t,e,n){var i=arguments.length<=3||void 0===arguments[3]?!1:arguments[3];t.removeEventListener(e,n,i)}Object.defineProperty(e,"__esModule",{value:!0});var G=void 0===window.ontransitionend&&void 0!==window.onwebkittransitionend,M=G?"webkitTransitionEnd":"transitionend",L="_wfMoveClass";e["default"]={props:{autoResize:{"default":!0},interval:{"default":200,validator:function(t){return t>=0}},align:{"default":"left",validator:function(t){return~["left","right","center"].indexOf(t)}},line:{"default":"v",validator:function(t){return~["v","h"].indexOf(t)}},lineGap:{required:!0,validator:function(t){return t>=0}},minLineGap:{validator:function(t){return t>=0}},maxLineGap:{validator:function(t){return t>=0}},singleMaxWidth:{validator:function(t){return t>=0}},fixedHeight:{"default":!1},watch:{"default":{}}},data:function(){return{style:{height:"",overflow:""}}},methods:{autoResizeHandler:n,reflowHandler:r(),reflow:o},events:{"wf-reflow":function(){this.reflowHandler()}},compiled:function(){this.virtualRects=[]},ready:function(){var t=this;this.autoResizeHandler(),this.$watch("autoResize",this.autoResizeHandler),this.$watch(function(){return t.align,t.line,t.lineGap,t.minLineGap,t.maxLineGap,t.singleMaxWidth,t.fixedHeight,t.watch},this.reflowHandler),y(this.$el,M,i,!0)},beforeDestroy:function(){this.autoResizeHandler(!1),b(this.$el,M,i,!0)}};var C=function(){function t(t,n,i,r){var o=t.$el.clientWidth,a=e(o,n),s=v(0,a.count);i.forEach(function(t,e){var i=s.reduce(function(t,e,n){return e<s[t]?n:t},0),o=r[e];o.top=s[i],o.left=a.left+a.width*i,o.width=a.width,o.height=t.height*(n.fixedHeight?1:a.width/t.width),s[i]=s[i]+o.height}),t.style.height=Math.max.apply(null,s)+"px"}function e(t,e){var n=t/e.lineGap,i=void 0;if(e.singleMaxWidth>=t)n=1,i=Math.max(t,e.minLineGap);else{var r=e.maxLineGap*~~n,o=e.minLineGap*~~(n+1),a=r>=t,s=t>=o;a&&s?(n=Math.round(n),i=t/n):a?(n=~~n,i=t/n):s?(n=~~(n+1),i=t/n):(n=~~n,i=e.maxLineGap),1===n&&(i=Math.min(t,e.singleMaxWidth),i=Math.max(i,e.minLineGap))}return{width:i,count:n,left:l(t,i*n,e.align)}}return{calculate:t}}(),W=function(){function t(t,n,i,r){for(var o=t.$el.clientWidth,a=i.length,s=0,u=0;a>u;){for(var l,f,c=e(o,n,i,u),d=0,h=0;d<c.count;d++)l=i[u+d],f=r[u+d],f.top=s,f.left=c.left+h,f.width=l.width*c.height/l.height,f.height=c.height,h+=f.width;u+=c.count,s+=c.height}t.style.height=s+"px"}function e(t,e,o,a){var s=n(t,e.lineGap,o,a),u=Math.max(s-1,1),f=i(t,e,o,a,s),c=i(t,e,o,a,u),d=r(c,f,t),h=d.height,p=d.width;return 1===d.count&&(p=Math.min(e.singleMaxWidth,t),h=o[a].height*p/o[a].width),{left:l(t,p,e.align),count:d.count,height:h}}function n(t,e,n,i){for(var r=0,o=i,a=0;o<n.length&&t>=a;o++)a+=n[o].width*e/n[o].height,r++;return r}function i(t,e,n,i,r){for(var o=0,a=r-1;a>=0;a--){var s=n[i+a];o+=s.width*e.lineGap/s.height}var u=e.lineGap*t/o,l=u<=e.maxLineGap&&u>=e.minLineGap;if(l)return{cost:Math.abs(e.lineGap-u),count:r,width:t,height:u};var f=o>t?e.minLineGap:e.maxLineGap;return{cost:1/0,count:r,width:o*f/e.lineGap,height:f}}function r(t,e,n){return t.cost===1/0&&e.cost===1/0?e.width<n?e:t:e.cost>=t.cost?t:e}return{calculate:t}}()},function(t,e){t.exports="<div class=vue-waterfall :style=style><slot></slot></div>"},function(t,e,n){var i,r;n(9),i=n(11),r=n(12),t.exports=i||{},t.exports.__esModule&&(t.exports=t.exports["default"]),r&&(("function"==typeof t.exports?t.exports.options||(t.exports.options={}):t.exports).template=r)},function(t,e,n){var i=n(10);"string"==typeof i&&(i=[[t.id,i,""]]);n(5)(i,{});i.locals&&(t.exports=i.locals)},function(t,e,n){e=t.exports=n(4)(),e.push([t.id,".vue-waterfall-slot{position:absolute;margin:0;padding:0;box-sizing:border-box}",""])},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={data:function(){return{isShow:!1}},props:{width:{required:!0,validator:function(t){return t>=0}},height:{required:!0,validator:function(t){return t>=0}},order:{"default":0},moveClass:{"default":""}},methods:{notify:function(){this.$dispatch("wf-reflow",[this])},getMeta:function(){return{vm:this,node:this.$el,order:this.order,width:this.width,height:this.height,moveClass:this.moveClass}}},compiled:function(){var t=this;this.$watch("width, height",this.notify),this.$once("wf-reflowed",function(){return t.isShow=!0}),this.rect={top:0,left:0,width:0,height:0}},attached:function(){this.notify()},detached:function(){this.notify()}}},function(t,e){t.exports="<div class=vue-waterfall-slot v-show=isShow><slot></slot></div>"}])});
+
+/***/ },
+/* 88 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(88)
+	__vue_script__ = __webpack_require__(89)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/Photo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(107)
+	__vue_template__ = __webpack_require__(108)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2825,7 +2840,7 @@
 	})()}
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2834,7 +2849,7 @@
 	    value: true
 	});
 
-	var _fleximages = __webpack_require__(89);
+	var _fleximages = __webpack_require__(90);
 
 	var _fleximages2 = _interopRequireDefault(_fleximages);
 
@@ -2877,12 +2892,6 @@
 	            }
 	        }
 	    },
-	    ready: function ready() {
-	        Vue.nextTick(function () {
-	            new _fleximages2.default({ selector: '#photosGrid', container: '.photo', rowHeight: 225 });
-	        }.bind(this));
-	    },
-
 	    methods: {
 	        deletePhoto: function deletePhoto() {
 	            var resource = this.$resource(societycms.api.gallery.album.photo.destroy);
@@ -2898,7 +2907,7 @@
 	};
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2907,7 +2916,7 @@
 	    value: true
 	});
 
-	var _typeof2 = __webpack_require__(90);
+	var _typeof2 = __webpack_require__(91);
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -3020,18 +3029,18 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _iterator = __webpack_require__(91);
+	var _iterator = __webpack_require__(92);
 
 	var _iterator2 = _interopRequireDefault(_iterator);
 
-	var _symbol = __webpack_require__(94);
+	var _symbol = __webpack_require__(95);
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -3046,43 +3055,43 @@
 	};
 
 /***/ },
-/* 91 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(92), __esModule: true };
-
-/***/ },
 /* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(61);
-	__webpack_require__(15);
-	module.exports = __webpack_require__(93).f('iterator');
+	module.exports = { "default": __webpack_require__(93), __esModule: true };
 
 /***/ },
 /* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.f = __webpack_require__(58);
+	__webpack_require__(61);
+	__webpack_require__(15);
+	module.exports = __webpack_require__(94).f('iterator');
 
 /***/ },
 /* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(95), __esModule: true };
+	exports.f = __webpack_require__(58);
 
 /***/ },
 /* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(96);
-	__webpack_require__(71);
-	__webpack_require__(105);
-	__webpack_require__(106);
-	module.exports = __webpack_require__(28).Symbol;
+	module.exports = { "default": __webpack_require__(96), __esModule: true };
 
 /***/ },
 /* 96 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(97);
+	__webpack_require__(71);
+	__webpack_require__(106);
+	__webpack_require__(107);
+	module.exports = __webpack_require__(28).Symbol;
+
+/***/ },
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3092,23 +3101,23 @@
 	  , DESCRIPTORS    = __webpack_require__(36)
 	  , $export        = __webpack_require__(26)
 	  , redefine       = __webpack_require__(41)
-	  , META           = __webpack_require__(97).KEY
+	  , META           = __webpack_require__(98).KEY
 	  , $fails         = __webpack_require__(37)
 	  , shared         = __webpack_require__(53)
 	  , setToStringTag = __webpack_require__(57)
 	  , uid            = __webpack_require__(54)
 	  , wks            = __webpack_require__(58)
-	  , wksExt         = __webpack_require__(93)
-	  , wksDefine      = __webpack_require__(98)
-	  , keyOf          = __webpack_require__(99)
-	  , enumKeys       = __webpack_require__(100)
-	  , isArray        = __webpack_require__(102)
+	  , wksExt         = __webpack_require__(94)
+	  , wksDefine      = __webpack_require__(99)
+	  , keyOf          = __webpack_require__(100)
+	  , enumKeys       = __webpack_require__(101)
+	  , isArray        = __webpack_require__(103)
 	  , anObject       = __webpack_require__(33)
 	  , toIObject      = __webpack_require__(20)
 	  , toPrimitive    = __webpack_require__(39)
 	  , createDesc     = __webpack_require__(40)
 	  , _create        = __webpack_require__(44)
-	  , gOPNExt        = __webpack_require__(103)
+	  , gOPNExt        = __webpack_require__(104)
 	  , $GOPD          = __webpack_require__(78)
 	  , $DP            = __webpack_require__(32)
 	  , $keys          = __webpack_require__(46)
@@ -3234,9 +3243,9 @@
 
 	  $GOPD.f = $getOwnPropertyDescriptor;
 	  $DP.f   = $defineProperty;
-	  __webpack_require__(104).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(105).f = gOPNExt.f = $getOwnPropertyNames;
 	  __webpack_require__(79).f  = $propertyIsEnumerable;
-	  __webpack_require__(101).f = $getOwnPropertySymbols;
+	  __webpack_require__(102).f = $getOwnPropertySymbols;
 
 	  if(DESCRIPTORS && !__webpack_require__(25)){
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -3322,7 +3331,7 @@
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var META     = __webpack_require__(54)('meta')
@@ -3380,13 +3389,13 @@
 	};
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var global         = __webpack_require__(27)
 	  , core           = __webpack_require__(28)
 	  , LIBRARY        = __webpack_require__(25)
-	  , wksExt         = __webpack_require__(93)
+	  , wksExt         = __webpack_require__(94)
 	  , defineProperty = __webpack_require__(32).f;
 	module.exports = function(name){
 	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -3394,7 +3403,7 @@
 	};
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getKeys   = __webpack_require__(46)
@@ -3409,12 +3418,12 @@
 	};
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
 	var getKeys = __webpack_require__(46)
-	  , gOPS    = __webpack_require__(101)
+	  , gOPS    = __webpack_require__(102)
 	  , pIE     = __webpack_require__(79);
 	module.exports = function(it){
 	  var result     = getKeys(it)
@@ -3429,13 +3438,13 @@
 	};
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports) {
 
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
@@ -3445,12 +3454,12 @@
 	};
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 	var toIObject = __webpack_require__(20)
-	  , gOPN      = __webpack_require__(104).f
+	  , gOPN      = __webpack_require__(105).f
 	  , toString  = {}.toString;
 
 	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -3470,7 +3479,7 @@
 
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
@@ -3482,40 +3491,40 @@
 	};
 
 /***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(98)('asyncIterator');
-
-/***/ },
 /* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(98)('observable');
+	__webpack_require__(99)('asyncIterator');
 
 /***/ },
 /* 107 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\n<div class=\"ui instant move down reveal photo\" v-bind:class=\"{ 'active': isFocused }\"\n     data-w=\"{{photo.properties.width}}\"\n     data-h=\"{{photo.properties.height}}\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:style=\"{ height: thumbnailHeight, width: thumbnailWidth}\"\n         v-bind:data-src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n    <div class=\"hidden content photo-detail\">\n        <div class=\"content\">\n            <div class=\"ui huge fluid input\">\n                <input type=\"text\" placeholder=\"Title\"\n                       v-model=\"photo.title\"\n                       v-on:focus=\"isFocused = true\"\n                       v-on:blur=\"isFocused = false\"\n                       debounce=\"500\">\n            </div>\n\n            <div class=\"buttons\">\n                <div class=\"ui inverted red icon button \" v-on:click=\"confirmDelete = true\" v-show=\"!confirmDelete\">\n                    <i class=\"trash icon\"></i></div>\n\n                <div class=\"ui buttons\" v-show=\"confirmDelete\">\n                    <div class=\"ui button\" v-on:click=\"confirmDelete = false\">Cancel</div>\n                    <div class=\"ui negative button\" v-on:click=\"deletePhoto\">Delete</div>\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n</div>\n";
+	__webpack_require__(99)('observable');
 
 /***/ },
 /* 108 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div v-dropzone=\"add_photo\" v-bind:upload-url=\"uploadUrl\" style=\"min-height: 30em; border: 1px solid red\">\n        <div class=\"ui photos\" id=\"photosGrid\">\n            <photo :photo=\"photo\" v-for=\"photo in selected_gallery_photos\"></photo>\n        </div>\n    </div>\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
+	module.exports = "\n<div class=\"ui instant move down reveal photo\" v-bind:class=\"{ 'active': isFocused }\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n    <div class=\"hidden content photo-detail\">\n        <div class=\"content\">\n            <div class=\"ui huge fluid input\">\n                <input type=\"text\" placeholder=\"Title\"\n                       v-model=\"photo.title\"\n                       v-on:focus=\"isFocused = true\"\n                       v-on:blur=\"isFocused = false\"\n                       debounce=\"500\">\n            </div>\n\n            <div class=\"buttons\">\n                <div class=\"ui inverted red icon button \" v-on:click=\"confirmDelete = true\" v-show=\"!confirmDelete\">\n                    <i class=\"trash icon\"></i></div>\n\n                <div class=\"ui buttons\" v-show=\"confirmDelete\">\n                    <div class=\"ui button\" v-on:click=\"confirmDelete = false\">Cancel</div>\n                    <div class=\"ui negative button\" v-on:click=\"deletePhoto\">Delete</div>\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n</div>\n";
 
 /***/ },
 /* 109 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div class=\"ui grid\">\n        <div class=\"twelve wide column\">\n            <div id=\"photosGrid\" v-dropzone=\"add_photo\" v-bind:upload-url=\"uploadUrl\"\n                 style=\"min-height: 30em; border: 1px solid red\">\n                <waterfall\n                        line=\"h\"\n                        :line-gap=\"200\"\n                        min-line-gap=\"160\"\n                        max-line-gap=\"240\"\n                        :watch=\"selected_gallery_photos\"\n                >\n                    <waterfall-slot v-for=\"photo in selected_gallery_photos\"\n                                    :width=\"photo.properties.width\"\n                                    :height=\"photo.properties.height\"\n                                    :order=\"$index\">\n                        <photo :photo=\"photo\"></photo>\n                    </waterfall-slot>\n                </waterfall>\n\n            </div>\n        </div>\n        <div class=\"four wide column\">\n\n        </div>\n    </div>\n\n\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
+
+/***/ },
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(110);
+	var content = __webpack_require__(111);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(112)(content, {});
+	var update = __webpack_require__(113)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3532,21 +3541,21 @@
 	}
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(111)();
+	exports = module.exports = __webpack_require__(112)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".ui.cards.gallery {\n  margin-top: 1em;\n}\n.ui.cards.gallery .card:first-child {\n  margin-top: inherit;\n}\n.album.ellipsis.button {\n  background: 0 0 !important;\n}\n.ui.photos {\n  display: flex;\n  margin: 1em 0em;\n  flex-flow: row wrap;\n}\n.ui.photos .photo {\n  position: relative;\n  height: 225px;\n  margin: 0.875em 0.1em;\n  border-radius: .28571429rem;\n}\n.ui.photos .photo > .ui.dimmer {\n  border-radius: inherit !important;\n  background-color: rgba(0, 0, 0, 0.6);\n}\n.ui.photos .photo img {\n  width: auto;\n  height: 100%;\n}\n.ui.photos .photo .hidden.content {\n  height: 100%;\n  display: flex;\n}\n.ui.photos .photo-detail {\n  background-color: #1B1C1D;\n  padding: 1em;\n  display: flex;\n  flex-grow: 1;\n  flex-direction: column;\n  justify-content: center;\n  align-content: center;\n  box-sizing: border-box;\n}\n.ui.photos .photo-detail .input {\n  font-size: 1.25em;\n}\n.ui.photos .photo-detail .buttons {\n  margin-top: 0.5em;\n}\n.ui.button.bottom.spacing {\n  margin-bottom: 2em;\n}\n#noPhotosPlaceholder {\n  margin-top: 3em;\n}\n#photosGrid .photo {\n  float: left;\n  margin: 4px;\n  border: 1px solid #eee;\n  box-sizing: content-box;\n  overflow: hidden;\n  position: relative;\n}\n#photosGrid .photo img {\n  display: block;\n  width: auto;\n  height: 100%;\n}\n", ""]);
+	exports.push([module.id, "#photosGrid {\n  padding-right: 10px;\n  padding-bottom: 10px;\n}\n#photosGrid .photo {\n  margin-top: 10px;\n  margin-left: 10px;\n}\n/*\n\n.ui.cards.gallery {\n  margin-top: 1em;\n}\n.ui.cards.gallery .card:first-child {\n  margin-top: inherit;\n}\n\n\n.album.ellipsis.button {\n  background: 0 0 !important;\n}\n\n.ui.photos {\n  display: flex;\n  margin: 1em 0em;\n  flex-flow: row wrap;\n\n  .photo {\n    position: relative;\n    height: 225px;\n    margin: 0.875em 0.1em;\n    border-radius: .28571429rem;\n\n    & > .ui.dimmer {\n      border-radius: inherit !important;\n      background-color: rgba(0, 0, 0, .6);\n    }\n\n    img {\n      width: auto;\n      height: 100%;\n    }\n\n    .hidden.content {\n      height: 100%;\n      display: flex;\n    }\n  }\n\n  .photo-detail {\n    background-color: #1B1C1D;\n    padding: 1em;\n\n    display: flex;\n    flex-grow: 1;\n    flex-direction: column;\n    justify-content: center;\n    align-content: center;\n\n    box-sizing: border-box;\n\n    .input {\n      font-size: 1.25em;\n    }\n\n    .buttons {\n      margin-top: 0.5em;\n    }\n  }\n\n}\n\n.ui.button.bottom.spacing {\n  margin-bottom: 2em;\n}\n\n#noPhotosPlaceholder {\n  margin-top: 3em;\n}\n*/\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports) {
 
 	/*
@@ -3602,7 +3611,7 @@
 
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

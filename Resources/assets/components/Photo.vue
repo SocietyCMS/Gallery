@@ -1,10 +1,7 @@
 <template>
-    <div class="ui instant move down reveal photo" v-bind:class="{ 'active': isFocused }"
-         data-w="{{photo.properties.width}}"
-         data-h="{{photo.properties.height}}">
+    <div class="ui instant move down reveal photo" v-bind:class="{ 'active': isFocused }">
         <img id="photo-id-{{photo.id}}" class="ui rounded image visible content"
-             v-bind:style="{ height: thumbnailHeight, width: thumbnailWidth}"
-             v-bind:data-src="thumbnailImage">
+             v-bind:src="thumbnailImage">
         <div class="ui active dimmer" v-if="photo.preview">
             <div class="ui indeterminate loader"></div>
         </div>
@@ -71,11 +68,6 @@
                     return Math.ceil((225 / this.photo.properties.height) * this.photo.properties.width) + 'px'
                 }
             }
-        },
-        ready() {
-            Vue.nextTick(function () {
-                new flexImages({selector: '#photosGrid', container: '.photo', rowHeight: 225});
-            }.bind(this))
         },
         methods: {
             deletePhoto() {
