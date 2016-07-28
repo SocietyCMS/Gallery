@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(110);
+	__webpack_require__(95);
 
 	// The router needs a root component to render.
 	// For demo purposes, we will just use an empty one
@@ -119,7 +119,8 @@
 	var state = {
 	    galleries: [],
 	    selected_gallery: null,
-	    selected_gallery_photos: []
+	    selected_gallery_photos: [],
+	    selected_gallery_selected_photo: null
 	};
 
 	// mutations are operations that actually mutates the state.
@@ -148,6 +149,9 @@
 	    },
 	    ADD_PHOTO: function ADD_PHOTO(state, photo) {
 	        state.selected_gallery_photos.push(photo);
+	    },
+	    SELECT_PHOTO: function SELECT_PHOTO(state, photo) {
+	        state.selected_gallery_selected_photo = photo;
 	    },
 	    REMOVE_PHOTO: function REMOVE_PHOTO(state, photo) {
 	        state.selected_gallery_photos.$remove(photo);
@@ -1006,8 +1010,13 @@
 	    });
 	};
 
-	var remove_photo = exports.remove_photo = function remove_photo(_ref7, payload) {
+	var set_selected_photo = exports.set_selected_photo = function set_selected_photo(_ref7, photo) {
 	    var dispatch = _ref7.dispatch;
+	    return dispatch('SELECT_PHOTO', photo);
+	};
+
+	var remove_photo = exports.remove_photo = function remove_photo(_ref8, payload) {
+	    var dispatch = _ref8.dispatch;
 	    return dispatch('REMOVE_PHOTO', payload);
 	};
 
@@ -1033,7 +1042,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/show.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(109)
+	__vue_template__ = __webpack_require__(94)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -1077,15 +1086,21 @@
 
 	var _Photo2 = _interopRequireDefault(_Photo);
 
+	var _PhotoDetail = __webpack_require__(91);
+
+	var _PhotoDetail2 = _interopRequireDefault(_PhotoDetail);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	Vue.directive('dropzone', {
 	    twoWay: true,
 
-	    params: ['uploadUrl'],
+	    params: ['uploadUrl', 'beginCallback', 'successCallback', 'progressCallback'],
 
 	    bind: function bind() {},
-	    update: function update(callback) {
+	    update: function update() {
+
+	        var self = this;
 
 	        new Dropzone(this.el, {
 	            url: this.params.uploadUrl,
@@ -1094,10 +1109,14 @@
 	            },
 	            paramName: "image",
 
-	            addedfile: function addedfile(file) {},
+	            addedfile: function addedfile(file) {
+	                self.params.beginCallback(file);
+	            },
 	            success: function success(file, response) {
-	                console.log(file, response);
-	                callback(response.data);
+	                self.params.successCallback(file, response.data);
+	            },
+	            uploadprogress: function uploadprogress(file, progress) {
+	                self.params.progressCallback(file, progress);
 	            }
 	        });
 	    },
@@ -1116,6 +1135,7 @@
 
 	                this.set_selected_gallery(gallery.data.data);
 	                this.add_photos(photos.data.data);
+	                this.selectFirstPhoto();
 	            }.bind(this));
 	        },
 	        activate: function activate(transition) {
@@ -1125,6 +1145,7 @@
 
 	    components: {
 	        Photo: _Photo2.default,
+	        PhotoDetail: _PhotoDetail2.default,
 	        Waterfall: _vueWaterfall.Waterfall,
 	        WaterfallSlot: _vueWaterfall.WaterfallSlot
 	    },
@@ -1142,9 +1163,17 @@
 	            set_selected_gallery: _actions.set_selected_gallery,
 	            add_photo: _actions.add_photo,
 	            add_photos: _actions.add_photos,
+	            set_selected_photo: _actions.set_selected_photo,
 	            remove_gallery: _actions.remove_gallery
 	        }
 	    },
+
+	    data: function data() {
+	        return {
+	            uploadingFiles: []
+	        };
+	    },
+
 
 	    computed: {
 	        uploadUrl: function uploadUrl() {
@@ -1152,13 +1181,45 @@
 	        }
 	    },
 
-	    methods: {
+	    watch: {
+	        '$loadingRouteData': function $loadingRouteData(val, oldVal) {
+	            this.$nextTick(function () {
+	                $('.photo-detail').sticky({
+	                    offset: 10,
+	                    context: '#photos-detail-rail'
+	                });
+	            });
+	        }
+	    },
 
+	    methods: {
+	        beginningUpload: function beginningUpload(file) {
+	            console.log('beginn:', file);
+
+	            file.progress = 0;
+
+	            this.uploadingFiles.push(file);
+	        },
+	        progressUpload: function progressUpload(file, progress) {
+	            console.log('progress:', file, progress);
+
+	            file.progress = progress;
+
+	            this.uploadingFiles.$set(file, file);
+	        },
+	        successfulUpload: function successfulUpload(file, response) {
+	            console.log('success:', file, response);
+	            this.uploadingFiles.$remove(file);
+	        },
 	        updateAlbum: function updateAlbum() {
 	            var resource = this.$resource(societycms.api.gallery.album.update);
 	            resource.update({ album: this.selected_gallery.slug }, { title: this.selected_gallery.title }, function (data, status, request) {}).error(function (data, status, request) {});
 	        },
-
+	        selectFirstPhoto: function selectFirstPhoto() {
+	            if (this.selected_gallery_photos.length >= 1) {
+	                this.set_selected_photo(this.selected_gallery_photos[0]);
+	            }
+	        },
 	        deleteAlbumModal: function deleteAlbumModal() {
 	            $('#deleteAlbumModal').modal('setting', 'transition', 'fade up').modal('show');
 	        },
@@ -2821,7 +2882,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/Photo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(108)
+	__vue_template__ = __webpack_require__(90)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2849,13 +2910,7 @@
 	    value: true
 	});
 
-	var _fleximages = __webpack_require__(90);
-
-	var _fleximages2 = _interopRequireDefault(_fleximages);
-
 	var _actions = __webpack_require__(7);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	    props: ['photo'],
@@ -2868,12 +2923,12 @@
 
 	    vuex: {
 	        getters: {
-	            selected_gallery: function selected_gallery(state) {
-	                return state.selected_gallery;
+	            selected_gallery_selected_photo: function selected_gallery_selected_photo(state) {
+	                return state.selected_gallery_selected_photo;
 	            }
 	        },
 	        actions: {
-	            remove_photo: _actions.remove_photo
+	            set_selected_photo: _actions.set_selected_photo
 	        }
 	    },
 
@@ -2882,649 +2937,132 @@
 	            if (this.photo.thumbnail && this.photo.thumbnail.medium) {
 	                return this.photo.thumbnail.medium;
 	            }
-	        },
-	        thumbnailHeight: function thumbnailHeight() {
-	            return '225px';
-	        },
-	        thumbnailWidth: function thumbnailWidth() {
-	            if (this.photo.properties && this.photo.properties.height && this.photo.properties.width) {
-	                return Math.ceil(225 / this.photo.properties.height * this.photo.properties.width) + 'px';
-	            }
 	        }
 	    },
 	    methods: {
-	        deletePhoto: function deletePhoto() {
-	            var resource = this.$resource(societycms.api.gallery.album.photo.destroy);
-
-	            resource.delete({
-	                album: this.selected_gallery.slug,
-	                photo: this.photo.id
-	            }, this.photo, function (data, status, request) {
-	                this.remove_photo(this.photo);
-	            }).error(function (data, status, request) {});
+	        selectPhoto: function selectPhoto() {
+	            this.set_selected_photo(this.photo);
 	        }
 	    }
 	};
 
 /***/ },
 /* 90 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"ui photo\" @click=\"selectPhoto\" v-bind:class=\"{'selected': selected_gallery_selected_photo == photo }\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:src=\"thumbnailImage\">\n</div>\n";
+
+/***/ },
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(92)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] Resources/assets/components/PhotoDetail.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(93)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-ecf881e4/PhotoDetail.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 92 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _typeof2 = __webpack_require__(91);
-
-	var _typeof3 = _interopRequireDefault(_typeof2);
-
-	exports.default = function (options) {
-
-	    if (!document.querySelector) return;
-
-	    function makeGrid(grid, items, o, noresize) {
-	        var x,
-	            new_w,
-	            exact_w,
-	            ratio = 1,
-	            rows = 1,
-	            max_w = grid.clientWidth - 2,
-	            row = [],
-	            row_width = 0,
-	            h,
-	            row_h = o.rowHeight;
-
-	        // define inside makeGrid to access variables in scope
-	        function _helper(lastRow) {
-	            if (o.maxRows && rows > o.maxRows || o.truncate && lastRow && rows > 1) row[x][0].style.display = 'none';else {
-	                if (row[x][4]) {
-	                    row[x][3].setAttribute('src', row[x][4]);
-	                    row[x][4] = '';
-	                }
-	                row[x][0].style.width = new_w + 'px';
-	                row[x][0].style.height = row_h + 'px';
-	                row[x][0].style.display = 'block';
-	            }
-	        }
-
-	        function create(htmlStr) {
-	            var frag = document.createDocumentFragment(),
-	                temp = document.createElement('div');
-	            temp.innerHTML = htmlStr;
-	            while (temp.firstChild) {
-	                frag.appendChild(temp.firstChild);
-	            }
-	            return frag;
-	        }
-
-	        for (var i = 0; i < items.length; i++) {
-	            row.push(items[i]);
-	            row_width += items[i][2] + o.margin;
-	            if (row_width >= max_w) {
-	                var margins_in_row = row.length * o.margin;
-	                ratio = (max_w - margins_in_row) / (row_width - margins_in_row), row_h = Math.ceil(o.rowHeight * ratio), exact_w = 0, new_w;
-	                for (x = 0; x < row.length; x++) {
-	                    new_w = Math.ceil(row[x][2] * ratio);
-	                    exact_w += new_w + o.margin;
-	                    if (exact_w > max_w) new_w -= exact_w - max_w;
-	                    _helper();
-	                    row[x][0].classList.remove('last-in-row');
-	                }
-
-	                row[row.length - 1][0].classList.add('last-in-row');
-
-	                // reset for next row
-	                row = [], row_width = 0;
-	                rows++;
-	            }
-	        }
-	        // layout last row - match height of last row to previous row
-	        for (x = 0; x < row.length; x++) {
-	            new_w = Math.floor(row[x][2] * ratio), h = Math.floor(o.rowHeight * ratio);
-	            _helper(true);
-	        }
-
-	        // scroll bars added or removed during rendering new layout?
-	        if (!noresize && max_w != grid.clientWidth) makeGrid(grid, items, o, true);
-	    }
-
-	    var o = { selector: 0, container: '.item', object: 'img', rowHeight: 180, maxRows: 0, truncate: 0 };
-	    for (var k in options) {
-	        if (options.hasOwnProperty(k)) o[k] = options[k];
-	    }
-	    var grids = (0, _typeof3.default)(o.selector) == 'object' ? [o.selector] : document.querySelectorAll(o.selector);
-
-	    for (var i = 0; i < grids.length; i++) {
-	        var grid = grids[i],
-	            containers = grid.querySelectorAll(o.container),
-	            items = [],
-	            t = new Date().getTime();
-	        if (!containers.length) continue;
-	        var s = window.getComputedStyle ? getComputedStyle(containers[0], null) : containers[0].currentStyle;
-	        o.margin = (parseInt(s.marginLeft) || 0) + (parseInt(s.marginRight) || 0) + (Math.round(parseFloat(s.borderLeftWidth)) || 0) + (Math.round(parseFloat(s.borderRightWidth)) || 0);
-	        for (var j = 0; j < containers.length; j++) {
-	            var c = containers[j],
-	                w = parseInt(c.getAttribute('data-w')),
-	                norm_w = w * (o.rowHeight / parseInt(c.getAttribute('data-h'))),
-	                // normalized width
-	            obj = c.querySelector(o.object);
-	            items.push([c, w, norm_w, obj, obj.getAttribute('data-src')]);
-	        }
-	        makeGrid(grid, items, o);
-	        var tempf = function tempf() {
-	            makeGrid(grid, items, o);
+	exports.default = {
+	    data: function data() {
+	        return {
+	            isFocused: false,
+	            confirmDelete: false
 	        };
-	        if (document.addEventListener) {
-	            window['flexImages_listener' + t] = tempf;
-	            window.removeEventListener('resize', window['flexImages_listener' + grid.getAttribute('data-flex-t')]);
-	            delete window['flexImages_listener' + grid.getAttribute('data-flex-t')];
-	            window.addEventListener('resize', window['flexImages_listener' + t]);
-	        } else grid.onresize = tempf;
-	        grid.setAttribute('data-flex-t', t);
+	    },
+
+	    vuex: {
+	        getters: {
+	            selected_gallery_selected_photo: function selected_gallery_selected_photo(state) {
+	                return state.selected_gallery_selected_photo;
+	            },
+	            selected_gallery: function selected_gallery(state) {
+	                return state.selected_gallery;
+	            }
+	        },
+	        actions: {}
+	    },
+
+	    computed: {
+	        thumbnailImage: function thumbnailImage() {
+	            try {
+	                return this.selected_gallery_selected_photo.thumbnail.medium;
+	            } catch (error) {}
+	        }
+	    },
+
+	    watch: {
+	        'selected_gallery_selected_photo': function selected_gallery_selected_photo(val, oldVal) {
+	            this.$nextTick(function () {
+	                $('.photo-detail').sticky('refresh');
+	            });
+	        }
+	    },
+
+	    methods: {
+	        save: function save() {
+
+	            var resource = this.$resource(societycms.api.gallery.album.photo.update);
+	            resource.update({
+	                album: this.selected_gallery.slug,
+	                photo: this.selected_gallery_selected_photo.id
+	            }, {
+	                title: this.selected_gallery_selected_photo.title,
+	                caption: this.selected_gallery_selected_photo.caption
+	            }, function (data, status, request) {}).error(function (data, status, request) {});
+	        }
 	    }
 	};
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ },
-/* 91 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	var _iterator = __webpack_require__(92);
-
-	var _iterator2 = _interopRequireDefault(_iterator);
-
-	var _symbol = __webpack_require__(95);
-
-	var _symbol2 = _interopRequireDefault(_symbol);
-
-	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-	} : function (obj) {
-	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-	};
-
-/***/ },
-/* 92 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(93), __esModule: true };
 
 /***/ },
 /* 93 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	__webpack_require__(61);
-	__webpack_require__(15);
-	module.exports = __webpack_require__(94).f('iterator');
+	module.exports = "\n<form class=\"ui form\" v-if=\"selected_gallery_selected_photo\">\n    <div class=\"field\">\n        <img id=\"photo-id\" class=\"ui rounded image\"\n             v-bind:src=\"thumbnailImage\">\n    </div>\n\n    <div class=\"field\">\n        <label>Title</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.title\">\n    </div>\n\n    <div class=\"field\">\n        <label>Caption</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.caption\">\n    </div>\n\n    <div class=\"ui primary button\" @click=\"save\">\n        Save\n    </div>\n</form>\n\n";
 
 /***/ },
 /* 94 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	exports.f = __webpack_require__(58);
+	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div class=\"ui grid\">\n        <div class=\"twelve wide column\">\n            <div v-dropzone id=\"photosGrid\"\n                 :begin-callback=\"beginningUpload\"\n                 :progress-callback=\"progressUpload\"\n                 :success-callback=\"successfulUpload\"\n                 v-bind:upload-url=\"uploadUrl\"\n                 style=\"min-height: 30em; border: 1px solid red\">\n                <waterfall\n                        line=\"h\"\n                        :line-gap=\"200\"\n                        min-line-gap=\"160\"\n                        max-line-gap=\"240\"\n                        :watch=\"selected_gallery_photos\"\n                >\n                    <waterfall-slot v-for=\"photo in selected_gallery_photos\"\n                                    :width=\"photo.properties.width\"\n                                    :height=\"photo.properties.height\"\n                                    :order=\"$index\">\n                        <photo :photo=\"photo\"></photo>\n                    </waterfall-slot>\n                </waterfall>\n\n            </div>\n\n            <div v-for=\"file in uploadingFiles\" track-by=\"$index\">{{file.name}} :: {{file.progress}} </div>\n        </div>\n        <div class=\"four wide column\" id=\"photos-detail-rail\">\n            <div class=\"ui segment sticky photo-detail\">\n               <photo-detail></photo-detail>\n            </div>\n        </div>\n\n\n    </div>\n\n\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
 
 /***/ },
 /* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(96), __esModule: true };
-
-/***/ },
-/* 96 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(97);
-	__webpack_require__(71);
-	__webpack_require__(106);
-	__webpack_require__(107);
-	module.exports = __webpack_require__(28).Symbol;
-
-/***/ },
-/* 97 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	// ECMAScript 6 symbols shim
-	var global         = __webpack_require__(27)
-	  , has            = __webpack_require__(42)
-	  , DESCRIPTORS    = __webpack_require__(36)
-	  , $export        = __webpack_require__(26)
-	  , redefine       = __webpack_require__(41)
-	  , META           = __webpack_require__(98).KEY
-	  , $fails         = __webpack_require__(37)
-	  , shared         = __webpack_require__(53)
-	  , setToStringTag = __webpack_require__(57)
-	  , uid            = __webpack_require__(54)
-	  , wks            = __webpack_require__(58)
-	  , wksExt         = __webpack_require__(94)
-	  , wksDefine      = __webpack_require__(99)
-	  , keyOf          = __webpack_require__(100)
-	  , enumKeys       = __webpack_require__(101)
-	  , isArray        = __webpack_require__(103)
-	  , anObject       = __webpack_require__(33)
-	  , toIObject      = __webpack_require__(20)
-	  , toPrimitive    = __webpack_require__(39)
-	  , createDesc     = __webpack_require__(40)
-	  , _create        = __webpack_require__(44)
-	  , gOPNExt        = __webpack_require__(104)
-	  , $GOPD          = __webpack_require__(78)
-	  , $DP            = __webpack_require__(32)
-	  , $keys          = __webpack_require__(46)
-	  , gOPD           = $GOPD.f
-	  , dP             = $DP.f
-	  , gOPN           = gOPNExt.f
-	  , $Symbol        = global.Symbol
-	  , $JSON          = global.JSON
-	  , _stringify     = $JSON && $JSON.stringify
-	  , PROTOTYPE      = 'prototype'
-	  , HIDDEN         = wks('_hidden')
-	  , TO_PRIMITIVE   = wks('toPrimitive')
-	  , isEnum         = {}.propertyIsEnumerable
-	  , SymbolRegistry = shared('symbol-registry')
-	  , AllSymbols     = shared('symbols')
-	  , OPSymbols      = shared('op-symbols')
-	  , ObjectProto    = Object[PROTOTYPE]
-	  , USE_NATIVE     = typeof $Symbol == 'function'
-	  , QObject        = global.QObject;
-	// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
-	var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-
-	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-	var setSymbolDesc = DESCRIPTORS && $fails(function(){
-	  return _create(dP({}, 'a', {
-	    get: function(){ return dP(this, 'a', {value: 7}).a; }
-	  })).a != 7;
-	}) ? function(it, key, D){
-	  var protoDesc = gOPD(ObjectProto, key);
-	  if(protoDesc)delete ObjectProto[key];
-	  dP(it, key, D);
-	  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
-	} : dP;
-
-	var wrap = function(tag){
-	  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
-	  sym._k = tag;
-	  return sym;
-	};
-
-	var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
-	  return typeof it == 'symbol';
-	} : function(it){
-	  return it instanceof $Symbol;
-	};
-
-	var $defineProperty = function defineProperty(it, key, D){
-	  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
-	  anObject(it);
-	  key = toPrimitive(key, true);
-	  anObject(D);
-	  if(has(AllSymbols, key)){
-	    if(!D.enumerable){
-	      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
-	      it[HIDDEN][key] = true;
-	    } else {
-	      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
-	      D = _create(D, {enumerable: createDesc(0, false)});
-	    } return setSymbolDesc(it, key, D);
-	  } return dP(it, key, D);
-	};
-	var $defineProperties = function defineProperties(it, P){
-	  anObject(it);
-	  var keys = enumKeys(P = toIObject(P))
-	    , i    = 0
-	    , l = keys.length
-	    , key;
-	  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
-	  return it;
-	};
-	var $create = function create(it, P){
-	  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
-	};
-	var $propertyIsEnumerable = function propertyIsEnumerable(key){
-	  var E = isEnum.call(this, key = toPrimitive(key, true));
-	  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
-	  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
-	};
-	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-	  it  = toIObject(it);
-	  key = toPrimitive(key, true);
-	  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
-	  var D = gOPD(it, key);
-	  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
-	  return D;
-	};
-	var $getOwnPropertyNames = function getOwnPropertyNames(it){
-	  var names  = gOPN(toIObject(it))
-	    , result = []
-	    , i      = 0
-	    , key;
-	  while(names.length > i){
-	    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
-	  } return result;
-	};
-	var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-	  var IS_OP  = it === ObjectProto
-	    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
-	    , result = []
-	    , i      = 0
-	    , key;
-	  while(names.length > i){
-	    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
-	  } return result;
-	};
-
-	// 19.4.1.1 Symbol([description])
-	if(!USE_NATIVE){
-	  $Symbol = function Symbol(){
-	    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
-	    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-	    var $set = function(value){
-	      if(this === ObjectProto)$set.call(OPSymbols, value);
-	      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
-	      setSymbolDesc(this, tag, createDesc(1, value));
-	    };
-	    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
-	    return wrap(tag);
-	  };
-	  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
-	    return this._k;
-	  });
-
-	  $GOPD.f = $getOwnPropertyDescriptor;
-	  $DP.f   = $defineProperty;
-	  __webpack_require__(105).f = gOPNExt.f = $getOwnPropertyNames;
-	  __webpack_require__(79).f  = $propertyIsEnumerable;
-	  __webpack_require__(102).f = $getOwnPropertySymbols;
-
-	  if(DESCRIPTORS && !__webpack_require__(25)){
-	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
-	  }
-
-	  wksExt.f = function(name){
-	    return wrap(wks(name));
-	  }
-	}
-
-	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
-
-	for(var symbols = (
-	  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
-	  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-	).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
-
-	for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
-
-	$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
-	  // 19.4.2.1 Symbol.for(key)
-	  'for': function(key){
-	    return has(SymbolRegistry, key += '')
-	      ? SymbolRegistry[key]
-	      : SymbolRegistry[key] = $Symbol(key);
-	  },
-	  // 19.4.2.5 Symbol.keyFor(sym)
-	  keyFor: function keyFor(key){
-	    if(isSymbol(key))return keyOf(SymbolRegistry, key);
-	    throw TypeError(key + ' is not a symbol!');
-	  },
-	  useSetter: function(){ setter = true; },
-	  useSimple: function(){ setter = false; }
-	});
-
-	$export($export.S + $export.F * !USE_NATIVE, 'Object', {
-	  // 19.1.2.2 Object.create(O [, Properties])
-	  create: $create,
-	  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
-	  defineProperty: $defineProperty,
-	  // 19.1.2.3 Object.defineProperties(O, Properties)
-	  defineProperties: $defineProperties,
-	  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-	  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
-	  // 19.1.2.7 Object.getOwnPropertyNames(O)
-	  getOwnPropertyNames: $getOwnPropertyNames,
-	  // 19.1.2.8 Object.getOwnPropertySymbols(O)
-	  getOwnPropertySymbols: $getOwnPropertySymbols
-	});
-
-	// 24.3.2 JSON.stringify(value [, replacer [, space]])
-	$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
-	  var S = $Symbol();
-	  // MS Edge converts symbol values to JSON as {}
-	  // WebKit converts symbol values to JSON as null
-	  // V8 throws on boxed symbols
-	  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
-	})), 'JSON', {
-	  stringify: function stringify(it){
-	    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
-	    var args = [it]
-	      , i    = 1
-	      , replacer, $replacer;
-	    while(arguments.length > i)args.push(arguments[i++]);
-	    replacer = args[1];
-	    if(typeof replacer == 'function')$replacer = replacer;
-	    if($replacer || !isArray(replacer))replacer = function(key, value){
-	      if($replacer)value = $replacer.call(this, key, value);
-	      if(!isSymbol(value))return value;
-	    };
-	    args[1] = replacer;
-	    return _stringify.apply($JSON, args);
-	  }
-	});
-
-	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(31)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
-	// 19.4.3.5 Symbol.prototype[@@toStringTag]
-	setToStringTag($Symbol, 'Symbol');
-	// 20.2.1.9 Math[@@toStringTag]
-	setToStringTag(Math, 'Math', true);
-	// 24.3.3 JSON[@@toStringTag]
-	setToStringTag(global.JSON, 'JSON', true);
-
-/***/ },
-/* 98 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var META     = __webpack_require__(54)('meta')
-	  , isObject = __webpack_require__(34)
-	  , has      = __webpack_require__(42)
-	  , setDesc  = __webpack_require__(32).f
-	  , id       = 0;
-	var isExtensible = Object.isExtensible || function(){
-	  return true;
-	};
-	var FREEZE = !__webpack_require__(37)(function(){
-	  return isExtensible(Object.preventExtensions({}));
-	});
-	var setMeta = function(it){
-	  setDesc(it, META, {value: {
-	    i: 'O' + ++id, // object ID
-	    w: {}          // weak collections IDs
-	  }});
-	};
-	var fastKey = function(it, create){
-	  // return primitive with prefix
-	  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-	  if(!has(it, META)){
-	    // can't set metadata to uncaught frozen object
-	    if(!isExtensible(it))return 'F';
-	    // not necessary to add metadata
-	    if(!create)return 'E';
-	    // add missing metadata
-	    setMeta(it);
-	  // return object ID
-	  } return it[META].i;
-	};
-	var getWeak = function(it, create){
-	  if(!has(it, META)){
-	    // can't set metadata to uncaught frozen object
-	    if(!isExtensible(it))return true;
-	    // not necessary to add metadata
-	    if(!create)return false;
-	    // add missing metadata
-	    setMeta(it);
-	  // return hash weak collections IDs
-	  } return it[META].w;
-	};
-	// add metadata on freeze-family methods calling
-	var onFreeze = function(it){
-	  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
-	  return it;
-	};
-	var meta = module.exports = {
-	  KEY:      META,
-	  NEED:     false,
-	  fastKey:  fastKey,
-	  getWeak:  getWeak,
-	  onFreeze: onFreeze
-	};
-
-/***/ },
-/* 99 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var global         = __webpack_require__(27)
-	  , core           = __webpack_require__(28)
-	  , LIBRARY        = __webpack_require__(25)
-	  , wksExt         = __webpack_require__(94)
-	  , defineProperty = __webpack_require__(32).f;
-	module.exports = function(name){
-	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-	  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
-	};
-
-/***/ },
-/* 100 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getKeys   = __webpack_require__(46)
-	  , toIObject = __webpack_require__(20);
-	module.exports = function(object, el){
-	  var O      = toIObject(object)
-	    , keys   = getKeys(O)
-	    , length = keys.length
-	    , index  = 0
-	    , key;
-	  while(length > index)if(O[key = keys[index++]] === el)return key;
-	};
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// all enumerable object keys, includes symbols
-	var getKeys = __webpack_require__(46)
-	  , gOPS    = __webpack_require__(102)
-	  , pIE     = __webpack_require__(79);
-	module.exports = function(it){
-	  var result     = getKeys(it)
-	    , getSymbols = gOPS.f;
-	  if(getSymbols){
-	    var symbols = getSymbols(it)
-	      , isEnum  = pIE.f
-	      , i       = 0
-	      , key;
-	    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
-	  } return result;
-	};
-
-/***/ },
-/* 102 */
-/***/ function(module, exports) {
-
-	exports.f = Object.getOwnPropertySymbols;
-
-/***/ },
-/* 103 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(22);
-	module.exports = Array.isArray || function isArray(arg){
-	  return cof(arg) == 'Array';
-	};
-
-/***/ },
-/* 104 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __webpack_require__(20)
-	  , gOPN      = __webpack_require__(105).f
-	  , toString  = {}.toString;
-
-	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-	  ? Object.getOwnPropertyNames(window) : [];
-
-	var getWindowNames = function(it){
-	  try {
-	    return gOPN(it);
-	  } catch(e){
-	    return windowNames.slice();
-	  }
-	};
-
-	module.exports.f = function getOwnPropertyNames(it){
-	  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-	};
-
-
-/***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-	var $keys      = __webpack_require__(47)
-	  , hiddenKeys = __webpack_require__(55).concat('length', 'prototype');
-
-	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
-	  return $keys(O, hiddenKeys);
-	};
-
-/***/ },
-/* 106 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(99)('asyncIterator');
-
-/***/ },
-/* 107 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(99)('observable');
-
-/***/ },
-/* 108 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"ui instant move down reveal photo\" v-bind:class=\"{ 'active': isFocused }\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:src=\"thumbnailImage\">\n    <div class=\"ui active dimmer\" v-if=\"photo.preview\">\n        <div class=\"ui indeterminate loader\"></div>\n    </div>\n    <div class=\"hidden content photo-detail\">\n        <div class=\"content\">\n            <div class=\"ui huge fluid input\">\n                <input type=\"text\" placeholder=\"Title\"\n                       v-model=\"photo.title\"\n                       v-on:focus=\"isFocused = true\"\n                       v-on:blur=\"isFocused = false\"\n                       debounce=\"500\">\n            </div>\n\n            <div class=\"buttons\">\n                <div class=\"ui inverted red icon button \" v-on:click=\"confirmDelete = true\" v-show=\"!confirmDelete\">\n                    <i class=\"trash icon\"></i></div>\n\n                <div class=\"ui buttons\" v-show=\"confirmDelete\">\n                    <div class=\"ui button\" v-on:click=\"confirmDelete = false\">Cancel</div>\n                    <div class=\"ui negative button\" v-on:click=\"deletePhoto\">Delete</div>\n                </div>\n\n            </div>\n        </div>\n\n    </div>\n</div>\n";
-
-/***/ },
-/* 109 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div class=\"ui grid\">\n        <div class=\"twelve wide column\">\n            <div id=\"photosGrid\" v-dropzone=\"add_photo\" v-bind:upload-url=\"uploadUrl\"\n                 style=\"min-height: 30em; border: 1px solid red\">\n                <waterfall\n                        line=\"h\"\n                        :line-gap=\"200\"\n                        min-line-gap=\"160\"\n                        max-line-gap=\"240\"\n                        :watch=\"selected_gallery_photos\"\n                >\n                    <waterfall-slot v-for=\"photo in selected_gallery_photos\"\n                                    :width=\"photo.properties.width\"\n                                    :height=\"photo.properties.height\"\n                                    :order=\"$index\">\n                        <photo :photo=\"photo\"></photo>\n                    </waterfall-slot>\n                </waterfall>\n\n            </div>\n        </div>\n        <div class=\"four wide column\">\n\n        </div>\n    </div>\n\n\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
-
-/***/ },
-/* 110 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(111);
+	var content = __webpack_require__(96);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(113)(content, {});
+	var update = __webpack_require__(98)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3541,21 +3079,21 @@
 	}
 
 /***/ },
-/* 111 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(112)();
+	exports = module.exports = __webpack_require__(97)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "#photosGrid {\n  padding-right: 10px;\n  padding-bottom: 10px;\n}\n#photosGrid .photo {\n  margin-top: 10px;\n  margin-left: 10px;\n}\n/*\n\n.ui.cards.gallery {\n  margin-top: 1em;\n}\n.ui.cards.gallery .card:first-child {\n  margin-top: inherit;\n}\n\n\n.album.ellipsis.button {\n  background: 0 0 !important;\n}\n\n.ui.photos {\n  display: flex;\n  margin: 1em 0em;\n  flex-flow: row wrap;\n\n  .photo {\n    position: relative;\n    height: 225px;\n    margin: 0.875em 0.1em;\n    border-radius: .28571429rem;\n\n    & > .ui.dimmer {\n      border-radius: inherit !important;\n      background-color: rgba(0, 0, 0, .6);\n    }\n\n    img {\n      width: auto;\n      height: 100%;\n    }\n\n    .hidden.content {\n      height: 100%;\n      display: flex;\n    }\n  }\n\n  .photo-detail {\n    background-color: #1B1C1D;\n    padding: 1em;\n\n    display: flex;\n    flex-grow: 1;\n    flex-direction: column;\n    justify-content: center;\n    align-content: center;\n\n    box-sizing: border-box;\n\n    .input {\n      font-size: 1.25em;\n    }\n\n    .buttons {\n      margin-top: 0.5em;\n    }\n  }\n\n}\n\n.ui.button.bottom.spacing {\n  margin-bottom: 2em;\n}\n\n#noPhotosPlaceholder {\n  margin-top: 3em;\n}\n*/\n", ""]);
+	exports.push([module.id, "#photosGrid {\n  padding-right: 10px;\n  padding-bottom: 10px;\n}\n#photosGrid .photo {\n  margin-top: 10px;\n  margin-left: 10px;\n}\n#photosGrid .photo.selected .image {\n  border: #2185D0 3px solid;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 112 */
+/* 97 */
 /***/ function(module, exports) {
 
 	/*
@@ -3611,7 +3149,7 @@
 
 
 /***/ },
-/* 113 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

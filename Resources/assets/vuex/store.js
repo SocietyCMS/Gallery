@@ -7,7 +7,8 @@ import Vuex from 'vuex'
 const state = {
     galleries: [],
     selected_gallery: null,
-    selected_gallery_photos: []
+    selected_gallery_photos: [],
+    selected_gallery_selected_photo: null
 }
 
 // mutations are operations that actually mutates the state.
@@ -40,6 +41,10 @@ const mutations = {
 
     ADD_PHOTO (state, photo) {
         state.selected_gallery_photos.push(photo);
+    },
+
+    SELECT_PHOTO (state, photo) {
+        state.selected_gallery_selected_photo = photo;
     },
 
     REMOVE_PHOTO (state, photo) {
