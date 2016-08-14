@@ -1,5 +1,5 @@
 <template>
-    <a class="card ui piled segment" @click="selectGallery(album)" v-link="{ name: 'show', params: { slug: album.slug }}">
+    <a class="card ui segment" @click="selectGallery(album)" v-link="{ name: 'show', params: { slug: album.slug }}">
         <div class="image">
             <div class="ui green right corner label" v-if="album.published">
                 <i class="bookmark icon"></i>

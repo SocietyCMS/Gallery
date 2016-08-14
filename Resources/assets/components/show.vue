@@ -23,6 +23,7 @@
                      :begin-callback="beginningUpload"
                      :progress-callback="progressUpload"
                      :success-callback="successfulUpload"
+                     :complete-callback="completeUpload"
                      v-bind:upload-url="uploadUrl"
                      style="min-height: 30em; border: 1px solid red">
                     <waterfall
@@ -42,7 +43,10 @@
 
                 </div>
 
-                <div v-for="file in uploadingFiles" track-by="$index">{{file.name}} :: {{file.progress}} </div>
+                <div v-for="file in uploadingFiles" track-by="$index">
+                    Uploading... {{file.name}} - {{file.progress}}
+                </div>
+
             </div>
             <div class="four wide column" id="photos-detail-rail">
                 <div class="ui segment sticky photo-detail">
@@ -85,7 +89,7 @@
     Vue.directive('dropzone', {
         twoWay: true,
 
-        params: ['uploadUrl', 'beginCallback',  'successCallback', 'progressCallback'],
+        params: ['uploadUrl', 'beginCallback',  'successCallback', 'progressCallback', 'completeCallback'],
 
         bind() {
 
@@ -106,6 +110,9 @@
                 },
                 success(file, response) {
                     self.params.successCallback(file, response.data)
+                },
+                complete(event) {
+                    self.params.completeCallback(event)
                 },
                 uploadprogress(file, progress) {
                     self.params.progressCallback(file, progress)
@@ -189,17 +196,15 @@
                 this.uploadingFiles.push(file)
             },
 
-            progressUpload(file, progress) {
-                console.log('progress:', file, progress)
-
-                file.progress = progress
-
-                this.uploadingFiles.$set(file, file)
-            },
-
             successfulUpload(file, response) {
                 console.log('success:', file, response)
                 this.uploadingFiles.$remove(file)
+                this.add_photo(response)
+            },
+
+            completeUpload(event) {
+                console.log('complete:', event)
+                this.uploadingFiles = []
             },
 
             updateAlbum() {

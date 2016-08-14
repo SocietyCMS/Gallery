@@ -43,6 +43,8 @@ class AlbumController extends ApiBaseController
             'published' => $request->published ?: 0,
         ]);
 
+        return $this->response->item($album, new AlbumTransformer());
+
         return $this->successCreated();
     }
 

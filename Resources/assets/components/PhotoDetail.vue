@@ -18,11 +18,16 @@
         <div class="ui primary button" @click="save">
             Save
         </div>
+
+        <button class="ui negative button" @click="delete">Delete</button>
+
     </form>
 
 </template>
 
 <script type="text/babel">
+
+    import {remove_photo} from '../vuex/actions';
 
     export default {
         data() {
@@ -36,7 +41,9 @@
                 selected_gallery_selected_photo: (state) => state.selected_gallery_selected_photo,
                 selected_gallery: (state) => state.selected_gallery,
             },
-            actions: {}
+            actions: {
+                remove_photo,
+            }
         },
 
         computed: {
@@ -67,6 +74,18 @@
                     title: this.selected_gallery_selected_photo.title,
                     caption: this.selected_gallery_selected_photo.caption
                 }, function (data, status, request) {
+                }).error(function (data, status, request) {
+                });
+            },
+
+            delete() {
+
+                var resource = this.$resource(societycms.api.gallery.album.photo.destroy);
+                resource.delete({
+                    album: this.selected_gallery.slug,
+                    photo: this.selected_gallery_selected_photo.id
+                }, {}, function (data, status, request) {
+                    this.remove_photo(this.selected_gallery_selected_photo)
                 }).error(function (data, status, request) {
                 });
             }

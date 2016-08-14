@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(95);
+	__webpack_require__(92);
 
 	// The router needs a root component to render.
 	// For demo purposes, we will just use an empty one
@@ -899,7 +899,10 @@
 	        createNewAlbum: function createNewAlbum() {
 	            var resource = this.$resource(societycms.api.gallery.album.store);
 
-	            resource.save(this.newAlbum, function (data, status, request) {}).error(function (data, status, request) {});
+	            resource.save(this.newAlbum, function (data, status, request) {
+	                $('#newAlbumModal').modal('hide');
+	                this.$route.router.go({ name: 'show', params: { slug: data.data.slug } });
+	            }).error(function (data, status, request) {});
 	        }
 	    }
 	};
@@ -1024,13 +1027,13 @@
 /* 8 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<a class=\"card ui piled segment\" @click=\"selectGallery(album)\" v-link=\"{ name: 'show', params: { slug: album.slug }}\">\n    <div class=\"image\">\n        <div class=\"ui green right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <div class=\"ui yellow right corner label\" v-if=\"!album.published\">\n            <i class=\"write icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.square\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos_count }}\n    </div>\n</a>\n";
+	module.exports = "\n<a class=\"card ui segment\" @click=\"selectGallery(album)\" v-link=\"{ name: 'show', params: { slug: album.slug }}\">\n    <div class=\"image\">\n        <div class=\"ui green right corner label\" v-if=\"album.published\">\n            <i class=\"bookmark icon\"></i>\n        </div>\n        <div class=\"ui yellow right corner label\" v-if=\"!album.published\">\n            <i class=\"write icon\"></i>\n        </div>\n        <img v-bind:src=\"album.cover.data.thumbnail.square\" v-if=\"album.cover\">\n        <img src=\"/modules/gallery/images/no-preview.png\" v-else>\n    </div>\n    <div class=\"content\">\n        <div class=\"header\">{{ album.title }}</div>\n    </div>\n    <div class=\"extra content\">\n        <i class=\"photo icon\"></i>\n        {{ album.photos_count }}\n    </div>\n</a>\n";
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<a class=\"ui primary button\" v-on:click=\"newAlbumModal\">\n    <i class=\"photo icon\"></i>\n    {{ 'core::elements.action.create resource' | trans  }}\n</a>\n\n<div class=\"ui five doubling link cards gallery\">\n    <album :album=\"album\" v-for=\"album in galleries\"></album>\n</div>\n\n<div class=\"ui modal\" id=\"newAlbumModal\">\n    <div class=\"header\">{{'gallery::gallery.modal.create album' | trans}}</div>\n    <div class=\"content\">\n        <form class=\"ui form\">\n            <div class=\"ui field\">\n                <label>{{'gallery::gallery.form.title'| trans }}</label>\n                <input type=\"text\"  v-model=\"newAlbum.title\">\n            </div>\n\n            <button class=\"ui green inverted fluid button\" v-on:click=\"createNewAlbum\"\n                    v-bind:class=\"{'disabled':!newAlbum.title}\">\n                <i class=\"checkmark icon\"></i>\n                {{'core::elements.button.create'| trans}}\n            </button>\n\n        </form>\n    </div>\n</div>\n\n";
+	module.exports = "\n\n<div class=\"ui basic segment\">\n    <a class=\"ui primary button\" v-on:click=\"newAlbumModal\">\n        <i class=\"photo icon\"></i>\n        {{ 'core::elements.action.create resource' | trans  }}\n    </a>\n</div>\n\n\n<div class=\"ui five doubling link cards gallery\">\n    <album :album=\"album\" v-for=\"album in galleries\"></album>\n</div>\n\n<div class=\"ui modal\" id=\"newAlbumModal\">\n    <div class=\"header\">{{'gallery::gallery.modal.create album' | trans}}</div>\n    <div class=\"content\">\n        <form class=\"ui form\">\n            <div class=\"ui field\">\n                <label>{{'gallery::gallery.form.title'| trans }}</label>\n                <input type=\"text\"  v-model=\"newAlbum.title\">\n            </div>\n\n            <button class=\"ui green inverted fluid button\" v-on:click=\"createNewAlbum\"\n                    v-bind:class=\"{'disabled':!newAlbum.title}\">\n                <i class=\"checkmark icon\"></i>\n                {{'core::elements.button.create'| trans}}\n            </button>\n\n        </form>\n    </div>\n</div>\n\n";
 
 /***/ },
 /* 10 */
@@ -1042,7 +1045,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/show.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(94)
+	__vue_template__ = __webpack_require__(91)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -1080,13 +1083,13 @@
 
 	var _actions = __webpack_require__(7);
 
-	var _vueWaterfall = __webpack_require__(87);
+	var _vueWaterfall = __webpack_require__(84);
 
-	var _Photo = __webpack_require__(88);
+	var _Photo = __webpack_require__(85);
 
 	var _Photo2 = _interopRequireDefault(_Photo);
 
-	var _PhotoDetail = __webpack_require__(91);
+	var _PhotoDetail = __webpack_require__(88);
 
 	var _PhotoDetail2 = _interopRequireDefault(_PhotoDetail);
 
@@ -1095,7 +1098,7 @@
 	Vue.directive('dropzone', {
 	    twoWay: true,
 
-	    params: ['uploadUrl', 'beginCallback', 'successCallback', 'progressCallback'],
+	    params: ['uploadUrl', 'beginCallback', 'successCallback', 'progressCallback', 'completeCallback'],
 
 	    bind: function bind() {},
 	    update: function update() {
@@ -1114,6 +1117,9 @@
 	            },
 	            success: function success(file, response) {
 	                self.params.successCallback(file, response.data);
+	            },
+	            complete: function complete(event) {
+	                self.params.completeCallback(event);
 	            },
 	            uploadprogress: function uploadprogress(file, progress) {
 	                self.params.progressCallback(file, progress);
@@ -1200,16 +1206,14 @@
 
 	            this.uploadingFiles.push(file);
 	        },
-	        progressUpload: function progressUpload(file, progress) {
-	            console.log('progress:', file, progress);
-
-	            file.progress = progress;
-
-	            this.uploadingFiles.$set(file, file);
-	        },
 	        successfulUpload: function successfulUpload(file, response) {
 	            console.log('success:', file, response);
 	            this.uploadingFiles.$remove(file);
+	            this.add_photo(response);
+	        },
+	        completeUpload: function completeUpload(event) {
+	            console.log('complete:', event);
+	            this.uploadingFiles = [];
 	        },
 	        updateAlbum: function updateAlbum() {
 	            var resource = this.$resource(societycms.api.gallery.album.update);
@@ -1795,6 +1799,7 @@
 	  // Thrash, waste and sodomy: IE GC bug
 	  var iframe = __webpack_require__(38)('iframe')
 	    , i      = enumBugKeys.length
+	    , lt     = '<'
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
@@ -1804,7 +1809,7 @@
 	  // html.removeChild(iframe);
 	  iframeDocument = iframe.contentWindow.document;
 	  iframeDocument.open();
-	  iframeDocument.write('<script>document.F=Object</script' + gt);
+	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
 	  iframeDocument.close();
 	  createDict = iframeDocument.F;
 	  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -1822,6 +1827,7 @@
 	  } else result = createDict();
 	  return Properties === undefined ? result : dPs(result, Properties);
 	};
+
 
 /***/ },
 /* 45 */
@@ -2195,14 +2201,12 @@
 	  , classof            = __webpack_require__(64)
 	  , $export            = __webpack_require__(26)
 	  , isObject           = __webpack_require__(34)
-	  , anObject           = __webpack_require__(33)
 	  , aFunction          = __webpack_require__(30)
 	  , anInstance         = __webpack_require__(73)
 	  , forOf              = __webpack_require__(74)
-	  , setProto           = __webpack_require__(77).set
-	  , speciesConstructor = __webpack_require__(80)
-	  , task               = __webpack_require__(81).set
-	  , microtask          = __webpack_require__(83)()
+	  , speciesConstructor = __webpack_require__(77)
+	  , task               = __webpack_require__(78).set
+	  , microtask          = __webpack_require__(80)()
 	  , PROMISE            = 'Promise'
 	  , TypeError          = global.TypeError
 	  , process            = global.process
@@ -2394,7 +2398,7 @@
 	    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
 	    this._n = false;          // <- notify
 	  };
-	  Internal.prototype = __webpack_require__(84)($Promise.prototype, {
+	  Internal.prototype = __webpack_require__(81)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
 	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -2421,7 +2425,7 @@
 
 	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
 	__webpack_require__(57)($Promise, PROMISE);
-	__webpack_require__(85)(PROMISE);
+	__webpack_require__(82)(PROMISE);
 	Wrapper = __webpack_require__(28)[PROMISE];
 
 	// statics
@@ -2445,7 +2449,7 @@
 	    return capability.promise;
 	  }
 	});
-	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(86)(function(iter){
+	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(83)(function(iter){
 	  $Promise.all(iter)['catch'](empty);
 	})), PROMISE, {
 	  // 25.4.4.1 Promise.all(iterable)
@@ -2564,63 +2568,6 @@
 /* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Works with __proto__ only. Old v8 can't work with null proto objects.
-	/* eslint-disable no-proto */
-	var isObject = __webpack_require__(34)
-	  , anObject = __webpack_require__(33);
-	var check = function(O, proto){
-	  anObject(O);
-	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
-	};
-	module.exports = {
-	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-	    function(test, buggy, set){
-	      try {
-	        set = __webpack_require__(29)(Function.call, __webpack_require__(78).f(Object.prototype, '__proto__').set, 2);
-	        set(test, []);
-	        buggy = !(test instanceof Array);
-	      } catch(e){ buggy = true; }
-	      return function setPrototypeOf(O, proto){
-	        check(O, proto);
-	        if(buggy)O.__proto__ = proto;
-	        else set(O, proto);
-	        return O;
-	      };
-	    }({}, false) : undefined),
-	  check: check
-	};
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pIE            = __webpack_require__(79)
-	  , createDesc     = __webpack_require__(40)
-	  , toIObject      = __webpack_require__(20)
-	  , toPrimitive    = __webpack_require__(39)
-	  , has            = __webpack_require__(42)
-	  , IE8_DOM_DEFINE = __webpack_require__(35)
-	  , gOPD           = Object.getOwnPropertyDescriptor;
-
-	exports.f = __webpack_require__(36) ? gOPD : function getOwnPropertyDescriptor(O, P){
-	  O = toIObject(O);
-	  P = toPrimitive(P, true);
-	  if(IE8_DOM_DEFINE)try {
-	    return gOPD(O, P);
-	  } catch(e){ /* empty */ }
-	  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
-	};
-
-/***/ },
-/* 79 */
-/***/ function(module, exports) {
-
-	exports.f = {}.propertyIsEnumerable;
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
 	var anObject  = __webpack_require__(33)
 	  , aFunction = __webpack_require__(30)
@@ -2631,11 +2578,11 @@
 	};
 
 /***/ },
-/* 81 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ctx                = __webpack_require__(29)
-	  , invoke             = __webpack_require__(82)
+	  , invoke             = __webpack_require__(79)
 	  , html               = __webpack_require__(56)
 	  , cel                = __webpack_require__(38)
 	  , global             = __webpack_require__(27)
@@ -2711,7 +2658,7 @@
 	};
 
 /***/ },
-/* 82 */
+/* 79 */
 /***/ function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -2732,11 +2679,11 @@
 	};
 
 /***/ },
-/* 83 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var global    = __webpack_require__(27)
-	  , macrotask = __webpack_require__(81).set
+	  , macrotask = __webpack_require__(78).set
 	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
 	  , process   = global.process
 	  , Promise   = global.Promise
@@ -2805,7 +2752,7 @@
 	};
 
 /***/ },
-/* 84 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var hide = __webpack_require__(31);
@@ -2817,7 +2764,7 @@
 	};
 
 /***/ },
-/* 85 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2836,7 +2783,7 @@
 	};
 
 /***/ },
-/* 86 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ITERATOR     = __webpack_require__(58)('iterator')
@@ -2862,7 +2809,7 @@
 	};
 
 /***/ },
-/* 87 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -2873,16 +2820,16 @@
 	!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.Waterfall=e():t.Waterfall=e()}(this,function(){return function(t){function e(i){if(n[i])return n[i].exports;var r=n[i]={exports:{},id:i,loaded:!1};return t[i].call(r.exports,r,r.exports,e),r.loaded=!0,r.exports}var n={};return e.m=t,e.c=n,e.p="",e(0)}([function(t,e,n){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}var r=n(1),o=i(r),a=n(8),s=i(a);t.exports={Waterfall:o["default"],WaterfallSlot:s["default"],waterfall:o["default"],waterfallSlot:s["default"]}},function(t,e,n){var i,r;n(2),i=n(6),r=n(7),t.exports=i||{},t.exports.__esModule&&(t.exports=t.exports["default"]),r&&(("function"==typeof t.exports?t.exports.options||(t.exports.options={}):t.exports).template=r)},function(t,e,n){var i=n(3);"string"==typeof i&&(i=[[t.id,i,""]]);n(5)(i,{});i.locals&&(t.exports=i.locals)},function(t,e,n){e=t.exports=n(4)(),e.push([t.id,".vue-waterfall{position:relative}",""])},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1])}return t.join("")},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var i={},r=0;r<this.length;r++){var o=this[r][0];"number"==typeof o&&(i[o]=!0)}for(r=0;r<e.length;r++){var a=e[r];"number"==typeof a[0]&&i[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a))}},t}},function(t,e,n){function i(t,e){for(var n=0;n<t.length;n++){var i=t[n],r=c[i.id];if(r){r.refs++;for(var o=0;o<r.parts.length;o++)r.parts[o](i.parts[o]);for(;o<i.parts.length;o++)r.parts.push(u(i.parts[o],e))}else{for(var a=[],o=0;o<i.parts.length;o++)a.push(u(i.parts[o],e));c[i.id]={id:i.id,refs:1,parts:a}}}}function r(t){for(var e=[],n={},i=0;i<t.length;i++){var r=t[i],o=r[0],a=r[1],s=r[2],u=r[3],l={css:a,media:s,sourceMap:u};n[o]?n[o].parts.push(l):e.push(n[o]={id:o,parts:[l]})}return e}function o(t,e){var n=p(),i=m[m.length-1];if("top"===t.insertAt)i?i.nextSibling?n.insertBefore(e,i.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),m.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e)}}function a(t){t.parentNode.removeChild(t);var e=m.indexOf(t);e>=0&&m.splice(e,1)}function s(t){var e=document.createElement("style");return e.type="text/css",o(t,e),e}function u(t,e){var n,i,r;if(e.singleton){var o=g++;n=v||(v=s(e)),i=l.bind(null,n,o,!1),r=l.bind(null,n,o,!0)}else n=s(e),i=f.bind(null,n),r=function(){a(n)};return i(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;i(t=e)}else r()}}function l(t,e,n,i){var r=n?"":i.css;if(t.styleSheet)t.styleSheet.cssText=x(e,r);else{var o=document.createTextNode(r),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(o,a[e]):t.appendChild(o)}}function f(t,e){var n=e.css,i=e.media,r=e.sourceMap;if(i&&t.setAttribute("media",i),r&&(n+="\n/*# sourceURL="+r.sources[0]+" */",n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */"),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}var c={},d=function(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e}},h=d(function(){return/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())}),p=d(function(){return document.head||document.getElementsByTagName("head")[0]}),v=null,g=0,m=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=h()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=r(t);return i(n,e),function(t){for(var o=[],a=0;a<n.length;a++){var s=n[a],u=c[s.id];u.refs--,o.push(u)}if(t){var l=r(t);i(l,e)}for(var a=0;a<o.length;a++){var u=o[a];if(0===u.refs){for(var f=0;f<u.parts.length;f++)u.parts[f]();delete c[u.id]}}}};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},function(t,e){"use strict";function n(t){t!==!1&&this.autoResize?y(window,"resize",this.reflowHandler,!1):b(window,"resize",this.reflowHandler,!1)}function i(t){var e=t.target,n=e[L];n&&m(e,n)}function r(t){return function(){clearTimeout(t),t=setTimeout(this.reflow,this.interval)}}function o(){var t=this;if(this.$el){var e=this.$el.clientWidth,n=this.$children.map(function(t){return t.getMeta()});n.sort(function(t,e){return t.order-e.order}),this.virtualRects=n.map(function(){return{}}),s(this,n,this.virtualRects),setTimeout(function(){a(t.$el,e)&&s(t,n,t.virtualRects),t.style.overflow="hidden",f(t.virtualRects,n),t.$broadcast("wf-reflowed",[t]),t.$dispatch("wf-reflowed",[t])},0)}}function a(t,e){return e!==t.clientWidth}function s(t,e,n){var i=u(t),r="h"===t.line?W:C;r.calculate(t,i,e,n)}function u(t){return{align:~["left","right","center"].indexOf(t.align)?t.align:"left",line:~["v","h"].indexOf(t.line)?t.line:"v",lineGap:+t.lineGap,minLineGap:t.minLineGap?+t.minLineGap:t.lineGap,maxLineGap:t.maxLineGap?+t.maxLineGap:t.lineGap,singleMaxWidth:Math.max(t.singleMaxWidth||0,t.maxLineGap),fixedHeight:!!t.fixedHeight}}function l(t,e,n){switch(n){case"right":return t-e;case"center":return(t-e)/2;default:return 0}}function f(t,e){var n=e.filter(function(t){return t.moveClass}),i=c(n);d(t,e);var r=c(n);n.forEach(function(t,e){t.node[L]=t.moveClass,h(t.node,i[e],r[e])}),document.body.clientWidth,n.forEach(function(t){g(t.node,t.moveClass),p(t.node)})}function c(t){return t.map(function(t){return t.vm.rect})}function d(t,e){t.forEach(function(t,n){var i=e[n].node.style;e[n].vm.rect=t;for(var r in t)i[r]=t[r]+"px"})}function h(t,e,n){var i=e.left-n.left,r=e.top-n.top,o=e.width/n.width,a=e.height/n.height;t.style.transform=t.style.WebkitTransform="translate("+i+"px,"+r+"px) scale("+o+","+a+")",t.style.transitionDuration="0s"}function p(t){t.style.transform=t.style.WebkitTransform="",t.style.transitionDuration=""}function v(t,e){for(var n="function"==typeof t?function(){return t()}:function(){return t},i=[],r=0;e>r;r++)i[r]=n();return i}function g(t,e){if(!x(t,e)){var n=w(t,"class").trim(),i=(n+" "+e).trim();w(t,"class",i)}}function m(t,e){var n=new RegExp("\\s*\\b"+e+"\\b\\s*","g"),i=w(t,"class").replace(n," ").trim();w(t,"class",i)}function x(t,e){return new RegExp("\\b"+e+"\\b").test(w(t,"class"))}function w(t,e,n){return"undefined"==typeof n?t.getAttribute(e)||"":void t.setAttribute(e,n)}function y(t,e,n){var i=arguments.length<=3||void 0===arguments[3]?!1:arguments[3];t.addEventListener(e,n,i)}function b(t,e,n){var i=arguments.length<=3||void 0===arguments[3]?!1:arguments[3];t.removeEventListener(e,n,i)}Object.defineProperty(e,"__esModule",{value:!0});var G=void 0===window.ontransitionend&&void 0!==window.onwebkittransitionend,M=G?"webkitTransitionEnd":"transitionend",L="_wfMoveClass";e["default"]={props:{autoResize:{"default":!0},interval:{"default":200,validator:function(t){return t>=0}},align:{"default":"left",validator:function(t){return~["left","right","center"].indexOf(t)}},line:{"default":"v",validator:function(t){return~["v","h"].indexOf(t)}},lineGap:{required:!0,validator:function(t){return t>=0}},minLineGap:{validator:function(t){return t>=0}},maxLineGap:{validator:function(t){return t>=0}},singleMaxWidth:{validator:function(t){return t>=0}},fixedHeight:{"default":!1},watch:{"default":{}}},data:function(){return{style:{height:"",overflow:""}}},methods:{autoResizeHandler:n,reflowHandler:r(),reflow:o},events:{"wf-reflow":function(){this.reflowHandler()}},compiled:function(){this.virtualRects=[]},ready:function(){var t=this;this.autoResizeHandler(),this.$watch("autoResize",this.autoResizeHandler),this.$watch(function(){return t.align,t.line,t.lineGap,t.minLineGap,t.maxLineGap,t.singleMaxWidth,t.fixedHeight,t.watch},this.reflowHandler),y(this.$el,M,i,!0)},beforeDestroy:function(){this.autoResizeHandler(!1),b(this.$el,M,i,!0)}};var C=function(){function t(t,n,i,r){var o=t.$el.clientWidth,a=e(o,n),s=v(0,a.count);i.forEach(function(t,e){var i=s.reduce(function(t,e,n){return e<s[t]?n:t},0),o=r[e];o.top=s[i],o.left=a.left+a.width*i,o.width=a.width,o.height=t.height*(n.fixedHeight?1:a.width/t.width),s[i]=s[i]+o.height}),t.style.height=Math.max.apply(null,s)+"px"}function e(t,e){var n=t/e.lineGap,i=void 0;if(e.singleMaxWidth>=t)n=1,i=Math.max(t,e.minLineGap);else{var r=e.maxLineGap*~~n,o=e.minLineGap*~~(n+1),a=r>=t,s=t>=o;a&&s?(n=Math.round(n),i=t/n):a?(n=~~n,i=t/n):s?(n=~~(n+1),i=t/n):(n=~~n,i=e.maxLineGap),1===n&&(i=Math.min(t,e.singleMaxWidth),i=Math.max(i,e.minLineGap))}return{width:i,count:n,left:l(t,i*n,e.align)}}return{calculate:t}}(),W=function(){function t(t,n,i,r){for(var o=t.$el.clientWidth,a=i.length,s=0,u=0;a>u;){for(var l,f,c=e(o,n,i,u),d=0,h=0;d<c.count;d++)l=i[u+d],f=r[u+d],f.top=s,f.left=c.left+h,f.width=l.width*c.height/l.height,f.height=c.height,h+=f.width;u+=c.count,s+=c.height}t.style.height=s+"px"}function e(t,e,o,a){var s=n(t,e.lineGap,o,a),u=Math.max(s-1,1),f=i(t,e,o,a,s),c=i(t,e,o,a,u),d=r(c,f,t),h=d.height,p=d.width;return 1===d.count&&(p=Math.min(e.singleMaxWidth,t),h=o[a].height*p/o[a].width),{left:l(t,p,e.align),count:d.count,height:h}}function n(t,e,n,i){for(var r=0,o=i,a=0;o<n.length&&t>=a;o++)a+=n[o].width*e/n[o].height,r++;return r}function i(t,e,n,i,r){for(var o=0,a=r-1;a>=0;a--){var s=n[i+a];o+=s.width*e.lineGap/s.height}var u=e.lineGap*t/o,l=u<=e.maxLineGap&&u>=e.minLineGap;if(l)return{cost:Math.abs(e.lineGap-u),count:r,width:t,height:u};var f=o>t?e.minLineGap:e.maxLineGap;return{cost:1/0,count:r,width:o*f/e.lineGap,height:f}}function r(t,e,n){return t.cost===1/0&&e.cost===1/0?e.width<n?e:t:e.cost>=t.cost?t:e}return{calculate:t}}()},function(t,e){t.exports="<div class=vue-waterfall :style=style><slot></slot></div>"},function(t,e,n){var i,r;n(9),i=n(11),r=n(12),t.exports=i||{},t.exports.__esModule&&(t.exports=t.exports["default"]),r&&(("function"==typeof t.exports?t.exports.options||(t.exports.options={}):t.exports).template=r)},function(t,e,n){var i=n(10);"string"==typeof i&&(i=[[t.id,i,""]]);n(5)(i,{});i.locals&&(t.exports=i.locals)},function(t,e,n){e=t.exports=n(4)(),e.push([t.id,".vue-waterfall-slot{position:absolute;margin:0;padding:0;box-sizing:border-box}",""])},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={data:function(){return{isShow:!1}},props:{width:{required:!0,validator:function(t){return t>=0}},height:{required:!0,validator:function(t){return t>=0}},order:{"default":0},moveClass:{"default":""}},methods:{notify:function(){this.$dispatch("wf-reflow",[this])},getMeta:function(){return{vm:this,node:this.$el,order:this.order,width:this.width,height:this.height,moveClass:this.moveClass}}},compiled:function(){var t=this;this.$watch("width, height",this.notify),this.$once("wf-reflowed",function(){return t.isShow=!0}),this.rect={top:0,left:0,width:0,height:0}},attached:function(){this.notify()},detached:function(){this.notify()}}},function(t,e){t.exports="<div class=vue-waterfall-slot v-show=isShow><slot></slot></div>"}])});
 
 /***/ },
-/* 88 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(89)
+	__vue_script__ = __webpack_require__(86)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/Photo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(90)
+	__vue_template__ = __webpack_require__(87)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2901,7 +2848,7 @@
 	})()}
 
 /***/ },
-/* 89 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2947,22 +2894,22 @@
 	};
 
 /***/ },
-/* 90 */
+/* 87 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"ui photo\" @click=\"selectPhoto\" v-bind:class=\"{'selected': selected_gallery_selected_photo == photo }\">\n    <img id=\"photo-id-{{photo.id}}\" class=\"ui rounded image visible content\"\n         v-bind:src=\"thumbnailImage\">\n</div>\n";
 
 /***/ },
-/* 91 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(92)
+	__vue_script__ = __webpack_require__(89)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] Resources/assets/components/PhotoDetail.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(93)
+	__vue_template__ = __webpack_require__(90)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2981,14 +2928,17 @@
 	})()}
 
 /***/ },
-/* 92 */
-/***/ function(module, exports) {
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _actions = __webpack_require__(7);
+
 	exports.default = {
 	    data: function data() {
 	        return {
@@ -3006,7 +2956,9 @@
 	                return state.selected_gallery;
 	            }
 	        },
-	        actions: {}
+	        actions: {
+	            remove_photo: _actions.remove_photo
+	        }
 	    },
 
 	    computed: {
@@ -3036,33 +2988,43 @@
 	                title: this.selected_gallery_selected_photo.title,
 	                caption: this.selected_gallery_selected_photo.caption
 	            }, function (data, status, request) {}).error(function (data, status, request) {});
+	        },
+	        delete: function _delete() {
+
+	            var resource = this.$resource(societycms.api.gallery.album.photo.destroy);
+	            resource.delete({
+	                album: this.selected_gallery.slug,
+	                photo: this.selected_gallery_selected_photo.id
+	            }, {}, function (data, status, request) {
+	                this.remove_photo(this.selected_gallery_selected_photo);
+	            }).error(function (data, status, request) {});
 	        }
 	    }
 	};
 
 /***/ },
-/* 93 */
+/* 90 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<form class=\"ui form\" v-if=\"selected_gallery_selected_photo\">\n    <div class=\"field\">\n        <img id=\"photo-id\" class=\"ui rounded image\"\n             v-bind:src=\"thumbnailImage\">\n    </div>\n\n    <div class=\"field\">\n        <label>Title</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.title\">\n    </div>\n\n    <div class=\"field\">\n        <label>Caption</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.caption\">\n    </div>\n\n    <div class=\"ui primary button\" @click=\"save\">\n        Save\n    </div>\n</form>\n\n";
+	module.exports = "\n<form class=\"ui form\" v-if=\"selected_gallery_selected_photo\">\n    <div class=\"field\">\n        <img id=\"photo-id\" class=\"ui rounded image\"\n             v-bind:src=\"thumbnailImage\">\n    </div>\n\n    <div class=\"field\">\n        <label>Title</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.title\">\n    </div>\n\n    <div class=\"field\">\n        <label>Caption</label>\n        <input type=\"text\" v-model=\"selected_gallery_selected_photo.caption\">\n    </div>\n\n    <div class=\"ui primary button\" @click=\"save\">\n        Save\n    </div>\n\n    <button class=\"ui negative button\" @click=\"delete\">Delete</button>\n\n</form>\n\n";
 
 /***/ },
-/* 94 */
+/* 91 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div class=\"ui grid\">\n        <div class=\"twelve wide column\">\n            <div v-dropzone id=\"photosGrid\"\n                 :begin-callback=\"beginningUpload\"\n                 :progress-callback=\"progressUpload\"\n                 :success-callback=\"successfulUpload\"\n                 v-bind:upload-url=\"uploadUrl\"\n                 style=\"min-height: 30em; border: 1px solid red\">\n                <waterfall\n                        line=\"h\"\n                        :line-gap=\"200\"\n                        min-line-gap=\"160\"\n                        max-line-gap=\"240\"\n                        :watch=\"selected_gallery_photos\"\n                >\n                    <waterfall-slot v-for=\"photo in selected_gallery_photos\"\n                                    :width=\"photo.properties.width\"\n                                    :height=\"photo.properties.height\"\n                                    :order=\"$index\">\n                        <photo :photo=\"photo\"></photo>\n                    </waterfall-slot>\n                </waterfall>\n\n            </div>\n\n            <div v-for=\"file in uploadingFiles\" track-by=\"$index\">{{file.name}} :: {{file.progress}} </div>\n        </div>\n        <div class=\"four wide column\" id=\"photos-detail-rail\">\n            <div class=\"ui segment sticky photo-detail\">\n               <photo-detail></photo-detail>\n            </div>\n        </div>\n\n\n    </div>\n\n\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
+	module.exports = "\n<div class=\"ui active inverted dimmer\" v-if=\"$loadingRouteData\">\n    <div class=\"ui large text loader\">Loading</div>\n</div>\n\n<div v-if=\"!$loadingRouteData\">\n\n    <div class=\"ui right floated icon button\" v-on:click=\"deleteAlbumModal\">\n        <i class=\"trash outline icon\"></i>\n    </div>\n    <div class=\"ui right floated icon button\" id=\"uploadImageButton\">\n        <i class=\"cloud upload icon\"></i>\n    </div>\n    <div class=\"ui massive transparent fluid input\">\n        <input type=\"text\" @keyup=\"updateAlbum | debounce 200\" v-model=\"selected_gallery.title\">\n    </div>\n\n    <div class=\"ui divider\"></div>\n\n    <div class=\"ui grid\">\n        <div class=\"twelve wide column\">\n            <div v-dropzone id=\"photosGrid\"\n                 :begin-callback=\"beginningUpload\"\n                 :progress-callback=\"progressUpload\"\n                 :success-callback=\"successfulUpload\"\n                 :complete-callback=\"completeUpload\"\n                 v-bind:upload-url=\"uploadUrl\"\n                 style=\"min-height: 30em; border: 1px solid red\">\n                <waterfall\n                        line=\"h\"\n                        :line-gap=\"200\"\n                        min-line-gap=\"160\"\n                        max-line-gap=\"240\"\n                        :watch=\"selected_gallery_photos\"\n                >\n                    <waterfall-slot v-for=\"photo in selected_gallery_photos\"\n                                    :width=\"photo.properties.width\"\n                                    :height=\"photo.properties.height\"\n                                    :order=\"$index\">\n                        <photo :photo=\"photo\"></photo>\n                    </waterfall-slot>\n                </waterfall>\n\n            </div>\n\n            <div v-for=\"file in uploadingFiles\" track-by=\"$index\">\n                Uploading... {{file.name}} - {{file.progress}}\n            </div>\n\n        </div>\n        <div class=\"four wide column\" id=\"photos-detail-rail\">\n            <div class=\"ui segment sticky photo-detail\">\n               <photo-detail></photo-detail>\n            </div>\n        </div>\n\n\n    </div>\n\n\n</div>\n\n<div class=\"ui small modal\" id=\"deleteAlbumModal\">\n    <div class=\"header\">{{ 'gallery::gallery.modal.delete album' | trans }}</div>\n    <div class=\"content\">\n        <p>{{ 'gallery::gallery.modal.delete album warning' | trans }}</p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui red inverted button\" v-on:click=\"deleteAlbum\">\n            <i class=\"trash icon\"></i>\n            {{ 'core::elements.button.delete' | trans }}\n        </div>\n        <div class=\"ui positive blue button\">\n            {{ 'core::elements.button.cancel' | trans }}\n        </div>\n    </div>\n</div>\n\n";
 
 /***/ },
-/* 95 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(96);
+	var content = __webpack_require__(93);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(98)(content, {});
+	var update = __webpack_require__(95)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -3079,10 +3041,10 @@
 	}
 
 /***/ },
-/* 96 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(97)();
+	exports = module.exports = __webpack_require__(94)();
 	// imports
 
 
@@ -3093,7 +3055,7 @@
 
 
 /***/ },
-/* 97 */
+/* 94 */
 /***/ function(module, exports) {
 
 	/*
@@ -3149,7 +3111,7 @@
 
 
 /***/ },
-/* 98 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
