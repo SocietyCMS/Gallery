@@ -17,11 +17,47 @@
 
         <div class="ui divider"></div>
 
-        <div v-dropzone="add_photo" v-bind:upload-url="uploadUrl" style="min-height: 30em; border: 1px solid red">
-            <div class="ui photos" id="photosGrid">
-                <photo :photo="photo" v-for="photo in selected_gallery_photos"></photo>
+        <div class="ui grid">
+            <div class="twelve wide column">
+                <div v-dropzone id="photosGrid"
+                     :begin-callback="beginningUpload"
+                     :progress-callback="progressUpload"
+                     :success-callback="successfulUpload"
+                     :complete-callback="completeUpload"
+                     v-bind:upload-url="uploadUrl"
+                     style="min-height: 30em; border: 1px solid red">
+                    <waterfall
+                            line="h"
+                            :line-gap="200"
+                            min-line-gap="160"
+                            max-line-gap="240"
+                            :watch="selected_gallery_photos"
+                    >
+                        <waterfall-slot v-for="photo in selected_gallery_photos"
+                                        :width="photo.properties.width"
+                                        :height="photo.properties.height"
+                                        :order="$index">
+                            <photo :photo="photo"></photo>
+                        </waterfall-slot>
+                    </waterfall>
+
+                </div>
+
+                <div v-for="file in uploadingFiles" track-by="$index">
+                    Uploading... {{file.name}} - {{file.progress}}
+                </div>
+
             </div>
+            <div class="four wide column" id="photos-detail-rail">
+                <div class="ui segment sticky photo-detail">
+                   <photo-detail></photo-detail>
+                </div>
+            </div>
+
+
         </div>
+
+
     </div>
 
     <div class="ui small modal" id="deleteAlbumModal">
@@ -43,19 +79,24 @@
 </template>
 
 <script type="text/babel">
-    import {set_selected_gallery, remove_gallery, add_photo, add_photos} from '../vuex/actions';
+    import {set_selected_gallery, remove_gallery, add_photo, add_photos, set_selected_photo} from '../vuex/actions';
+    import {Waterfall, WaterfallSlot} from 'vue-waterfall'
 
     import Photo from './Photo.vue';
+    import PhotoDetail from './PhotoDetail.vue';
+
 
     Vue.directive('dropzone', {
         twoWay: true,
 
-        params: ['uploadUrl'],
+        params: ['uploadUrl', 'beginCallback',  'successCallback', 'progressCallback', 'completeCallback'],
 
-        bind: function () {
+        bind() {
 
         },
-        update: function (callback) {
+        update() {
+
+            var self = this
 
             new Dropzone(this.el, {
                 url: this.params.uploadUrl,
@@ -64,16 +105,22 @@
                 },
                 paramName: "image",
 
-                addedfile: function (file) {
+                addedfile(file) {
+                    self.params.beginCallback(file)
                 },
-                success: function (file, response) {
-                    console.log(file, response);
-                    callback(response.data)
+                success(file, response) {
+                    self.params.successCallback(file, response.data)
                 },
+                complete(event) {
+                    self.params.completeCallback(event)
+                },
+                uploadprogress(file, progress) {
+                    self.params.progressCallback(file, progress)
+                }
             });
 
         },
-        unbind: function () {
+        unbind() {
         }
     })
 
@@ -87,6 +134,7 @@
                 ]).then(function ([gallery, photos]) {
                     this.set_selected_gallery(gallery.data.data);
                     this.add_photos(photos.data.data);
+                    this.selectFirstPhoto()
                 }.bind(this))
             },
             activate: function (transition) {
@@ -95,7 +143,10 @@
         },
 
         components: {
-            Photo
+            Photo,
+            PhotoDetail,
+            Waterfall,
+            WaterfallSlot
         },
 
         vuex: {
@@ -107,7 +158,14 @@
                 set_selected_gallery,
                 add_photo,
                 add_photos,
+                set_selected_photo,
                 remove_gallery,
+            }
+        },
+
+        data() {
+            return {
+                uploadingFiles: []
             }
         },
 
@@ -117,24 +175,60 @@
             }
         },
 
+        watch: {
+            '$loadingRouteData': function (val, oldVal) {
+                this.$nextTick(function () {
+                    $('.photo-detail').sticky({
+                        offset: 10,
+                        context: '#photos-detail-rail'
+                    });
+                });
+            },
+        },
+
         methods: {
 
-            updateAlbum: function () {
+            beginningUpload(file) {
+                console.log('beginn:', file)
+
+                file.progress = 0
+
+                this.uploadingFiles.push(file)
+            },
+
+            successfulUpload(file, response) {
+                console.log('success:', file, response)
+                this.uploadingFiles.$remove(file)
+                this.add_photo(response)
+            },
+
+            completeUpload(event) {
+                console.log('complete:', event)
+                this.uploadingFiles = []
+            },
+
+            updateAlbum() {
                 var resource = this.$resource(societycms.api.gallery.album.update);
                 resource.update({album: this.selected_gallery.slug}, {title: this.selected_gallery.title}, function (data, status, request) {
                 }).error(function (data, status, request) {
                 });
             },
 
-            deleteAlbumModal: function () {
+            selectFirstPhoto() {
+                if(this.selected_gallery_photos.length >= 1) {
+                    this.set_selected_photo(this.selected_gallery_photos[0])
+                }
+            },
+
+            deleteAlbumModal() {
                 $('#deleteAlbumModal')
                         .modal('setting', 'transition', 'fade up')
                         .modal('show');
             },
-            deleteAlbum: function () {
 
-                $('#deleteAlbumModal')
-                        .modal('hide');
+            deleteAlbum() {
+
+                $('#deleteAlbumModal').modal('hide');
 
                 var resource = this.$resource(societycms.api.gallery.album.destroy);
 

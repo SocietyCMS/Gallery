@@ -1,8 +1,12 @@
 <template>
-    <a class="ui primary button" v-on:click="newAlbumModal">
-        <i class="photo icon"></i>
-        {{ 'core::elements.action.create resource' | trans  }}
-    </a>
+
+    <div class="ui basic segment">
+        <a class="ui primary button" v-on:click="newAlbumModal">
+            <i class="photo icon"></i>
+            {{ 'core::elements.action.create resource' | trans  }}
+        </a>
+    </div>
+
 
     <div class="ui five doubling link cards gallery">
         <album :album="album" v-for="album in galleries"></album>
@@ -79,6 +83,8 @@
                 var resource = this.$resource(societycms.api.gallery.album.store);
 
                 resource.save(this.newAlbum, function (data, status, request) {
+                    $('#newAlbumModal').modal('hide');
+                    this.$route.router.go({name:'show', params: { slug: data.data.slug }})
                 }).error(function (data, status, request) {
                 });
             },

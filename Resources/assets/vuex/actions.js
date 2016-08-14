@@ -20,4 +20,6 @@ export const add_photos = function ({dispatch}, photos) {
     })
 }
 
+export const set_selected_photo = ({dispatch}, photo) => dispatch('SELECT_PHOTO', photo)
+
 export const remove_photo = ({dispatch}, payload) => dispatch('REMOVE_PHOTO', payload)

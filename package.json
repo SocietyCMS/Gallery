@@ -29,6 +29,7 @@
     "webpack": "^1.12.13"
   },
   "dependencies": {
+    "vue-waterfall": "^0.2.3",
     "vuex": "^0.6.3"
   }
 }
